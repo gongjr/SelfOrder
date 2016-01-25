@@ -1,0 +1,91 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/activity_root_style"
+    android:background="@color/white" >
+
+    <ImageView
+        android:id="@+id/img_top"
+        android:layout_width="470dip"
+        android:layout_height="325dip"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:scaleType="centerInside"
+        android:src="@drawable/login_top_logo"
+        android:layout_marginTop="60dip"/>
+
+    <RelativeLayout
+        android:id="@+id/login_user_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/img_top"
+        android:layout_marginTop="@dimen/distance_5"
+        android:background="@color/white"
+        android:layout_centerHorizontal="true">
+
+        <EditText
+            android:id="@+id/edit_username"
+            android:layout_width="470dip"
+            android:layout_height="84dip"
+            android:layout_marginTop="5dip"
+            android:background="@drawable/edit_userinfo_bg"
+            android:gravity="center_vertical|left"
+            android:hint="请输入账号"
+            android:inputType="number"
+            android:textColor="#7a2c1f"
+            android:textColorHint="#a19997"
+            android:textSize="@dimen/textsize_large"
+            android:paddingLeft="125dip"/>
+
+        <EditText
+            android:id="@+id/edit_password"
+            android:layout_width="470dip"
+            android:layout_height="84dip"
+            android:layout_marginTop="23dip"
+            android:layout_below="@+id/edit_username"
+            android:background="@drawable/edit_password_bg"
+            android:gravity="center_vertical|left"
+            android:hint="请输入密码"
+            android:inputType="number"
+            android:password="true"
+            android:textColor="#7a2c1f"
+            android:textColorHint="#a19997"
+            android:textSize="@dimen/textsize_large"
+            android:paddingLeft="125dip"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/remember_password"
+        android:layout_width="470dip"
+        android:layout_height="42dip"
+        android:layout_below="@+id/login_user_info"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="28dip">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="记住密码"
+            android:layout_toLeftOf="@+id/remember_password_check"
+            android:textSize="@dimen/textsize_large"
+            android:layout_marginRight="@dimen/distance_10"/>
+
+        <CheckBox
+            android:id="@+id/remember_password_check"
+            android:layout_width="42dip"
+            android:layout_height="42dip"
+            android:button="@anim/selector_cbx_remember_password"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/distance_15"
+            />
+        </RelativeLayout>
+
+
+
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_width="470dip"
+        android:layout_height="85dip"
+        android:layout_below="@+id/remember_password"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="23dip"
+        android:background="@anim/selector_btn_login" />
+</RelativeLayout>

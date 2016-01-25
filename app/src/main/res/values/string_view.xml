@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- dishes_menu,菜单页面字体常量-->
+    <string name="dishes_menu_clear_order">清空</string>
+    <string name="dishes_menu_pay_price">待付金额</string>
+    <string name="dishes_menu_next">下一步</string>
+    <string name="dishes_menu_selected_num">已选数量</string>
+
+    <!-- choose_property属性选择-->
+    <string name="choose_property_title">属性选择</string>
+
+    <!-- makeorder订单生成-->
+    <string name="makeorder_num_title">数量:</string>
+    <string name="makeorder_total">合计: ￥</string>
+    <!-- settle支付-->
+    <string name="settle_type">支付方式</string>
+    <string name="settle_need_pay">您需要支付</string>
+    <string name="need_pay_weixin_title">打开微信扫描支付</string>
+    <string name="need_pay_zhifubao_title">打开支付宝扫描支付</string>
+    <string name="need_pay_to_xianjin">若支付宝、微信支付未成功,请选择\"现金支付\"</string>
+
+
+
+</resources>

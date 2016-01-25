@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.asiainfo.selforder"
+    android:versionCode="1"
+    android:versionName="1.0">
+
+    <!--网络-->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!--允许程序获取网络信息状态，如当前的网络连接是否有效-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    //允许程序改变网络状态
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    //允许程序获取当前WiFi接入的状态以及WLAN热点的信息
+    <!--存储读写权限-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!--允许程序读取或写入系统设置-->
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <!--允许一个应用程序检索私有信息是当前最顶级的活动，不被第三方应用使用,查看task栈-->
+    <uses-permission android:name="android.permission.GET_TASKS" />
+
+    //系统默认下载管理器调用权限
+    <uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER" />
+    //禁止发出通知,既后台下载不提示
+    <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
+    允许程序禁用键盘锁
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+
+    <uses-permission android:name="com.asiainfo.mealorder.permission.JPUSH_MESSAGE" />
+    //用户唤醒机器的权限
+    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
+    //允许程序在手机屏幕关闭后后台进程仍然运行
+
+
+
+    <application
+        android:name="com.asiainfo.selforder.AppApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_logo"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".LaunchActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.LoginActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".ui.DishesMenuActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".ui.MakeOrderActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NODimEnabled">
+        </activity>
+        <activity
+            android:name=".ui.SettleActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NODimEnabled">
+        </activity>
+        <activity
+            android:name=".ui.PayStateActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NODimEnabled">
+        </activity>
+        <activity
+            android:name=".ui.PayXianjinActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NODimEnabled">
+        </activity>
+
+        <activity
+            android:name="com.iflytek.voicedemo.IflytekActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NODimEnabled">
+        </activity>
+        <activity
+            android:name="com.iflytek.voicedemo.IatDemo"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NODimEnabled">
+        </activity>
+        <activity
+            android:name="com.iflytek.voicedemo.TtsDemo"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NODimEnabled">
+        </activity>
+        <activity
+            android:name="com.iflytek.speech.IatSettings"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NODimEnabled">
+        </activity>
+
+        <service
+            android:name="kxlive.gjrlibrary.utils.DownloadService"
+            android:exported="true" />
+    </application>
+
+</manifest>

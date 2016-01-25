@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/settle_bg"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:textSize="@dimen/textsize_big"
+        android:textColor="@color/settle_top_type_name"
+        android:layout_marginTop="@dimen/distance_50"
+        android:text="@string/settle_type"/>
+
+    <View
+        android:id="@+id/settle_top_line"
+        android:layout_width="match_parent"
+        android:layout_height="2dip"
+        android:background="@color/settle_top_line_bg"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="@dimen/distance_150"
+        android:layout_marginLeft="@dimen/distance_30"
+        android:layout_marginRight="@dimen/distance_30"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/settle_top_line"
+        android:layout_above="@+id/settle_bottom_line">
+
+        <RadioGroup
+            android:id="@+id/type_group"
+            android:layout_width="wrap_content"
+            android:layout_height="230dip"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/distance_20"
+            android:orientation="horizontal">
+            <RadioButton
+                android:id="@+id/type_weixin"
+                android:layout_width="186dip"
+                android:layout_height="189dip"
+                android:background="@anim/selector_radio_type_weixin"
+                android:layout_margin="@dimen/distance_10"
+                android:button="@null"
+                android:checked="false"
+                />
+            <RadioButton
+                android:id="@+id/type_zhifubao"
+                android:layout_width="186dip"
+                android:layout_height="189dip"
+                android:background="@anim/selector_radio_type_zhifubao"
+                android:layout_margin="@dimen/distance_10"
+                android:button="@null"
+                android:checked="false"
+                />
+            <RadioButton
+                android:id="@+id/type_xianjin"
+                android:layout_width="186dip"
+                android:layout_height="189dip"
+                android:background="@anim/selector_radio_type_xianjin"
+                android:layout_margin="@dimen/distance_10"
+                android:button="@null"
+                android:checked="false"
+                android:visibility="visible"
+                />
+
+            </RadioGroup>
+
+        <RelativeLayout
+            android:id="@+id/weixinAndzhifubao_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_below="@+id/type_group"
+            android:layout_centerHorizontal="true">
+            <LinearLayout
+                android:id="@+id/need_title_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_centerHorizontal="true">
+
+
+            <TextView
+                android:id="@+id/need_money"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settle_need_pay"
+                android:textSize="@dimen/textsize_large"
+                android:layout_marginTop="@dimen/distance_3"/>
+            <TextView
+                android:id="@+id/need_pay_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="￥40.00"
+                android:layout_toRightOf="@+id/need_money"
+                android:textSize="@dimen/textsize_xxlarge"
+                android:textColor="@color/red"
+                android:paddingLeft="@dimen/distance_10"/>
+            </LinearLayout>
+            <View
+                android:id="@+id/need_pay_code_bg"
+                android:layout_width="280dip"
+                android:layout_height="280dip"
+                android:background="@drawable/settle_pay_code_bg"
+                android:layout_below="@+id/need_title_group"
+                android:layout_marginTop="@dimen/distance_20"
+                android:layout_centerHorizontal="true"
+
+                />
+
+            <ImageView
+                android:id="@+id/need_pay_code"
+                android:layout_width="250dip"
+                android:layout_height="250dip"
+                android:layout_below="@+id/need_title_group"
+                android:layout_marginTop="@dimen/distance_35"
+                android:layout_centerHorizontal="true"
+                />
+
+            <TextView
+                android:id="@+id/need_type_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/need_pay_weixin_title"
+                android:textSize="@dimen/textsize_large"
+                android:layout_below="@+id/need_pay_code"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/distance_20"/>
+
+            <TextView
+                android:id="@+id/need_to_xianjin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/need_pay_to_xianjin"
+                android:textSize="@dimen/textsize_middle"
+                android:layout_below="@+id/need_type_title"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/distance_40"
+                android:textColor="@color/text_settle_to_xianjin"/>
+
+
+            </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/xianjin_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/type_group"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/xianjin_tips"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textsize_xxlarge"
+                android:layout_marginTop="@dimen/distance_50"
+                android:layout_centerHorizontal="true"/>
+            
+            <Button
+                android:id="@+id/print_orderinfo"
+                android:layout_width="210dip"
+                android:layout_height="100dip"
+                android:layout_below="@+id/xianjin_tips"
+                android:layout_marginTop="@dimen/distance_60"
+                android:layout_centerHorizontal="true"
+                android:text="打印小票"
+                android:textSize="@dimen/textsize_xlarge_"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:background="@color/settle_print_btn_bg"
+                />
+
+
+        </RelativeLayout>
+
+
+        </RelativeLayout>
+
+    <View
+        android:id="@+id/settle_bottom_line"
+        android:layout_width="match_parent"
+        android:layout_height="2dip"
+        android:background="@color/settle_bottom_line_bg"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/distance_100"
+        />
+
+    <Button
+        android:id="@+id/back"
+        android:layout_width="72dip"
+        android:layout_height="72dip"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="40dip"
+        android:layout_marginBottom="10dip"
+        android:background="@anim/selector_btn_settle_back"/>
+
+    <Button
+        android:id="@+id/cancle"
+        android:layout_width="@dimen/distance_110"
+        android:layout_height="@dimen/distance_80"
+        android:background="@anim/selector_btn_dishesmenu_clear"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="40dip"
+        android:layout_marginBottom="10dip"
+        />
+
+</RelativeLayout>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- distance边距常量值-->
+    <dimen name="distance_1">1dip</dimen>
+    <dimen name="distance_2">2dip</dimen>
+    <dimen name="distance_3">3dip</dimen>
+    <dimen name="distance_5">5dip</dimen>
+    <dimen name="distance_7">7dip</dimen>
+    <dimen name="distance_8">8dip</dimen>
+    <dimen name="distance_10">10dip</dimen>
+    <dimen name="distance_12">12dip</dimen>
+    <dimen name="distance_15">15dip</dimen>
+    <dimen name="distance_18">18dip</dimen>
+    <dimen name="distance_20">20dip</dimen>
+    <dimen name="distance_25">25dip</dimen>
+    <dimen name="distance_30">30dip</dimen>
+    <dimen name="distance_35">35dip</dimen>
+    <dimen name="distance_40">40dip</dimen>
+    <dimen name="distance_45">45dip</dimen>
+    <dimen name="distance_50">50dip</dimen>
+    <dimen name="distance_60">60dip</dimen>
+    <dimen name="distance_70">70dip</dimen>
+    <dimen name="distance_75">75dip</dimen>
+    <dimen name="distance_80">80dip</dimen>
+    <dimen name="distance_90">90dip</dimen>
+    <dimen name="distance_100">100dip</dimen>
+    <dimen name="distance_110">110dip</dimen>
+    <dimen name="distance_120">120dip</dimen>
+    <dimen name="distance_150">150dip</dimen>
+    <dimen name="distance_160">160dip</dimen>
+    <dimen name="distance_180">180dip</dimen>
+    <dimen name="distance_190">190dip</dimen>
+    <dimen name="distance_200">200dip</dimen>
+    <dimen name="distance_230">230dip</dimen>
+    <dimen name="distance_240">240dip</dimen>
+    <dimen name="distance_250">250dip</dimen>
+
+    <!--字体大小常量-->
+    <dimen name="textsize_xxsmall">14sp</dimen>
+    <dimen name="textsize_xsmall">16sp</dimen>
+    <dimen name="textsize_small">18sp</dimen>
+    <dimen name="textsize_middle">20sp</dimen>
+    <dimen name="textsize_large">24sp</dimen>
+    <dimen name="textsize_xlarge">28sp</dimen>
+    <dimen name="textsize_xlarge_">30sp</dimen>
+    <dimen name="textsize_xxlarge">32sp</dimen>
+    <dimen name="textsize_xxlarge_">34sp</dimen>
+    <dimen name="textsize_big">36sp</dimen>
+    <dimen name="textsize_xbig">40sp</dimen>
+    <dimen name="textsize_xxxbig">60sp</dimen>
+</resources>

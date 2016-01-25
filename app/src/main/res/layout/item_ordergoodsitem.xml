@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="14"
+    android:paddingTop="@dimen/distance_10">
+
+    <LinearLayout
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="10"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/distance_10">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/distance_50"
+        android:orientation="horizontal"
+        android:weightSum="10">
+
+
+
+    <TextView
+        android:id="@+id/ordergoodsitem_dishesname"
+        android:layout_width="0dip"
+        android:layout_height="@dimen/distance_50"
+        android:layout_weight="5"
+        android:text="南美白虾"
+        android:singleLine="true"
+        android:gravity="center_vertical|left"
+        android:textSize="@dimen/textsize_large"
+        android:textColor="@color/makeorder_item_name_text"
+        />
+
+        <TextView
+            android:id="@+id/ordergoodsitem_dishesprice"
+            android:layout_width="0dip"
+            android:layout_height="@dimen/distance_50"
+            android:layout_weight="3"
+            android:textSize="@dimen/textsize_large"
+            android:text="40.00"
+            android:gravity="center"
+            android:textColor="@color/makeorder_item_name_text"/>
+
+        <TextView
+            android:id="@+id/ordergoodsitem_dishesnum"
+            android:layout_width="0dip"
+            android:layout_height="@dimen/distance_50"
+            android:layout_weight="2"
+            android:textSize="@dimen/textsize_large"
+            android:text="1"
+            android:gravity="center"
+            android:textColor="@color/makeorder_item_name_text"/>
+
+    </LinearLayout>
+        <TextView
+            android:id="@+id/ordergoodsitem_remark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="口味:微辣"
+            android:textSize="@dimen/textsize_middle"
+            android:textColor="@color/makeorder_item_remark_text"
+            android:singleLine="true"
+            android:paddingLeft="@dimen/distance_10"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/ordergoodsitem_istakeaway"
+        android:layout_width="0dip"
+        android:layout_height="@dimen/distance_50"
+        android:layout_weight="2">
+        <CheckBox
+            android:id="@+id/makeorder_item_takeaway_check"
+            android:layout_width="40dip"
+            android:layout_height="40dip"
+            android:button="@anim/selector_cbx_remember_password"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/distance_8"
+            />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/ordergoodsitem_dishesoperation"
+        android:layout_width="0dip"
+        android:layout_height="@dimen/distance_60"
+        android:layout_weight="2"
+        android:gravity="center">
+        
+        <Button
+            android:id="@+id/makeorder_item_delete"
+            android:layout_width="63dip"
+            android:layout_height="63dip"
+            android:background="@anim/selector_btn_makeorder_item_delete"
+            android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
+
+</LinearLayout>

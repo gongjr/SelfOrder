@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="280dip"
+    android:background="@color/item_dishes_margin_bg"
+    >
+
+    <include
+        android:id="@+id/item_dishes_init"
+        android:layout_width="match_parent"
+        android:layout_height="260dip"
+        layout="@layout/item_dishes_init"
+        android:layout_margin="@dimen/distance_10"
+        />
+    
+    <ViewStub
+        android:layout="@layout/item_dishes_selected"
+        android:id="@+id/item_dishes_selected"
+        android:layout_width="match_parent"
+        android:layout_height="260dip"
+        android:layout_margin="@dimen/distance_10"/>
+</RelativeLayout>

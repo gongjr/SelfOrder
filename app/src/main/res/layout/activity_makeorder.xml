@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@style/activity_root_style">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/makeorder_bottom"
+        android:background="@drawable/makeorder_top_bg">
+
+
+
+    <LinearLayout
+        android:id="@+id/makeorder_top"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/distance_50"
+        android:layout_alignParentTop="true"
+        android:weightSum="14"
+        android:layout_marginRight="@dimen/distance_50"
+        android:layout_marginLeft="@dimen/distance_50"
+        android:layout_marginTop="@dimen/distance_90">
+
+        <TextView
+            android:id="@+id/makeorder_top_dishesname"
+            android:layout_width="0dip"
+            android:layout_height="@dimen/distance_50"
+            android:layout_weight="5"
+            android:text="菜名"
+            android:gravity="center"
+            android:textSize="@dimen/textsize_large"
+            android:textStyle="bold"
+            />
+
+        <TextView
+            android:id="@+id/makeorder_top_dishesprice"
+            android:layout_width="0dip"
+            android:layout_height="@dimen/distance_50"
+            android:layout_weight="3"
+            android:textSize="@dimen/textsize_large"
+            android:text="价格"
+            android:gravity="center"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/makeorder_top_dishesnum"
+            android:layout_width="0dip"
+            android:layout_height="@dimen/distance_50"
+            android:layout_weight="2"
+            android:textSize="@dimen/textsize_large"
+            android:text="数量"
+            android:gravity="center"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/makeorder_top_istakeaway"
+            android:layout_width="0dip"
+            android:layout_height="@dimen/distance_50"
+            android:layout_weight="2"
+            android:text="外卖"
+            android:textSize="@dimen/textsize_large"
+            android:gravity="center"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/makeorder_top_dishesoperation"
+            android:layout_width="0dip"
+            android:layout_height="@dimen/distance_50"
+            android:layout_weight="2"
+            android:text="操作"
+            android:textSize="@dimen/textsize_large"
+            android:gravity="center"
+            android:textStyle="bold"/>
+
+        </LinearLayout>
+
+    <View
+        android:id="@+id/makeorder_top_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/distance_2"
+        android:background="@color/makeorder_top_line"
+        android:layout_below="@+id/makeorder_top"
+        android:layout_marginLeft="@dimen/distance_40"
+        android:layout_marginRight="@dimen/distance_40"
+        />
+
+
+        <kxlive.gjrlibrary.widget.sectionedlist.PinnedSectionListView
+            android:id="@+id/makeorder_disheslist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="@dimen/distance_50"
+            android:layout_marginLeft="@dimen/distance_50"
+            android:layout_below="@+id/makeorder_top_line"
+            android:layout_above="@+id/makeorder_bottom_line"
+            android:choiceMode="singleChoice"
+            android:divider="@null"
+            android:drawSelectorOnTop="true"
+            android:focusable="false"
+            android:gravity="center"
+            android:scrollbars="none" />
+
+        <View
+            android:id="@+id/makeorder_bottom_line"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/distance_2"
+            android:background="@color/makeorder_top_line"
+            android:layout_above="@+id/makeorder_total_group"
+            android:layout_marginLeft="@dimen/distance_40"
+            android:layout_marginRight="@dimen/distance_40"
+            />
+
+        <RelativeLayout
+            android:id="@+id/makeorder_total_group"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/distance_120"
+            android:layout_marginLeft="@dimen/distance_40"
+            android:layout_marginRight="@dimen/distance_40"
+            android:layout_alignParentBottom="true">
+
+            <TextView
+                android:id="@+id/makeorder_num_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/makeorder_num_title"
+                android:textSize="@dimen/textsize_large"
+                android:layout_marginTop="@dimen/distance_20"
+                android:layout_marginLeft="@dimen/distance_200"/>
+
+            <TextView
+            android:id="@+id/makeorder_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/textsize_large"
+            android:layout_marginTop="@dimen/distance_20"
+            android:layout_marginLeft="@dimen/distance_10"
+            android:layout_toRightOf="@+id/makeorder_num_title"
+            android:text="1"/>
+
+            <TextView
+                android:id="@+id/makeorder_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textsize_large"
+                android:layout_marginTop="@dimen/distance_20"
+                android:layout_marginLeft="@dimen/distance_40"
+                android:layout_toRightOf="@+id/makeorder_num"
+                android:text="@string/makeorder_total"/>
+
+            <TextView
+                android:id="@+id/makeorder_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textsize_xxlarge"
+                android:layout_marginTop="@dimen/distance_15"
+                android:layout_marginLeft="@dimen/distance_5"
+                android:layout_toRightOf="@+id/makeorder_total"
+                android:text="40.00"
+                android:textColor="@color/makeorder_price_color"/>
+
+            <TextView
+                android:id="@+id/makeorder_takeaway_sysbol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textsize_large"
+                android:layout_marginTop="@dimen/distance_20"
+                android:layout_marginLeft="@dimen/distance_20"
+                android:layout_toRightOf="@+id/makeorder_price"
+                android:text="@string/takeaway"/>
+
+            <CheckBox
+                android:id="@+id/makeorder_takeaway_all_check"
+                android:layout_width="42dip"
+                android:layout_height="42dip"
+                android:button="@anim/selector_cbx_remember_password"
+                android:layout_marginTop="@dimen/distance_15"
+                android:layout_marginLeft="@dimen/distance_5"
+                android:layout_toRightOf="@+id/makeorder_takeaway_sysbol"
+                />
+
+
+            </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/makeorder_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/distance_120"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:background="@color/makeorder_bottom_bg"
+        >
+
+        <Button
+            android:layout_width="@dimen/distance_230"
+            android:layout_height="@dimen/distance_80"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:id="@+id/makeorder_to_dishesmenu"
+            android:background="@anim/selector_btn_makeorder_to_dishesmenu"
+            />
+
+        <Button
+            android:id="@+id/makeorder_clear"
+            android:layout_width="@dimen/distance_110"
+            android:layout_height="@dimen/distance_80"
+            android:background="@anim/selector_btn_dishesmenu_clear"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/makeorder_settle"
+            android:layout_marginRight="@dimen/distance_20"/>
+
+        <Button
+            android:layout_width="@dimen/distance_190"
+            android:layout_height="@dimen/distance_80"
+            android:background="@anim/selector_btn_makeorder_settle_bg"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/distance_20"
+            android:layout_marginBottom="@dimen/distance_15"
+            android:id="@+id/makeorder_settle" />
+        </RelativeLayout>
+
+</RelativeLayout>

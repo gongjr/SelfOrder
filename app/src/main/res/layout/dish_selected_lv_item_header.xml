@@ -1,0 +1,20 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+
+
+        <TextView
+            android:id="@+id/view_header"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/distance_40"
+            android:layout_margin="@dimen/distance_10"
+            android:paddingLeft="@dimen/distance_20"
+            android:gravity="left|center_vertical"
+            android:singleLine="true"
+            android:textAllCaps="true"
+            android:textIsSelectable="false"
+            android:textSize="@dimen/textsize_large"
+            android:background="@color/makeorder_seleted_header_bg"/>
+
+</FrameLayout>

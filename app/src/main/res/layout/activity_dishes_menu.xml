@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dishes_bg">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/dishes_type_group"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/distance_80"
+            android:layout_alignParentTop="true"
+            android:background="@color/item_dishes_type_name_bg"
+            />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/dishes_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/dishes_type_group"
+            android:layout_above="@+id/dishes_bottom"
+            android:layout_margin="@dimen/distance_5"
+            />
+    <RelativeLayout
+        android:id="@+id/dishes_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/distance_100"
+        android:layout_alignParentBottom="true"
+        android:background="@color/dishesmenu_bottom_bg">
+        
+        <LinearLayout
+            android:id="@+id/dishesmenu_num_group"
+            android:layout_width="@dimen/distance_160"
+            android:layout_height="@dimen/distance_80"
+            android:orientation="vertical"
+            android:layout_centerVertical="true">
+            <TextView
+                android:layout_width="@dimen/distance_160"
+                android:layout_height="@dimen/distance_40"
+                android:text="@string/dishes_menu_selected_num"
+                android:gravity="center"
+                android:textSize="@dimen/textsize_large"/>
+
+            <TextView
+                android:id="@+id/dishes_menu_selected_num"
+                android:layout_width="@dimen/distance_160"
+                android:layout_height="@dimen/distance_40"
+                android:text="1"
+                android:gravity="center"
+                android:textSize="@dimen/textsize_xlarge"
+                android:textColor="@color/dishes_menu_selected_num_text"/>
+            </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="@dimen/distance_160"
+            android:layout_height="@dimen/distance_80"
+            android:orientation="vertical"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/dishesmenu_num_group">
+            <TextView
+                android:layout_width="@dimen/distance_120"
+                android:layout_height="@dimen/distance_40"
+                android:text="@string/dishes_menu_pay_price"
+                android:gravity="center_vertical|right"
+                android:textSize="@dimen/textsize_large"/>
+
+            <TextView
+                android:id="@+id/dishes_menu_selected_price"
+                android:layout_width="@dimen/distance_120"
+                android:layout_height="@dimen/distance_40"
+                android:text="00.00"
+                android:gravity="center_vertical|right"
+                android:textSize="@dimen/textsize_xlarge"
+                android:textColor="@color/dishes_menu_selected_num_text"/>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/dishesmenu_next"
+            android:layout_width="@dimen/distance_190"
+            android:layout_height="@dimen/distance_80"
+            android:background="@anim/selector_btn_dishesmenu_next_click"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/dishesmenu_bottom_clear"
+            android:layout_marginRight="@dimen/distance_15"/>
+
+
+        
+        <Button
+            android:id="@+id/dishesmenu_bottom_clear"
+            android:layout_width="@dimen/distance_110"
+            android:layout_height="@dimen/distance_80"
+            android:background="@anim/selector_btn_dishesmenu_clear"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/distance_20"/>
+
+        <Button
+            android:id="@+id/dishesmenu_next_init"
+            android:layout_width="@dimen/distance_190"
+            android:layout_height="@dimen/distance_80"
+            android:background="@drawable/dishesmenu_next_click_init"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/dishesmenu_bottom_clear_init"
+            android:layout_marginRight="@dimen/distance_15"
+            android:visibility="gone"/>
+        <Button
+            android:id="@+id/dishesmenu_bottom_clear_init"
+            android:layout_width="@dimen/distance_110"
+            android:layout_height="@dimen/distance_80"
+            android:background="@drawable/dishesmenu_clear_init"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/distance_20"
+            android:visibility="gone"/>
+
+        </RelativeLayout>
+</RelativeLayout>

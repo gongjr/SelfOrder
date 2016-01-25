@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="@dimen/distance_250"
+    android:layout_height="@dimen/distance_80">
+
+    <TextView
+        android:id="@+id/item_dishes_type_name"
+        android:layout_width="@dimen/distance_250"
+        android:layout_height="@dimen/distance_80"
+        android:gravity="center"
+        android:textColor="@color/item_dishes_type_name_text"
+        android:textSize="@dimen/textsize_large"
+        android:background="@color/item_dishes_type_name_bg" />
+
+</LinearLayout>
