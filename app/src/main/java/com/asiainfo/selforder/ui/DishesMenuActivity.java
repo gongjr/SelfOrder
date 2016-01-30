@@ -77,7 +77,7 @@ public class DishesMenuActivity extends mBaseActivity{
     }
 
     private void initData(){
-        //当前版本debug
+        //当前版本debug,2
         EventBus.getDefault().register(this);
         MerchantRegister merchantRegister=(MerchantRegister)mApp.getData(mApp.KEY_GLOABLE_LOGININFO);
         MerchantDesk merchantDesk=(MerchantDesk)mApp.getData(mApp.KEY_GLOABLE_MERCHANTDESk);
