@@ -168,7 +168,8 @@
                 android:layout_marginTop="@dimen/distance_20"
                 android:layout_marginLeft="@dimen/distance_20"
                 android:layout_toRightOf="@+id/makeorder_price"
-                android:text="@string/takeaway"/>
+                android:text="@string/takeaway"
+                android:visibility="invisible"/>
 
             <CheckBox
                 android:id="@+id/makeorder_takeaway_all_check"
@@ -178,6 +179,7 @@
                 android:layout_marginTop="@dimen/distance_15"
                 android:layout_marginLeft="@dimen/distance_5"
                 android:layout_toRightOf="@+id/makeorder_takeaway_sysbol"
+                android:visibility="invisible"
                 />
 
 
