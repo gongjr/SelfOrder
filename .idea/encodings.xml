@@ -19,6 +19,11 @@
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/model/order/OrderGoodsItem.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/model/order/OrderSubmit.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/model/order/PropertySelectEntity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/service/HomeActivity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/service/LockScreenActivity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/service/LockScreenReceiver.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/service/LockScreenService.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/service/TimeUtils.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/ui/LoginActivity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/ui/MakeOrderDF.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/utils/CrashHandler.java" charset="UTF-8" />
@@ -38,13 +43,19 @@
     <file url="file://$PROJECT_DIR$/app/src/main/res/anim/push_up_in.xml" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/anim/push_up_out.xml" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/anim/scale_rotate_in.xml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/click.png" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/icon.png" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/key.png" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/lock.png" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/login_bg.jpg" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/login_password_icon.png" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/login_pwd_shadow.png" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/login_top_waiter_tie.png" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/login_user_icon.png" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/share.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_home.xml" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_launcher.xml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_lockscreen.xml" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_login.xml" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/layout/crash_toast_content_view.xml" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/layout/dfragment_makeorder_settle.xml" charset="UTF-8" />
