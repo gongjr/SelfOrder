@@ -80,6 +80,7 @@
             android:button="@anim/selector_cbx_remember_password"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/distance_8"
+            android:visibility="invisible"
             />
     </RelativeLayout>
     <RelativeLayout
