@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Button xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dish_comp_type_btn"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dish_type_bg"
+    android:text="牛"
+    android:textSize="@dimen/textsize_large"
+    android:focusable="false"
+    android:clickable="false"
+    >
+</Button>

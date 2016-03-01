@@ -35,6 +35,8 @@ public class DishesPropertyItem extends DataSupport implements Serializable{
      */
     private String isCompProperty="0";
 
+	private boolean isChecked;
+
     public String getIsCompProperty() {
         return isCompProperty;
     }
@@ -105,5 +107,13 @@ public class DishesPropertyItem extends DataSupport implements Serializable{
 
 	public void setItemTypeName(String itemTypeName) {
 		this.itemTypeName = itemTypeName;
+	}
+
+	public boolean isChecked() {
+		return isChecked;
+	}
+
+	public void setIsChecked(boolean isChecked) {
+		this.isChecked = isChecked;
 	}
 }
