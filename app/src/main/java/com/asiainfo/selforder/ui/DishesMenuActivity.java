@@ -217,13 +217,12 @@ public class DishesMenuActivity extends mBaseActivity{
      * @param position
      */
     public void refreshDishesItem(final int position,final MerchantDishesType dishesType){
-        Log.i("SectionPosition",dishesType.getDishesTypeName()+":"+dishesType.getSectionPosition());
         //定位菜品dishesGridView对应位置
         if(dishesType.getSectionPosition()==0){
         dishesGridView.postDelayed(new Runnable() {
             @Override
             public void run() {
-        dishesGridView.smoothScrollToPosition(dishesType.getSectionPosition());
+                  dishesGridView.smoothScrollToPosition(dishesType.getSectionPosition());
             }
         },200);
         }else{
@@ -233,30 +232,41 @@ public class DishesMenuActivity extends mBaseActivity{
                 numScroll=dishesType.getSectionPosition()-curFirstVisibleItemPosition;
             else if(dishesType.getSectionPosition()<curFirstVisibleItemPosition)
                 numScroll=curFirstVisibleItemPosition-dishesType.getSectionPosition();
+
             if(dishesType.getSectionPosition()>=curFirstVisibleItemPosition+curVisibleItemCount){
-            //若果要定位的目标位置在显示区域外面,先强制粗略定位到头部或尾部上下最近位置,后进行精准头部定位
-            //否则直接进行精准头部定位,有时候不一定能够直接偏移定位到头部,偏移到中间就直接事件冲突停止了
-            dishesGridView.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    // 精准头部定位失效,只能定位到上下最近位置
-                    if(dishesGridView.getFirstVisiblePosition()<dishesType.getSectionPosition())
-                        dishesGridView.smoothScrollToPosition(dishesType.getSectionPosition()+6);
-                    else dishesGridView.smoothScrollToPosition(dishesType.getSectionPosition()+3);
-                }
-            },10);
-            }
-            //精准头部偏移定位
-            dishesGridView.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Log.i("s","curFirstVisibleItemPosition:"+curFirstVisibleItemPosition);
-                    Log.i("s","dishesType.getSectionPosition():"+dishesType.getSectionPosition());
-                    if(curFirstVisibleItemPosition!=dishesType.getSectionPosition()){
-                        dishesGridView.smoothScrollToPositionFromTop(dishesType.getSectionPosition(),0);
+                //若果要定位的目标位置在显示区域下面外面,先强制粗略定位到头部或尾部上下最近位置,后进行精准头部定位
+                //否则直接进行精准头部定位,有时候不一定能够直接偏移定位到头部,偏移到中间就直接事件冲突停止了
+                dishesGridView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        // 精准头部定位失效,只能定位到上下最近位置
+                        if(dishesGridView.getFirstVisiblePosition()<dishesType.getSectionPosition())
+                            dishesGridView.smoothScrollToPosition(dishesType.getSectionPosition()+6);
+                        else dishesGridView.smoothScrollToPosition(dishesType.getSectionPosition()+3);
                     }
-                }
-            },numScroll*10);
+                },10);
+
+                //精准头部偏移定位,给粗略定位滚动留一定空余时间,根据目标滚动距离,估算时间
+                dishesGridView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(curFirstVisibleItemPosition!=dishesType.getSectionPosition()){
+                            dishesGridView.smoothScrollToPositionFromTop(dishesType.getSectionPosition(),0);
+                        }
+                    }
+                },numScroll*10);
+            }else{
+                //精准头部偏移定位,在上面位置是,直接定位到位
+                dishesGridView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(curFirstVisibleItemPosition!=dishesType.getSectionPosition()){
+                            dishesGridView.smoothScrollToPositionFromTop(dishesType.getSectionPosition(),0);
+                        }
+                    }
+                },10);
+            }
+            //给自动滚动一定时间限制,此时屏蔽滚动事件对头部类型的影响
             if(numScroll<50)numScroll=50;
             dishesGridView.postDelayed(new Runnable() {
                 @Override
@@ -277,17 +287,11 @@ public class DishesMenuActivity extends mBaseActivity{
             dishesTypeView.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    KLog.i("position:"+position);
-                    //dishesTypeView.getLayoutManager().scrollToPosition(position-1);
-                    //scrollToPosition(position),移动靠左或靠右,或者完全显示的时候不移动,不计算偏移量
                     ((LinearLayoutManager)dishesTypeView.getLayoutManager()).scrollToPositionWithOffset(position-1,0);
                 }
             },300);
         }
     }
-
-
-
 
     /**
      * 处理dishes初始点击事件
