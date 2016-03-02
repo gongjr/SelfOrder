@@ -107,8 +107,8 @@ public class DishCompsTypeAdapter extends BaseAdapter {
             Log.d("1111", "The size is: " + dishesPropertyList.size());
             listView.setVisibility(View.VISIBLE);
 
-            for (DishesProperty dishesProperty: dishesPropertyList) {
-                for (DishesPropertyItem dishesPropertyItem: dishesProperty.getItemlist()) {
+            for (DishesProperty dishesProperty : dishesPropertyList) {
+                for (DishesPropertyItem dishesPropertyItem : dishesProperty.getItemlist()) {
                     if (dishesPropertyItem.isChecked()) {
                         return;
                     }

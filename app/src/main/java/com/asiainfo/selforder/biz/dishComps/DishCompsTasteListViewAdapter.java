@@ -58,7 +58,7 @@ public class DishCompsTasteListViewAdapter extends BaseAdapter {
             holder = new DishCompsTasteListViewHolder();
             view = LayoutInflater.from(context).inflate(R.layout.dish_comps_taste_listview, null);
             holder.textView = (TextView) view.findViewById(R.id.dish_comp_taste_name);
-            holder.gridView  = (GridView) view.findViewById(R.id.dish_comp_taste_gridview);
+            holder.gridView = (GridView) view.findViewById(R.id.dish_comp_taste_gridview);
             view.setTag(holder);
         } else {
             holder = (DishCompsTasteListViewHolder) view.getTag();
@@ -72,7 +72,7 @@ public class DishCompsTasteListViewAdapter extends BaseAdapter {
         holder.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                for (DishesPropertyItem dishesPropertyItem: dishesPropertyItemList ) {
+                for (DishesPropertyItem dishesPropertyItem : dishesPropertyItemList) {
                     dishesPropertyItem.setIsChecked(false);
                 }
                 dishesPropertyItemList.get(i).setIsChecked(true);

@@ -3,43 +3,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingTop="20dp"
     android:paddingBottom="10dp"
-    >
+    android:paddingTop="20dp">
 
     <TextView
         android:id="@+id/dish_comp_type_name"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:textColor="@color/item_dishes_type_name_text_s"
-        android:textSize="@dimen/textsize_middle"
-        android:text="主食"
         android:layout_marginLeft="70dp"
-        />
+        android:text="主食"
+        android:textColor="@color/item_dishes_type_name_text_s"
+        android:textSize="@dimen/textsize_middle" />
 
     <com.asiainfo.selforder.biz.dishComps.MyGridview
         android:id="@+id/dish_comp_type_gridview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/dish_comp_type_name"
         android:layout_marginLeft="20dp"
-        android:verticalSpacing="10dp"
+        android:layout_marginRight="70dp"
+        android:layout_toRightOf="@+id/dish_comp_type_name"
         android:horizontalSpacing="10dp"
         android:numColumns="3"
         android:stretchMode="columnWidth"
-        android:layout_marginRight="70dp"
-        ></com.asiainfo.selforder.biz.dishComps.MyGridview>
+        android:verticalSpacing="10dp"></com.asiainfo.selforder.biz.dishComps.MyGridview>
 
     <com.asiainfo.selforder.biz.dishComps.MyListView
         android:id="@+id/dish_comp_taste_listview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/dish_comp_type_gridview"
-        android:background="@android:color/white"
-        android:focusable="false"
-        android:visibility="gone"
         android:layout_marginTop="20dp"
-        android:divider="@null">
+        android:background="@android:color/white"
+        android:divider="@null"
+        android:focusable="false"
+        android:visibility="gone">
 
     </com.asiainfo.selforder.biz.dishComps.MyListView>
 

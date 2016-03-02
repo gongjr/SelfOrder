@@ -2,26 +2,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:gravity="center_vertical">
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
 
     <TextView
         android:id="@+id/dish_comp_taste_name"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/textsize_middle"
         android:layout_marginLeft="80dp"
-        android:text="111"/>
+        android:text="111"
+        android:textSize="@dimen/textsize_middle" />
 
     <com.asiainfo.selforder.biz.dishComps.MyGridview
         android:id="@+id/dish_comp_taste_gridview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:verticalSpacing="10dp"
         android:horizontalSpacing="10dp"
         android:numColumns="3"
         android:stretchMode="columnWidth"
-        ></com.asiainfo.selforder.biz.dishComps.MyGridview>
+        android:verticalSpacing="10dp"></com.asiainfo.selforder.biz.dishComps.MyGridview>
 
 </LinearLayout>
