@@ -8,6 +8,7 @@
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/http/HttpHelper.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/model/Listener/OnChangeWithPropertyListener.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/model/Listener/OnCheckedPropertyListener.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/model/Listener/OnStickyHeaderChangeListener.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/model/MerchantRegister.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/model/dishes/DishesProperty.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/model/dishes/DishesPropertyItem.java" charset="UTF-8" />
@@ -19,11 +20,6 @@
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/model/order/OrderGoodsItem.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/model/order/OrderSubmit.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/model/order/PropertySelectEntity.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/service/HomeActivity.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/service/LockScreenActivity.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/service/LockScreenReceiver.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/service/LockScreenService.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/service/TimeUtils.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/ui/LoginActivity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/ui/MakeOrderDF.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/utils/CrashHandler.java" charset="UTF-8" />
@@ -53,9 +49,7 @@
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/login_top_waiter_tie.png" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/login_user_icon.png" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/share.png" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_home.xml" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_launcher.xml" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_lockscreen.xml" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_login.xml" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/layout/crash_toast_content_view.xml" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/layout/dfragment_makeorder_settle.xml" charset="UTF-8" />
@@ -124,6 +118,7 @@
     <file url="file://$PROJECT_DIR$/kxlivelibrary/src/main/java/com/android/volley/toolbox/StringRequest.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/kxlivelibrary/src/main/java/com/android/volley/toolbox/Volley.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/kxlivelibrary/src/main/java/com/handmark" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/kxlivelibrary/src/main/java/com/tonicartos" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/kxlivelibrary/src/main/java/kxlive/gjrlibrary/base/BaseActivity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/kxlivelibrary/src/main/java/kxlive/gjrlibrary/base/DialogFragmentBase.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/kxlivelibrary/src/main/java/kxlive/gjrlibrary/base/IBaseActivity.java" charset="UTF-8" />

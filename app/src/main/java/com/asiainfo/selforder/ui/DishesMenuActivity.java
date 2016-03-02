@@ -5,28 +5,32 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.asiainfo.selforder.R;
 import com.asiainfo.selforder.biz.db.DishesEntity;
-import com.asiainfo.selforder.biz.dishes.DishesAdapter;
 import com.asiainfo.selforder.biz.dishes.DishesTypeAdapter;
+import com.asiainfo.selforder.biz.dishes.StickyDishesAdapter;
 import com.asiainfo.selforder.biz.order.OrderEntity;
 import com.asiainfo.selforder.config.Constants;
 import com.asiainfo.selforder.model.Listener.OnItemClickListener;
 import com.asiainfo.selforder.model.Listener.OnPropertyItemClickListener;
 import com.asiainfo.selforder.model.MerchantDesk;
 import com.asiainfo.selforder.model.MerchantRegister;
+import com.asiainfo.selforder.model.dishes.DishesData;
 import com.asiainfo.selforder.model.dishes.MerchantDishes;
 import com.asiainfo.selforder.model.dishes.MerchantDishesType;
+import com.asiainfo.selforder.model.dishes.TypeSection;
 import com.asiainfo.selforder.model.order.PropertySelectEntity;
 import com.asiainfo.selforder.ui.base.mBaseActivity;
 import com.google.inject.Inject;
+import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
 
 import java.util.List;
 
@@ -55,8 +59,10 @@ public class DishesMenuActivity extends mBaseActivity{
     private Button next_init;
     @InjectView(R.id.dishes_type_group)
     private RecyclerView dishesTypeView;
-    @InjectView(R.id.dishes_group)
-    private RecyclerView dishesView;
+//    @InjectView(R.id.dishes_group)
+//    private RecyclerView dishesView;
+    @InjectView(R.id.sticky_dishes_group)
+    private StickyGridHeadersGridView dishesGridView;
     @Inject
     Resources res;
     @Inject
@@ -64,8 +70,14 @@ public class DishesMenuActivity extends mBaseActivity{
     @InjectResource(R.string.clear_init_tips) String clear_init_tips;
     @InjectResource(R.string.next_init_tips) String next_init_tips;
     private DishesTypeAdapter mDishesTypeAdapter;
-    private DishesAdapter mDishesAdapter;
-    private List<MerchantDishesType> dishesTypeList;
+//    private DishesAdapter mDishesAdapter;
+    private StickyDishesAdapter mStickyDishesAdapter;
+//    private ArrayList<MerchantDishesType> dishesTypeList;
+//    private ArrayList<MerchantDishes> dishesList;
+    private DishesData mDishesData;
+    private int curFirstVisibleItemPosition=0;
+    private int curVisibleItemCount=9;
+    private boolean isAutoScroll=false;
     private DishesEntity dishesEntity;
     private OrderEntity orderEntity;
     @Override
@@ -82,20 +94,24 @@ public class DishesMenuActivity extends mBaseActivity{
         MerchantDesk merchantDesk=(MerchantDesk)mApp.getData(mApp.KEY_GLOABLE_MERCHANTDESk);
         KLog.i("merchantDesk:"+merchantDesk);
         dishesEntity=new DishesEntity();
-        //类型加载
-        dishesTypeList=dishesEntity.getAllDishesType();
-        orderEntity=new OrderEntity(merchantRegister,dishesTypeList,merchantDesk);
+        //菜品加载
+//        dishesTypeList=dishesEntity.getAllDishesType();
+        mDishesData=dishesEntity.getAllDishesOrderbyType();
+        orderEntity=new OrderEntity(merchantRegister,mDishesData.getDishesTypeList(),merchantDesk);
 
         LinearLayoutManager dishesLayoutManager = new LinearLayoutManager(this);
         dishesLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         dishesTypeView.setLayoutManager(dishesLayoutManager);
-        mDishesTypeAdapter=new DishesTypeAdapter(inflater,dishesTypeList,res);
+        mDishesTypeAdapter=new DishesTypeAdapter(inflater,mDishesData.getDishesTypeList(),res);
         mDishesTypeAdapter.setmOnItemClickListenerT(dishesTypeOnItemClick);
         dishesTypeView.setAdapter(mDishesTypeAdapter);
         //菜品加载
-        mDishesAdapter=new DishesAdapter<MerchantDishes>(inflater,res,mActivity);
-        mDishesAdapter.setOnPropertyItemClickListener(addDishesOnItemClick);
-        refreshDishesItem(0);
+//        mDishesAdapter=new DishesAdapter<MerchantDishes>(inflater,res,mActivity);
+//        mDishesAdapter.setOnPropertyItemClickListener(addDishesOnItemClick);
+        mStickyDishesAdapter=new StickyDishesAdapter(inflater,res,mActivity);
+        mStickyDishesAdapter.setOnPropertyItemClickListener(addDishesOnItemClick);
+        mStickyDishesAdapter.refreshData(mDishesData.getDishesList());
+        dishesGridView.setAdapter(mStickyDishesAdapter);
         updateNumAndPrice();
     }
 
@@ -104,25 +120,48 @@ public class DishesMenuActivity extends mBaseActivity{
         clear_init.setOnClickListener(mOnClickListener);
         next.setOnClickListener(mOnClickListener);
         next_init.setOnClickListener(mOnClickListener);
-    }
+        dishesGridView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
 
-    /**
-     * 属性对应位置处的类型菜
-     * @param position
-     */
-    public void refreshDishesItem(int position){
-        if(dishesTypeList!=null&&dishesTypeList.size()>0) {
-            MerchantDishesType merchantDishesType=dishesTypeList.get(position);
-            if(merchantDishesType.getDishesInfoList()!=null&&merchantDishesType.getDishesInfoList().size()<1){
-                merchantDishesType.setDishesInfoList(dishesEntity.sqliteMerchantDishesByType(merchantDishesType.getDishesTypeCode()));
-                dishesTypeList.set(position,merchantDishesType);
-                //查询一次后保存
             }
-            mDishesAdapter.refreshData(merchantDishesType.getDishesInfoList());
-            StaggeredGridLayoutManager mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
-            dishesView.setLayoutManager(mStaggeredGridLayoutManager);
-            dishesView.setAdapter(mDishesAdapter);
-        }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
+                                 int totalItemCount) {
+                if (curFirstVisibleItemPosition != firstVisibleItem) {
+                    curFirstVisibleItemPosition = firstVisibleItem;
+                    curVisibleItemCount=visibleItemCount;
+                    Log.i("onScroll", "curFirstVisibleItemPosition:" + curFirstVisibleItemPosition);
+                    for (TypeSection mTypeSection : mDishesData.getSectionList()) {
+                        if (curFirstVisibleItemPosition < mTypeSection.getEndIndex() && curFirstVisibleItemPosition >= mTypeSection.getStartIndex()&&!isAutoScroll) {
+                            if (mDishesTypeAdapter.getSelectedPos() != mTypeSection.getTypeIndex()) {
+                                mDishesTypeAdapter.setSelectedPos(mTypeSection.getTypeIndex());
+                                final int position = mTypeSection.getTypeIndex();
+                                //定位头部类型位置
+                                if (position == 0 && dishesGridView.getChildAt(0).getVisibility() == View.VISIBLE) {
+                                    dishesTypeView.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                        }
+                                    }, 300);
+                                } else if (position > 0) {
+                                    dishesTypeView.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            //dishesTypeView.getLayoutManager().scrollToPosition(position-1);
+                                            //scrollToPosition(position),移动靠左或靠右,或者完全显示的时候不移动,不计算偏移量
+                                            ((LinearLayoutManager) dishesTypeView.getLayoutManager()).scrollToPositionWithOffset(position - 1, 0);
+                                        }
+                                    }, 300);
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        });
     }
 
     View.OnClickListener mOnClickListener=new View.OnClickListener() {
@@ -133,7 +172,8 @@ public class DishesMenuActivity extends mBaseActivity{
                     orderEntity.clearOrder();
                     updateNumAndPrice();
                     clearTOinit();
-                    mDishesAdapter.clearNum();
+//                    mDishesAdapter.clearNum();
+                    mStickyDishesAdapter.clearNum();
                     break;
                 case R.id.dishesmenu_next:
                     orderEntity.prepareNewOrderSummaryInfo();
@@ -166,9 +206,88 @@ public class DishesMenuActivity extends mBaseActivity{
     OnItemClickListener<MerchantDishesType> dishesTypeOnItemClick=new OnItemClickListener<MerchantDishesType>() {
         @Override
         public void onItemClick(View view, int position, MerchantDishesType dishesType) {
-            refreshDishesItem(position);
+            refreshDishesItem(position,dishesType);
         }
     };
+
+
+    /**
+     * 属性对应位置处的类型菜,自动数据定位,但是头部精准定位失效
+     * 只能进行数据估算,上下位置下不同偏移量来平衡
+     * @param position
+     */
+    public void refreshDishesItem(final int position,final MerchantDishesType dishesType){
+        Log.i("SectionPosition",dishesType.getDishesTypeName()+":"+dishesType.getSectionPosition());
+        //定位菜品dishesGridView对应位置
+        if(dishesType.getSectionPosition()==0){
+        dishesGridView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+        dishesGridView.smoothScrollToPosition(dishesType.getSectionPosition());
+            }
+        },200);
+        }else{
+            isAutoScroll=true;
+            int numScroll=1;
+            if(dishesType.getSectionPosition()>curFirstVisibleItemPosition)
+                numScroll=dishesType.getSectionPosition()-curFirstVisibleItemPosition;
+            else if(dishesType.getSectionPosition()<curFirstVisibleItemPosition)
+                numScroll=curFirstVisibleItemPosition-dishesType.getSectionPosition();
+            if(dishesType.getSectionPosition()>=curFirstVisibleItemPosition+curVisibleItemCount){
+            //若果要定位的目标位置在显示区域外面,先强制粗略定位到头部或尾部上下最近位置,后进行精准头部定位
+            //否则直接进行精准头部定位,有时候不一定能够直接偏移定位到头部,偏移到中间就直接事件冲突停止了
+            dishesGridView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    // 精准头部定位失效,只能定位到上下最近位置
+                    if(dishesGridView.getFirstVisiblePosition()<dishesType.getSectionPosition())
+                        dishesGridView.smoothScrollToPosition(dishesType.getSectionPosition()+6);
+                    else dishesGridView.smoothScrollToPosition(dishesType.getSectionPosition()+3);
+                }
+            },10);
+            }
+            //精准头部偏移定位
+            dishesGridView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Log.i("s","curFirstVisibleItemPosition:"+curFirstVisibleItemPosition);
+                    Log.i("s","dishesType.getSectionPosition():"+dishesType.getSectionPosition());
+                    if(curFirstVisibleItemPosition!=dishesType.getSectionPosition()){
+                        dishesGridView.smoothScrollToPositionFromTop(dishesType.getSectionPosition(),0);
+                    }
+                }
+            },numScroll*10);
+            if(numScroll<50)numScroll=50;
+            dishesGridView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    isAutoScroll=false;
+                }
+            },numScroll*12);
+        }
+        //定位头部类型位置
+        if(position==0){
+            dishesTypeView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    dishesTypeView.getLayoutManager().scrollToPosition(0);
+                }
+            },300);
+        }else if(position>0){
+            dishesTypeView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    KLog.i("position:"+position);
+                    //dishesTypeView.getLayoutManager().scrollToPosition(position-1);
+                    //scrollToPosition(position),移动靠左或靠右,或者完全显示的时候不移动,不计算偏移量
+                    ((LinearLayoutManager)dishesTypeView.getLayoutManager()).scrollToPositionWithOffset(position-1,0);
+                }
+            },300);
+        }
+    }
+
+
+
 
     /**
      * 处理dishes初始点击事件
@@ -206,7 +325,8 @@ public class DishesMenuActivity extends mBaseActivity{
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==Constants.RequestCode_DishesMenuToMakeorder&&resultCode==Constants.ResultCode_MakeorderToDishesMenu_Back){
             orderEntity=(OrderEntity)mApp.getData(mApp.KEY_CURORDER_ENTITY);
-            mDishesAdapter.refreshByOrderList(orderEntity.getOrderList());
+//            mDishesAdapter.refreshByOrderList(orderEntity.getOrderList());
+            mStickyDishesAdapter.refreshByOrderList(orderEntity.getOrderList());
             updateNumAndPrice();
         }
         if(requestCode==Constants.RequestCode_DishesMenuToMakeorder&&resultCode==Constants.ResultCode_MakeorderToDishesMenu_Clear){
@@ -214,7 +334,8 @@ public class DishesMenuActivity extends mBaseActivity{
             orderEntity.clearOrder();
             updateNumAndPrice();
             clearTOinit();
-            mDishesAdapter.clearNum();
+//            mDishesAdapter.clearNum();
+            mStickyDishesAdapter.clearNum();
         }
     }
 
@@ -229,7 +350,8 @@ public class DishesMenuActivity extends mBaseActivity{
                     orderEntity.clearOrder();
                     updateNumAndPrice();
                     clearTOinit();
-                    mDishesAdapter.clearNum();
+//                    mDishesAdapter.clearNum();
+                    mStickyDishesAdapter.clearNum();
                     break;
                 default:
                     break;

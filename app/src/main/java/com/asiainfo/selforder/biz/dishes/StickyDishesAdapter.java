@@ -3,14 +3,16 @@ package com.asiainfo.selforder.biz.dishes;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 import com.asiainfo.selforder.R;
 import com.asiainfo.selforder.model.Listener.OnChangeWithPropertyListener;
 import com.asiainfo.selforder.model.Listener.OnPropertyItemClickListener;
+import com.asiainfo.selforder.model.Listener.OnStickyHeaderChangeListener;
 import com.asiainfo.selforder.model.dishes.DishesProperty;
 import com.asiainfo.selforder.model.dishes.MerchantDishes;
 import com.asiainfo.selforder.model.order.OrderGoodsItem;
@@ -21,6 +23,7 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.tonicartos.widget.stickygridheaders.StickyGridHeadersSimpleAdapter;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,40 +34,92 @@ import kxlive.gjrlibrary.utils.KLog;
 /**
  * Created by gjr on 2015/12/1.
  */
-public class DishesAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
+public class StickyDishesAdapter extends BaseAdapter implements
+        StickyGridHeadersSimpleAdapter {
 
     private LayoutInflater mInflater;
     private Resources res;
     private List<MerchantDishes> itemList;
     private OnPropertyItemClickListener<MerchantDishes> numChangeOnItemClick;
+    private OnStickyHeaderChangeListener<MerchantDishes> stickyHeaderChangeListener;
     private Map<String,Integer> numMap;
     private FragmentActivity mActivity;
+    private boolean init;
 
-    public DishesAdapter(LayoutInflater inflater,Resources mRes,FragmentActivity mActivity){
+    public StickyDishesAdapter(LayoutInflater inflater, Resources mRes, FragmentActivity mActivity){
         this.mInflater=inflater;
         this.res=mRes;
         this.mActivity=mActivity;
         this.numMap=new HashMap<String,Integer>();
+        this.init=true;
     }
 
-    public DishesAdapter(LayoutInflater inflater, List<MerchantDishes> typeList, Resources mRes,FragmentActivity mActivity){
+    public StickyDishesAdapter(LayoutInflater inflater, List<MerchantDishes> typeList, Resources mRes, FragmentActivity mActivity){
         this.mInflater=inflater;
         this.itemList=typeList;
         this.res=mRes;
         this.numMap=new HashMap<String,Integer>();
         this.mActivity=mActivity;
+        this.init=true;
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view=mInflater.inflate(R.layout.item_dishes,null);
-        ViewHolder holder = new ViewHolder(view);
-        holder.setIsRecyclable(true);
-        return holder;
+    public int getCount() {
+        return itemList.size();
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
+    public Object getItem(int position) {
+        return itemList.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public long getHeaderId(int position) {
+        return Long.valueOf(itemList.get(position).getSection());
+    }
+
+    @Override
+    public View getHeaderView(int position, View convertView, ViewGroup parent) {
+
+        HeaderViewHolder mHeaderHolder;
+        if (convertView == null) {
+            mHeaderHolder = new HeaderViewHolder();
+            convertView = mInflater.inflate(R.layout.header1, parent, false);
+            mHeaderHolder.mTextView = (TextView) convertView
+                    .findViewById(R.id.header);
+            convertView.setTag(mHeaderHolder);
+        } else {
+            mHeaderHolder = (HeaderViewHolder) convertView.getTag();
+        }
+        if (init) {
+            init=false;
+            mHeaderHolder.mTextView.setText(itemList.get(position).getDishesTypeName());
+            mHeaderHolder.mTextView.setTag(itemList.get(position).getDishesTypeCode());
+        }else{
+            String curTag=(String)mHeaderHolder.mTextView.getTag();//Tag必须是类型唯一表示
+            if(!itemList.get(position).getDishesTypeCode().equals(curTag)){
+                mHeaderHolder.mTextView.setText(itemList.get(position).getDishesTypeName());
+                mHeaderHolder.mTextView.setTag(itemList.get(position).getDishesTypeCode());
+            }
+        }
+        return convertView;
+    }
+
+    @Override
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        final ViewHolder viewHolder;
+        if(convertView==null){
+            convertView = mInflater.inflate(R.layout.item_dishes, parent, false);
+            viewHolder=new ViewHolder(convertView);
+            convertView.setTag(viewHolder);
+        }else{
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
         final MerchantDishes merchantDishes=itemList.get(position);
         int curNum=getNum(merchantDishes);
         if(curNum>0){
@@ -114,6 +169,7 @@ public class DishesAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
                 }
             });
         }
+        return convertView;
     }
 
     public void loadViewHolderWithDishes(final ViewHolder viewHolder,final MerchantDishes merchantDishes,final int position){
@@ -150,7 +206,7 @@ public class DishesAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
                             int num=minusNum(merchantDishes);
                             viewHolder.dishesInit.setVisibility(View.VISIBLE);
                             viewHolder.dishesSelected.setVisibility(View.INVISIBLE);
-                            notifyItemChanged(position);//由于视图复用,恢复显示的时候要单独刷新对应item
+                            //notifyItemChanged(position);//由于视图复用,恢复显示的时候要单独刷新对应item
                             numChangeOnItemClick.onItemClick(null, num, merchantDishes, null);
                         }else{
                             int num=minusNum(merchantDishes);
@@ -162,7 +218,7 @@ public class DishesAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
                     if(num==0){
                         viewHolder.dishesInit.setVisibility(View.VISIBLE);
                         viewHolder.dishesSelected.setVisibility(View.INVISIBLE);
-                        notifyItemChanged(position);//由于视图复用,恢复显示的时候要单独刷新对应item
+                        //notifyItemChanged(position);//由于视图复用,恢复显示的时候要单独刷新对应item
                     }else{
                         viewHolder.dishesSelectedNum.setText(num+"");
                     }
@@ -235,10 +291,6 @@ public class DishesAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
         }
     };
 
-    @Override
-    public int getItemCount() {
-        return itemList.size();
-    }
 
     public void refreshData(List<MerchantDishes> typeList){
         this.itemList=typeList;
@@ -248,6 +300,15 @@ public class DishesAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
     public void setOnPropertyItemClickListener(OnPropertyItemClickListener<MerchantDishes> mOnItemClickListener){
          this.numChangeOnItemClick =mOnItemClickListener;
     }
+
+    public void setStickyHeaderChangeListener(OnStickyHeaderChangeListener<MerchantDishes> mOnItemClickListener){
+        this.stickyHeaderChangeListener =mOnItemClickListener;
+    }
+
+    public static class HeaderViewHolder {
+        public TextView mTextView;
+    }
+
 
     /**
      * 菜单显示图片的加载参数

@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.asiainfo.selforder.R;
-import com.asiainfo.selforder.biz.dishes.DishesAdapter;
+import com.asiainfo.selforder.biz.dishes.ViewHolder;
 import com.asiainfo.selforder.model.Listener.OnChangeWithPropertyListener;
 import com.asiainfo.selforder.model.dishes.DishesProperty;
 import com.asiainfo.selforder.model.dishes.DishesPropertyItem;
@@ -46,7 +46,7 @@ public class ChoosePropertyFragment extends DialogFragmentBase {
      */
     private List<PropertySelectEntity> curPropertyChocie = new ArrayList<PropertySelectEntity>();
     private OnChangeWithPropertyListener mOnChangeWithPropertyListener;
-    private DishesAdapter.ViewHolder viewHolder;
+    private ViewHolder viewHolder;
     private ConcurrentHashMap<DishesPropertyItem, CompoundButton> checkDishesItem = new ConcurrentHashMap<DishesPropertyItem, CompoundButton>();
     public static ChoosePropertyFragment propertyDF;
     public static ChoosePropertyFragment newInstance(MerchantDishes merchantDishes) {
@@ -122,7 +122,7 @@ public class ChoosePropertyFragment extends DialogFragmentBase {
     /**
      * 设置返回所选属性的监听函数
      */
-    public void setOnCheckedPropertyItemsListener(OnChangeWithPropertyListener nOnCheckedPropertyListener,DishesAdapter.ViewHolder viewHolder){
+    public void setOnCheckedPropertyItemsListener(OnChangeWithPropertyListener nOnCheckedPropertyListener,ViewHolder viewHolder){
         this.mOnChangeWithPropertyListener = nOnCheckedPropertyListener;
         this.viewHolder =viewHolder;
     }

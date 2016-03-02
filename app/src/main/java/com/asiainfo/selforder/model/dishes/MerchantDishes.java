@@ -54,6 +54,26 @@ public class MerchantDishes extends DataSupport implements Serializable{
 	private String memberPrice;
     /**是否参与整单折扣**/
 	private String isZdzk;
+    /**数据组装的时候头部位置,动态生成**/
+    private int section;
+
+    private int typeIndex;
+
+    public int getTypeIndex() {
+        return typeIndex;
+    }
+
+    public void setTypeIndex(int typeIndex) {
+        this.typeIndex = typeIndex;
+    }
+
+    public int getSection() {
+        return section;
+    }
+
+    public void setSection(int section) {
+        this.section = section;
+    }
 
     public String getDishesCode() {
         return dishesCode;

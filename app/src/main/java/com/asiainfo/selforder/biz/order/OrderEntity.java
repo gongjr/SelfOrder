@@ -367,6 +367,11 @@ public class OrderEntity {
         mOrderSubmit.setOrderid(orderid);
     }
 
+
+    public String getOrderId(){
+       return mOrderSubmit.getOrderid();
+    }
+
     public ServerOrder getNotifyOrderInfo(){
         ServerOrder notifyOrder = new ServerOrder();
         notifyOrder.setDeskId(Long.valueOf(mOrderSubmit.getDeskId()));
@@ -379,9 +384,4 @@ public class OrderEntity {
         notifyOrder.setChildMerchantId(mOrderSubmit.getChildMerchantId()+"");
         return notifyOrder;
     }
-
-    public String getOrderId(){
-       return mOrderSubmit.getOrderid();
-    }
-
 }

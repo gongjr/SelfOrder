@@ -102,7 +102,6 @@ public class ServerOrder {
     private List<ServerOrderGoods> OrderGoods = new ArrayList<ServerOrderGoods>();
 
 
-
     private Integer allGoodsNum = 0;
 
     private Long deskId;
@@ -323,6 +322,8 @@ public class ServerOrder {
     public void setMerchantName(String merchantName) {
         this.merchantName = merchantName;
     }
+
+
 
     public Integer getAllGoodsNum() {
         return allGoodsNum;
