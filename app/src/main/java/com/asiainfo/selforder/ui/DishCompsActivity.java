@@ -50,6 +50,8 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
     private List<DishesComp> dishesCompList;
     private String dishId = "100014732";
     private String childMerchantId;
+    private MerchantRegister mRegister;
+    private MerchantDesk mDesk;
 
     @InjectView(R.id.dish_comp_name)
     private TextView dishCompNameText;
@@ -69,9 +71,9 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dish_comps);
         TAG = getClass().getSimpleName();
-        MerchantRegister mRegister = (MerchantRegister) mApp.getData(mApp.KEY_GLOABLE_LOGININFO);
-        MerchantDesk mDesk = (MerchantDesk) mApp.getData(mApp.KEY_GLOABLE_MERCHANTDESk);
-//        initData();
+        mRegister = (MerchantRegister) mApp.getData(mApp.KEY_GLOABLE_LOGININFO);
+        mDesk = (MerchantDesk) mApp.getData(mApp.KEY_GLOABLE_MERCHANTDESk);
+        initData();
         initListner();
         httpGetDishesData("100014732", "20000080");
     }
@@ -111,7 +113,7 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
                         try {
                             if (data.length() != 0) {
                                 String dataStr = data.getString("compDishesTypeList");
-                                if (dataStr.length() !=0 ) {
+                                if (dataStr.length() != 0) {
                                     dishesCompList = new ArrayList<DishesComp>();
                                     Gson gson = new Gson();
                                     Type type = new TypeToken<ArrayList<DishesComp>>() {
@@ -183,17 +185,17 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
 
     private void getSelectedData() {
         List<OrderGoodsItem> orderGoodsItemList = new ArrayList<OrderGoodsItem>();
-        for (DishesComp dishesComp: dishesCompList) {
+        for (DishesComp dishesComp : dishesCompList) {
             List<DishesCompItem> dishesCompItemList = dishesComp.getDishesInfoList();
-            for (DishesCompItem dishesCompItem: dishesCompItemList) {
+            for (DishesCompItem dishesCompItem : dishesCompItemList) {
                 OrderGoodsItem orderGoodsItem = new OrderGoodsItem();
                 if (dishesCompItem.isChecked()) {
                     List<DishesProperty> dishesPropertyList = dishesCompItem.getDishesItemTypelist();
                     if (dishesPropertyList.size() != 0) {
                         List<String> remark = new ArrayList<String>();
-                        for (DishesProperty dishesProperty: dishesPropertyList) {
+                        for (DishesProperty dishesProperty : dishesPropertyList) {
                             List<DishesPropertyItem> dishesPropertyItemList = dishesProperty.getItemlist();
-                            for (DishesPropertyItem dishesPropertyItem: dishesPropertyItemList) {
+                            for (DishesPropertyItem dishesPropertyItem : dishesPropertyItemList) {
                                 if (dishesPropertyItem.isChecked()) {
                                     remark.add(dishesPropertyItem.getItemName());
                                 }
@@ -202,6 +204,8 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
                         }
                     }
                     orderGoodsItem.setCompId(dishId);
+                    orderGoodsItem.setTradeStaffId(mRegister.getStaffId());
+                    orderGoodsItem.setDeskId(mDesk.getDeskId());
                     orderGoodsItem.setDishesPrice(dishesCompItem.getDishesPrice());
                     orderGoodsItem.setDishesTypeCode(dishesCompItem.getDishesTypeCode());
                     orderGoodsItem.setExportId(dishesCompItem.getExportId());
@@ -227,6 +231,6 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
     * 给字体中间加横线
     * */
     private void textSetFlag(TextView textView) {
-        textView.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG );
+        textView.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
     }
 }
