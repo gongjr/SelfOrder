@@ -1,6 +1,6 @@
 package com.asiainfo.selforder.ui;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -31,6 +31,7 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,7 @@ import roboguice.inject.InjectView;
 public class DishCompsActivity extends mBaseActivity implements View.OnClickListener {
 
     private static String TAG = null;
+    private static final Integer DISHE_COMPS = 100001;
     private List<DishesComp> dishesCompList;
     private String dishId = "100014732";
     private String childMerchantId;
@@ -150,15 +152,15 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
     *
     * 跳转页面并将数据传递到新的页面中
     * */
-    public static void actionStart(Context context, String dishesId, String childMerchantId,
+    public static void actionStart(Activity context, String dishesId, String childMerchantId,
                                    String dishesName, String dishesPrice, String dishesMemberPrice) {
         Intent intent = new Intent(context, DishCompsActivity.class);
         intent.putExtra("dishesId", dishesId); //套餐ID
         intent.putExtra("childMerchantId", childMerchantId); //餐厅ID
         intent.putExtra("dishesName", dishesName); //套餐名称
         intent.putExtra("dishesPrice", dishesPrice); //套餐价格
-        intent.putExtra("dishesMemberPrice", dishesMemberPrice);//套餐会员价
-        context.startActivity(intent);
+        intent.putExtra("dishesMemberPrice", dishesMemberPrice);//套餐会员价it
+        context.startActivityForResult(intent, DISHE_COMPS);
     }
 
     /*
@@ -183,6 +185,9 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
         }
     }
 
+    /*
+    * 点击确定按钮后,将选择的菜传回上个页面
+    * */
     private void getSelectedData() {
         List<OrderGoodsItem> orderGoodsItemList = new ArrayList<OrderGoodsItem>();
         for (DishesComp dishesComp : dishesCompList) {
@@ -225,6 +230,10 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
                 }
             }
         }
+        Intent intent = new Intent();
+        intent.putExtra("OrderGoodsList", (Serializable) orderGoodsItemList);
+        setResult(DISHE_COMPS, intent);
+        finish();
     }
 
     /*
