@@ -109,11 +109,11 @@ public class DishCompsTypeAdapter extends BaseAdapter {
 
             for (DishesProperty dishesProperty : dishesPropertyList) {
                 for (DishesPropertyItem dishesPropertyItem : dishesProperty.getItemlist()) {
-                    if (dishesPropertyItem.isChecked()) {
+                    if (dishesPropertyItem.getIsChecked() != 0) {
                         return;
                     }
                 }
-                dishesProperty.getItemlist().get(0).setIsChecked(true);
+                dishesProperty.getItemlist().get(0).setIsChecked(1);
             }
             DishCompsTasteListViewAdapter adapter = new DishCompsTasteListViewAdapter(context, dishesPropertyList);
             listView.setAdapter(adapter);

@@ -73,9 +73,9 @@ public class DishCompsTasteListViewAdapter extends BaseAdapter {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 for (DishesPropertyItem dishesPropertyItem : dishesPropertyItemList) {
-                    dishesPropertyItem.setIsChecked(false);
+                    dishesPropertyItem.setIsChecked(0);
                 }
-                dishesPropertyItemList.get(i).setIsChecked(true);
+                dishesPropertyItemList.get(i).setIsChecked(1);
                 adapter.notifyDataSetChanged();
             }
         });

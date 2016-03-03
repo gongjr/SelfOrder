@@ -68,7 +68,7 @@ public class DishCompsTasteGridViewAdapter extends BaseAdapter {
         drawable1.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         holder.textView.setCompoundDrawables(null, null, drawable, null);
         //根据口味是否选中,设置对应图片
-        if (dishesPropertyItem.isChecked()) {
+        if (dishesPropertyItem.getIsChecked() != 0) {
             holder.textView.setCompoundDrawables(null, null, drawable1, null);
         } else {
             holder.textView.setCompoundDrawables(null, null, drawable, null);

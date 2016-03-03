@@ -23,6 +23,7 @@ import com.asiainfo.selforder.model.dishComps.DishesComp;
 import com.asiainfo.selforder.model.dishComps.DishesCompItem;
 import com.asiainfo.selforder.model.dishes.DishesProperty;
 import com.asiainfo.selforder.model.dishes.DishesPropertyItem;
+import com.asiainfo.selforder.model.dishes.MerchantDishes;
 import com.asiainfo.selforder.model.order.OrderGoodsItem;
 import com.asiainfo.selforder.ui.base.mBaseActivity;
 import com.google.gson.Gson;
@@ -48,12 +49,13 @@ import roboguice.inject.InjectView;
 public class DishCompsActivity extends mBaseActivity implements View.OnClickListener {
 
     private static String TAG = null;
-    private static final Integer DISHE_COMPS = 100001;
+    public static final Integer DISHE_COMPS = 10001;
     private List<DishesComp> dishesCompList;
     private String dishId = "100014732";
     private String childMerchantId;
     private MerchantRegister mRegister;
     private MerchantDesk mDesk;
+    private static MerchantDishes mMerchantDishes;
 
     @InjectView(R.id.dish_comp_name)
     private TextView dishCompNameText;
@@ -152,15 +154,15 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
     *
     * 跳转页面并将数据传递到新的页面中
     * */
-    public static void actionStart(Activity context, String dishesId, String childMerchantId,
-                                   String dishesName, String dishesPrice, String dishesMemberPrice) {
+    public static void actionStart(Activity context, MerchantDishes merchantDishes) {
         Intent intent = new Intent(context, DishCompsActivity.class);
-        intent.putExtra("dishesId", dishesId); //套餐ID
-        intent.putExtra("childMerchantId", childMerchantId); //餐厅ID
-        intent.putExtra("dishesName", dishesName); //套餐名称
-        intent.putExtra("dishesPrice", dishesPrice); //套餐价格
-        intent.putExtra("dishesMemberPrice", dishesMemberPrice);//套餐会员价it
+        intent.putExtra("dishesId", merchantDishes.getDishesId()); //套餐ID
+        intent.putExtra("childMerchantId", merchantDishes.getMerchantId()); //餐厅ID
+        intent.putExtra("dishesName", merchantDishes.getDishesName()); //套餐名称
+        intent.putExtra("dishesPrice", merchantDishes.getDishesPrice()); //套餐价格
+        intent.putExtra("dishesMemberPrice", merchantDishes.getMemberPrice());//套餐会员价it
         context.startActivityForResult(intent, DISHE_COMPS);
+        mMerchantDishes = merchantDishes;
     }
 
     /*
@@ -201,7 +203,7 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
                         for (DishesProperty dishesProperty : dishesPropertyList) {
                             List<DishesPropertyItem> dishesPropertyItemList = dishesProperty.getItemlist();
                             for (DishesPropertyItem dishesPropertyItem : dishesPropertyItemList) {
-                                if (dishesPropertyItem.isChecked()) {
+                                if (dishesPropertyItem.getIsChecked() != 0) {
                                     remark.add(dishesPropertyItem.getItemName());
                                 }
                             }
@@ -231,6 +233,7 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
             }
         }
         Intent intent = new Intent();
+        intent.putExtra("merchantDishes", mMerchantDishes);
         intent.putExtra("OrderGoodsList", (Serializable) orderGoodsItemList);
         setResult(DISHE_COMPS, intent);
         finish();

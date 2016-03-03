@@ -35,7 +35,7 @@ public class DishesPropertyItem extends DataSupport implements Serializable{
      */
     private String isCompProperty="0";
 
-	private boolean isChecked;
+	private int isChecked = 0; //0表示未选中; 1表示选中
 
     public String getIsCompProperty() {
         return isCompProperty;
@@ -109,11 +109,12 @@ public class DishesPropertyItem extends DataSupport implements Serializable{
 		this.itemTypeName = itemTypeName;
 	}
 
-	public boolean isChecked() {
+
+	public int getIsChecked() {
 		return isChecked;
 	}
 
-	public void setIsChecked(boolean isChecked) {
+	public void setIsChecked(int isChecked) {
 		this.isChecked = isChecked;
 	}
 }
