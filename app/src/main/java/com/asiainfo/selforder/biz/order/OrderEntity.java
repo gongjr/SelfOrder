@@ -303,7 +303,7 @@ public class OrderEntity {
     }
 
     public void deleteOrderGoodsItem(OrderGoodsItem orderGoodsItem) {
-        if (orderGoodsItem.getIsCompDish().equals("true")) {
+        if (orderGoodsItem.isComp()) {
             for (int i = 0; i < orderCompGoodsList.size(); i++) {
                 if (orderGoodsItem.getSalesId().equals(orderCompGoodsList.get(i).getmCompMainDishes().getSalesId()) &&
                         orderGoodsItem.getDishesTypeCode().equals(orderCompGoodsList.get(i).getmCompMainDishes().getDishesTypeCode())
@@ -325,7 +325,7 @@ public class OrderEntity {
     }
 
     public void changeOrderGoodsItemTakwawayState(OrderGoodsItem orderGoodsItem, boolean istakeaway) {
-        if (orderGoodsItem.getIsCompDish().equals("true")) {
+        if (orderGoodsItem.isComp()) {
             for (int i = 0; i < orderCompGoodsList.size(); i++) {
                 if (orderGoodsItem.getSalesId().equals(orderCompGoodsList.get(i).getmCompMainDishes().getSalesId()) &&
                         orderGoodsItem.getDishesTypeCode().equals(orderCompGoodsList.get(i).getmCompMainDishes().getDishesTypeCode())
