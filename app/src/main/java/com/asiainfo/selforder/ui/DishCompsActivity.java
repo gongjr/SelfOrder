@@ -232,8 +232,28 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
                 }
             }
         }
+        OrderGoodsItem orderGoodsItem = new OrderGoodsItem();
+        orderGoodsItem.setCompId("0");
+        orderGoodsItem.setTradeStaffId(mRegister.getStaffId());
+        orderGoodsItem.setDeskId(mDesk.getDeskId());
+        orderGoodsItem.setDishesPrice(mMerchantDishes.getDishesPrice());
+        orderGoodsItem.setDishesTypeCode(mMerchantDishes.getDishesTypeCode());
+        orderGoodsItem.setExportId(mMerchantDishes.getExportId());
+        orderGoodsItem.setInstanceId("" + System.currentTimeMillis());
+        orderGoodsItem.setInterferePrice("0");
+        orderGoodsItem.setOrderId("");
+        orderGoodsItem.setSalesId(mMerchantDishes.getDishesId());
+        orderGoodsItem.setSalesName(mMerchantDishes.getDishesName());
+        orderGoodsItem.setSalesNum(1);
+        orderGoodsItem.setSalesPrice(mMerchantDishes.getDishesPrice());
+        orderGoodsItem.setSalesState("1");  //0稍后下单  1立即下单
+        orderGoodsItem.setIsCompDish("" + true); //套餐菜固定为true
+        orderGoodsItem.setAction("1");
+        orderGoodsItem.setIsZdzk(mMerchantDishes.getIsZdzk()); //整单折扣
+        orderGoodsItem.setMemberPrice(mMerchantDishes.getMemberPrice()); //会员价
         Intent intent = new Intent();
-        intent.putExtra("merchantDishes", mMerchantDishes);
+        intent.putExtra("OrderGoodsItem", orderGoodsItem);
+        intent.putExtra("MerchantDishes", mMerchantDishes);
         intent.putExtra("OrderGoodsList", (Serializable) orderGoodsItemList);
         setResult(DISHE_COMPS, intent);
         finish();

@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.asiainfo.selforder.R;
 import com.asiainfo.selforder.model.Listener.OnChangeWithPropertyListener;
 import com.asiainfo.selforder.model.Listener.OnPropertyItemClickListener;
+import com.asiainfo.selforder.model.dishComps.DishesCompSelectionEntity;
 import com.asiainfo.selforder.model.dishes.DishesProperty;
 import com.asiainfo.selforder.model.dishes.MerchantDishes;
 import com.asiainfo.selforder.model.order.OrderGoodsItem;
@@ -184,10 +185,12 @@ public class DishesAdapter<T> extends RecyclerView.Adapter<DishesAdapter.ViewHol
                             viewHolder.dishesSelected.setVisibility(View.INVISIBLE);
                             notifyItemChanged(position);
                             context.deleteOrderCompGoods();
+                            context.updateNumAndPrice();
                         } else {
                             int num = minusNum(merchantDishes);
                             viewHolder.dishesSelectedNum.setText(num + "");
                             context.deleteOrderCompGoods();
+                            context.updateNumAndPrice();
                         }
 
                     } else if (propertyList != null && propertyList.size() > 0) {
@@ -222,7 +225,7 @@ public class DishesAdapter<T> extends RecyclerView.Adapter<DishesAdapter.ViewHol
         int num = addNum(merchantDishes);
         loadViewHolderWithDishes(viewHolder, merchantDishes, position);
         notifyItemChanged(position);
-
+//        context.updateNumAndPrice();
     }
 
     public int addNum(MerchantDishes merchantDishes) {
@@ -262,9 +265,19 @@ public class DishesAdapter<T> extends RecyclerView.Adapter<DishesAdapter.ViewHol
         notifyDataSetChanged();
     }
 
-    public void refreshByOrderList(List<OrderGoodsItem> dishesItems) {
+    public void refreshByOrderList(List<OrderGoodsItem> dishesItems, List<DishesCompSelectionEntity> compDishes) {
         numMap.clear();
         for (OrderGoodsItem orderGoodsItem : dishesItems) {
+            if (numMap.containsKey(orderGoodsItem.getSalesId())) {
+                int curNum = numMap.get(orderGoodsItem.getSalesId());
+                numMap.put(orderGoodsItem.getSalesId(), curNum + orderGoodsItem.getSalesNum());
+            } else {
+                numMap.put(orderGoodsItem.getSalesId(), orderGoodsItem.getSalesNum());
+            }
+        }
+
+        for (DishesCompSelectionEntity compDish: compDishes) {
+            OrderGoodsItem orderGoodsItem = compDish.getmCompMainDishes();
             if (numMap.containsKey(orderGoodsItem.getSalesId())) {
                 int curNum = numMap.get(orderGoodsItem.getSalesId());
                 numMap.put(orderGoodsItem.getSalesId(), curNum + orderGoodsItem.getSalesNum());

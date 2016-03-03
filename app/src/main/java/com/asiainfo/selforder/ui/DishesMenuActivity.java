@@ -140,6 +140,7 @@ public class DishesMenuActivity extends mBaseActivity {
             switch (view.getId()) {
                 case R.id.dishesmenu_bottom_clear:
                     orderEntity.clearOrder();
+                    orderEntity.clearOrderCompGoods();
                     updateNumAndPrice();
                     clearTOinit();
                     mDishesAdapter.clearNum();
@@ -214,24 +215,27 @@ public class DishesMenuActivity extends mBaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Constants.RequestCode_DishesMenuToMakeorder && resultCode == Constants.ResultCode_MakeorderToDishesMenu_Back) {
             orderEntity = (OrderEntity) mApp.getData(mApp.KEY_CURORDER_ENTITY);
-            mDishesAdapter.refreshByOrderList(orderEntity.getOrderList());
+            mDishesAdapter.refreshByOrderList(orderEntity.getOrderList(), orderEntity.getOrderCompGoodsList());
             updateNumAndPrice();
         }
         if (requestCode == Constants.RequestCode_DishesMenuToMakeorder && resultCode == Constants.ResultCode_MakeorderToDishesMenu_Clear) {
             orderEntity = (OrderEntity) mApp.getData(mApp.KEY_CURORDER_ENTITY);
             orderEntity.clearOrder();
+            orderEntity.clearOrderCompGoods();
             updateNumAndPrice();
             clearTOinit();
             mDishesAdapter.clearNum();
         }
         if (requestCode == DishCompsActivity.DISHE_COMPS && resultCode == DishCompsActivity.DISHE_COMPS) {
-            MerchantDishes merchantDishes = (MerchantDishes) data.getSerializableExtra("merchantDishes");
+            MerchantDishes merchantDishes = (MerchantDishes) data.getSerializableExtra("MerchantDishes");
+            OrderGoodsItem orderGoodsItem = (OrderGoodsItem) data.getSerializableExtra("OrderGoodsItem");
             List<OrderGoodsItem> list = (List<OrderGoodsItem>) data.getSerializableExtra("OrderGoodsList");
             DishesCompSelectionEntity dishesCompSelectionEntity = new DishesCompSelectionEntity();
             dishesCompSelectionEntity.setCompItemDishes(list);
+            dishesCompSelectionEntity.setmCompMainDishes(orderGoodsItem);
             orderEntity.addOrderCompGoods(dishesCompSelectionEntity);
             mDishesAdapter.addNumberTest(viewHolder, merchantDishes, position);
-
+            updateNumAndPrice();
         }
     }
 
@@ -244,6 +248,7 @@ public class DishesMenuActivity extends mBaseActivity {
                     //点餐完毕后清空
                     orderEntity = (OrderEntity) mApp.getData(mApp.KEY_CURORDER_ENTITY);
                     orderEntity.clearOrder();
+                    orderEntity.clearOrderCompGoods();
                     updateNumAndPrice();
                     clearTOinit();
                     mDishesAdapter.clearNum();
