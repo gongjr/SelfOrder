@@ -266,25 +266,11 @@ public class OrderEntity {
                 OrderGoodsItem compMainDishes = orderCompsGoods.getmCompMainDishes();
                 //套餐子菜
                 List<OrderGoodsItem> compItemDishes = orderCompsGoods.getCompItemDishes();
+
                 if (compMainDishes.getDishesTypeCode().equals(dishesType.getDishesTypeCode())) {
-                    String mRemark = "";
-                    List<String> remarkList;
-                    if (compMainDishes.getRemark() != null) {
-                        remarkList = compMainDishes.getRemark();
-                    } else {
-                        remarkList = new ArrayList<String>();
-                    }
-                    for (OrderGoodsItem compItemDish : compItemDishes) {
-                        mRemark += " " + compItemDish.getSalesName();
-                        if (compItemDish.getRemark() != null) {
-                            String tasteString = "";
-                            for (String remark : compItemDish.getRemark()) {
-                                tasteString += " " + remark;
-                            }
-                            mRemark += "(" + tasteString + ")";
-                        }
-                    }
-                    remarkList.add(mRemark);
+                    String remark = getCompRemark(compItemDishes);
+                    List<String> remarkList = new ArrayList<String>();
+                    remarkList.add(remark);
                     compMainDishes.setRemark(remarkList);
                     goods.add(compMainDishes);
                 }
@@ -420,26 +406,8 @@ public class OrderEntity {
             goodsItem.setAction(orderCompGoods.getmCompMainDishes().getAction());
             goodsItem.setIsZdzk(orderCompGoods.getmCompMainDishes().getIsZdzk());
             goodsItem.setMemberPrice(orderCompGoods.getmCompMainDishes().getMemberPrice());
-//            List<String> remarkCommit = fromItemEntityList2RemarkCommit(orderCompGoods.getmCompMainDishes().getRemark());
-            List<String> remarkCommit;
-            if (orderCompGoods.getmCompMainDishes().getRemark() == null) {
-                remarkCommit = new ArrayList<String>();
-            } else {
-                remarkCommit = orderCompGoods.getmCompMainDishes().getRemark();
-            }
-            List<OrderGoodsItem> compItemDishes = orderCompGoods.getCompItemDishes();
-            String remark="";
-            for (OrderGoodsItem compItemDish: compItemDishes) {
-                remark += " " + compItemDish.getSalesName();
-                if (compItemDish.getRemark() != null) {
-                    String tasteString = "";
-                    for (String taste: compItemDish.getRemark()) {
-                        tasteString += " " + taste;
-                    }
-                    remark += "(" + tasteString + ")";
-                }
-
-            }
+            List<String> remarkCommit = new ArrayList<String>();
+            String remark = getCompRemark(orderCompGoods.getCompItemDishes());
             remarkCommit.add(remark);
             if (orderCompGoods.getmCompMainDishes().isTakeaway()) {
                 remarkCommit.add("外卖");
@@ -530,5 +498,21 @@ public class OrderEntity {
 
     public void clearOrderCompGoods() {
         this.orderCompGoodsList.clear();
+    }
+
+    private String getCompRemark(List<OrderGoodsItem> compItemDishesList) {
+        String mRemark = "";
+        for (OrderGoodsItem compItemDishes : compItemDishesList) {
+            List<String> remarkList = compItemDishes.getRemark();
+            mRemark += " " + compItemDishes.getSalesName();
+            if (remarkList != null && remarkList.size() != 0) {
+                String tasteString = "";
+                for (String remark : remarkList) {
+                    tasteString += remark;
+                }
+                mRemark += "(" + tasteString + ")";
+            }
+        }
+        return mRemark;
     }
 }
