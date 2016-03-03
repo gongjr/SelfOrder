@@ -232,6 +232,7 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
                 }
             }
         }
+
         OrderGoodsItem orderGoodsItem = new OrderGoodsItem();
         orderGoodsItem.setCompId("0");
         orderGoodsItem.setTradeStaffId(mRegister.getStaffId());
@@ -247,10 +248,11 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
         orderGoodsItem.setSalesNum(1);
         orderGoodsItem.setSalesPrice(mMerchantDishes.getDishesPrice());
         orderGoodsItem.setSalesState("1");  //0稍后下单  1立即下单
-        orderGoodsItem.setIsCompDish("" + true); //套餐菜固定为true
+        orderGoodsItem.setIsCompDish("" + false); //套餐菜固定为true
         orderGoodsItem.setAction("1");
         orderGoodsItem.setIsZdzk(mMerchantDishes.getIsZdzk()); //整单折扣
         orderGoodsItem.setMemberPrice(mMerchantDishes.getMemberPrice()); //会员价
+        orderGoodsItem.setComp(true);
         Intent intent = new Intent();
         intent.putExtra("OrderGoodsItem", orderGoodsItem);
         intent.putExtra("MerchantDishes", mMerchantDishes);

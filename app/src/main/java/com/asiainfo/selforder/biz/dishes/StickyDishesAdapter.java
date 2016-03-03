@@ -13,6 +13,7 @@ import com.asiainfo.selforder.R;
 import com.asiainfo.selforder.model.Listener.OnChangeWithPropertyListener;
 import com.asiainfo.selforder.model.Listener.OnPropertyItemClickListener;
 import com.asiainfo.selforder.model.Listener.OnStickyHeaderChangeListener;
+import com.asiainfo.selforder.model.dishComps.DishesCompSelectionEntity;
 import com.asiainfo.selforder.model.dishes.DishesProperty;
 import com.asiainfo.selforder.model.dishes.MerchantDishes;
 import com.asiainfo.selforder.model.order.OrderGoodsItem;
@@ -220,10 +221,12 @@ public class StickyDishesAdapter extends BaseAdapter implements
                             viewHolder.dishesInit.setVisibility(View.VISIBLE);
                             viewHolder.dishesSelected.setVisibility(View.INVISIBLE);
                             context.deleteOrderCompGoods();
+                            context.updateNumAndPrice();
                         } else {
                             int num = minusNum(merchantDishes);
                             viewHolder.dishesSelectedNum.setText(num + "");
                             context.deleteOrderCompGoods();
+                            context.updateNumAndPrice();
                         }
 
                     } else if(propertyList!=null && propertyList.size()>0){
@@ -299,7 +302,7 @@ public class StickyDishesAdapter extends BaseAdapter implements
         notifyDataSetChanged();
     }
 
-    public void refreshByOrderList(List<OrderGoodsItem> dishesItems){
+    public void refreshByOrderList(List<OrderGoodsItem> dishesItems, List<DishesCompSelectionEntity> compDishesItems){
         numMap.clear();
         for (OrderGoodsItem orderGoodsItem:dishesItems){
             if (numMap.containsKey(orderGoodsItem.getSalesId())){
@@ -307,6 +310,15 @@ public class StickyDishesAdapter extends BaseAdapter implements
                 numMap.put(orderGoodsItem.getSalesId(),curNum+orderGoodsItem.getSalesNum());
             }else{
                 numMap.put(orderGoodsItem.getSalesId(),orderGoodsItem.getSalesNum());
+            }
+        }
+
+        for (DishesCompSelectionEntity compDishesItem: compDishesItems) {
+            if (numMap.containsKey(compDishesItem.getmCompMainDishes().getSalesId())){
+                int curNum=numMap.get(compDishesItem.getmCompMainDishes().getSalesId());
+                numMap.put(compDishesItem.getmCompMainDishes().getSalesId(),curNum+compDishesItem.getmCompMainDishes().getSalesNum());
+            }else{
+                numMap.put(compDishesItem.getmCompMainDishes().getSalesId(),compDishesItem.getmCompMainDishes().getSalesNum());
             }
         }
         notifyDataSetChanged();

@@ -86,45 +86,13 @@ public class OrderListAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-//        if (position > orderGoodsList.size() - 1) {
-//            final DishesCompSelectionEntity orderCompsGoodsItem = orderCompsGoodsList.get(position - orderGoodsList.size());
-//            OrderGoodsItem mCompMainOrderGoodsItem = orderCompsGoodsItem.getmCompMainDishes();
-//            List<OrderGoodsItem> mCompOrderGoodsList = orderCompsGoodsItem.getCompItemDishes();
-//            viewHolder.name.setText(mCompMainOrderGoodsItem.getSalesName());
-//            viewHolder.price.setText(mCompMainOrderGoodsItem.getSalesPrice());
-//            viewHolder.num.setText(mCompMainOrderGoodsItem.getSalesNum() + "");
-//            viewHolder.istakeaway.setChecked(mCompMainOrderGoodsItem.isTakeaway());
-//            viewHolder.remark.setVisibility(View.VISIBLE);
-//            String text = "配置: ";
-//            for (OrderGoodsItem mOrderGoodsItem: mCompOrderGoodsList) {
-//                text += " " + mOrderGoodsItem.getSalesName();
-//                if (mOrderGoodsItem.getRemark() != null) {
-//                    List<String> remarks = mOrderGoodsItem.getRemark();
-//                    if (remarks.size() != 0) {
-//                        String str = "";
-//                        for (String remark: remarks) {
-//                            str += remark;
-//                        }
-//                        text = text + "(" + str + ")";
-//                    }
-//                }
-//
-//            }
-//            viewHolder.remark.setText(text);
-//            viewHolder.delete.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    context.delete(position - orderGoodsList.size());
-//                }
-//            });
-//        } else {
         final OrderGoodsItem orderGoodsItem = orderGoodsList.get(position);
         viewHolder.name.setText(orderGoodsItem.getSalesName());
         viewHolder.price.setText(orderGoodsItem.getSalesPrice());
         viewHolder.num.setText(orderGoodsItem.getSalesNum() + "");
         viewHolder.istakeaway.setChecked(orderGoodsItem.isTakeaway());
         List<String> remarkList = orderGoodsItem.getRemark();
-        if (orderGoodsItem.getIsCompDish().equals("true")) {
+        if (orderGoodsItem.isComp()) {
             String str = "配置: ";
             for (String remark : remarkList) {
                 str += remark;
@@ -155,7 +123,6 @@ public class OrderListAdapter extends BaseAdapter {
                 mOnItemClickListener.onItemClick(compoundButton, position, orderGoodsItem);
             }
         });
-//        }
         return convertView;
     }
 

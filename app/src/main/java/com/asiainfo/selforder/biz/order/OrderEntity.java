@@ -351,7 +351,7 @@ public class OrderEntity {
         for (OrderGoodsItem orderGoodsItem : orderGoodsList) {
             orderGoodsItem.setTakeaway(false);
         }
-        for (DishesCompSelectionEntity orderCompGoods: orderCompGoodsList) {
+        for (DishesCompSelectionEntity orderCompGoods : orderCompGoodsList) {
             orderCompGoods.getmCompMainDishes().setTakeaway(false);
         }
     }
@@ -360,7 +360,7 @@ public class OrderEntity {
         for (OrderGoodsItem orderGoodsItem : orderGoodsList) {
             orderGoodsItem.setTakeaway(true);
         }
-        for (DishesCompSelectionEntity orderCompGoods: orderCompGoodsList) {
+        for (DishesCompSelectionEntity orderCompGoods : orderCompGoodsList) {
             orderCompGoods.getmCompMainDishes().setTakeaway(true);
         }
     }
@@ -398,6 +398,56 @@ public class OrderEntity {
             goodsItem.setRemark(remarkCommit);
             mCommitList.add(goodsItem);
         }
+
+        for (int i = 0; i < orderCompGoodsList.size(); i++) {
+            DishesCompSelectionEntity orderCompGoods = orderCompGoodsList.get(i);
+            OrderGoodsItem goodsItem = new OrderGoodsItem();
+            goodsItem.setCompId(orderCompGoods.getmCompMainDishes().getCompId());
+            goodsItem.setTradeStaffId(orderCompGoods.getmCompMainDishes().getTradeStaffId());
+            goodsItem.setDeskId(orderCompGoods.getmCompMainDishes().getDeskId());
+            goodsItem.setDishesPrice(orderCompGoods.getmCompMainDishes().getDishesPrice());
+            goodsItem.setDishesTypeCode(orderCompGoods.getmCompMainDishes().getDishesTypeCode());
+            goodsItem.setExportId(orderCompGoods.getmCompMainDishes().getExportId());
+            goodsItem.setInstanceId(orderCompGoods.getmCompMainDishes().getInstanceId());
+            goodsItem.setInterferePrice(orderCompGoods.getmCompMainDishes().getInterferePrice());
+            goodsItem.setOrderId(orderCompGoods.getmCompMainDishes().getOrderId());
+            goodsItem.setSalesId(orderCompGoods.getmCompMainDishes().getSalesId());
+            goodsItem.setSalesName(orderCompGoods.getmCompMainDishes().getSalesName());
+            goodsItem.setSalesNum(orderCompGoods.getmCompMainDishes().getSalesNum());
+            goodsItem.setSalesPrice(orderCompGoods.getmCompMainDishes().getSalesPrice());
+            goodsItem.setSalesState(orderCompGoods.getmCompMainDishes().getSalesState());
+            goodsItem.setIsCompDish(orderCompGoods.getmCompMainDishes().getIsCompDish());
+            goodsItem.setAction(orderCompGoods.getmCompMainDishes().getAction());
+            goodsItem.setIsZdzk(orderCompGoods.getmCompMainDishes().getIsZdzk());
+            goodsItem.setMemberPrice(orderCompGoods.getmCompMainDishes().getMemberPrice());
+//            List<String> remarkCommit = fromItemEntityList2RemarkCommit(orderCompGoods.getmCompMainDishes().getRemark());
+            List<String> remarkCommit;
+            if (orderCompGoods.getmCompMainDishes().getRemark() == null) {
+                remarkCommit = new ArrayList<String>();
+            } else {
+                remarkCommit = orderCompGoods.getmCompMainDishes().getRemark();
+            }
+            List<OrderGoodsItem> compItemDishes = orderCompGoods.getCompItemDishes();
+            String remark="";
+            for (OrderGoodsItem compItemDish: compItemDishes) {
+                remark += " " + compItemDish.getSalesName();
+                if (compItemDish.getRemark() != null) {
+                    String tasteString = "";
+                    for (String taste: compItemDish.getRemark()) {
+                        tasteString += " " + taste;
+                    }
+                    remark += "(" + tasteString + ")";
+                }
+
+            }
+            remarkCommit.add(remark);
+            if (orderCompGoods.getmCompMainDishes().isTakeaway()) {
+                remarkCommit.add("外卖");
+            }
+            goodsItem.setRemark(remarkCommit);
+            mCommitList.add(goodsItem);
+        }
+
         Submit.setOrderGoods(mCommitList);
         String orderData = gson.toJson(Submit);
         return orderData;
@@ -467,6 +517,7 @@ public class OrderEntity {
 
     public void addOrderCompGoods(DishesCompSelectionEntity dishesCompSelectionEntity) {
         this.orderCompGoodsList.add(dishesCompSelectionEntity);
+//        this.orderGoodsList.add(dishesCompSelectionEntity.getmCompMainDishes());
     }
 
     public void deleteOrderCompGoods(int position) {
