@@ -2,6 +2,7 @@ package com.asiainfo.selforder.biz.order;
 
 import com.asiainfo.selforder.model.MerchantDesk;
 import com.asiainfo.selforder.model.MerchantRegister;
+import com.asiainfo.selforder.model.dishComps.DishesCompSelectionEntity;
 import com.asiainfo.selforder.model.dishes.DishesPropertyItem;
 import com.asiainfo.selforder.model.dishes.MerchantDishes;
 import com.asiainfo.selforder.model.dishes.MerchantDishesType;
@@ -26,6 +27,8 @@ import kxlive.gjrlibrary.utils.StringUtils;
 public class OrderEntity {
     private Gson gson;
     private List<OrderGoodsItem> orderGoodsList;
+    /** 已选套餐菜  **/
+    private List<DishesCompSelectionEntity> orderCompGoodsList;
     private OrderSubmit mOrderSubmit;
     private MerchantRegister merchantRegister;
     private List<MerchantDishesType> dishesTypeList;
@@ -38,6 +41,7 @@ public class OrderEntity {
         this.mOrderSubmit=new OrderSubmit();
         this.dishesTypeList=dishesTypeList;
         this.merchantDesk=merchantDesk;
+        this.orderCompGoodsList = new ArrayList<DishesCompSelectionEntity>();
         initNewOrderSummaryInfo();
 
     }
@@ -368,10 +372,6 @@ public class OrderEntity {
     }
 
 
-    public String getOrderId(){
-       return mOrderSubmit.getOrderid();
-    }
-
     public ServerOrder getNotifyOrderInfo(){
         ServerOrder notifyOrder = new ServerOrder();
         notifyOrder.setDeskId(Long.valueOf(mOrderSubmit.getDeskId()));
@@ -383,5 +383,22 @@ public class OrderEntity {
         notifyOrder.setMerchantId(mOrderSubmit.getMerchantId());
         notifyOrder.setChildMerchantId(mOrderSubmit.getChildMerchantId()+"");
         return notifyOrder;
+    }
+
+
+    public String getOrderId(){
+       return mOrderSubmit.getOrderid();
+    }
+
+    public List<DishesCompSelectionEntity> getOrderCompGoodsList() {
+        return orderCompGoodsList;
+    }
+
+    public void addOrderCompGoods(DishesCompSelectionEntity dishesCompSelectionEntity) {
+        this.orderCompGoodsList.add(dishesCompSelectionEntity);
+    }
+
+    public void deleteOrderCompGoods() {
+        this.orderCompGoodsList.remove(this.orderCompGoodsList.size() - 1);
     }
 }

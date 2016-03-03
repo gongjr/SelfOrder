@@ -15,8 +15,10 @@ import android.widget.TextView;
 
 import com.asiainfo.selforder.R;
 import com.asiainfo.selforder.biz.db.DishesEntity;
+import com.asiainfo.selforder.biz.dishes.DishesAdapter;
 import com.asiainfo.selforder.biz.dishes.DishesTypeAdapter;
 import com.asiainfo.selforder.biz.dishes.StickyDishesAdapter;
+import com.asiainfo.selforder.biz.dishes.ViewHolder;
 import com.asiainfo.selforder.biz.order.OrderEntity;
 import com.asiainfo.selforder.config.Constants;
 import com.asiainfo.selforder.model.Listener.OnItemClickListener;
@@ -27,11 +29,16 @@ import com.asiainfo.selforder.model.dishes.DishesData;
 import com.asiainfo.selforder.model.dishes.MerchantDishes;
 import com.asiainfo.selforder.model.dishes.MerchantDishesType;
 import com.asiainfo.selforder.model.dishes.TypeSection;
+import com.asiainfo.selforder.model.dishComps.DishesCompSelectionEntity;
+import com.asiainfo.selforder.model.dishes.MerchantDishes;
+import com.asiainfo.selforder.model.dishes.MerchantDishesType;
+import com.asiainfo.selforder.model.order.OrderGoodsItem;
 import com.asiainfo.selforder.model.order.PropertySelectEntity;
 import com.asiainfo.selforder.ui.base.mBaseActivity;
 import com.google.inject.Inject;
 import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.greenrobot.event.EventBus;
@@ -44,7 +51,7 @@ import roboguice.inject.InjectView;
  * 菜单
  * Created by gjr on 2015/12/1.
  */
-public class DishesMenuActivity extends mBaseActivity{
+public class DishesMenuActivity extends mBaseActivity {
     @InjectView(R.id.dishes_menu_selected_num)
     private TextView shoppingNum;
     @InjectView(R.id.dishes_menu_selected_price)
@@ -67,19 +74,24 @@ public class DishesMenuActivity extends mBaseActivity{
     Resources res;
     @Inject
     LayoutInflater inflater;
-    @InjectResource(R.string.clear_init_tips) String clear_init_tips;
-    @InjectResource(R.string.next_init_tips) String next_init_tips;
+    @InjectResource(R.string.clear_init_tips)
+    String clear_init_tips;
+    @InjectResource(R.string.next_init_tips)
+    String next_init_tips;
     private DishesTypeAdapter mDishesTypeAdapter;
 //    private DishesAdapter mDishesAdapter;
     private StickyDishesAdapter mStickyDishesAdapter;
-//    private ArrayList<MerchantDishesType> dishesTypeList;
-//    private ArrayList<MerchantDishes> dishesList;
+    private ArrayList<MerchantDishesType> dishesTypeList;
+    private ArrayList<MerchantDishes> dishesList;
     private DishesData mDishesData;
     private int curFirstVisibleItemPosition=0;
     private int curVisibleItemCount=9;
     private boolean isAutoScroll=false;
     private DishesEntity dishesEntity;
     private OrderEntity orderEntity;
+    private ViewHolder viewHolder;
+    private int position;
+
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
@@ -88,34 +100,33 @@ public class DishesMenuActivity extends mBaseActivity{
         initListener();
     }
 
-    private void initData(){
+    private void initData() {
         EventBus.getDefault().register(this);
-        MerchantRegister merchantRegister=(MerchantRegister)mApp.getData(mApp.KEY_GLOABLE_LOGININFO);
-        MerchantDesk merchantDesk=(MerchantDesk)mApp.getData(mApp.KEY_GLOABLE_MERCHANTDESk);
-        KLog.i("merchantDesk:"+merchantDesk);
-        dishesEntity=new DishesEntity();
-        //菜品加载
-//        dishesTypeList=dishesEntity.getAllDishesType();
+        MerchantRegister merchantRegister = (MerchantRegister) mApp.getData(mApp.KEY_GLOABLE_LOGININFO);
+        MerchantDesk merchantDesk = (MerchantDesk) mApp.getData(mApp.KEY_GLOABLE_MERCHANTDESk);
+        KLog.i("merchantDesk:" + merchantDesk);
+        dishesEntity = new DishesEntity();
+        //类型加载
+        dishesTypeList=dishesEntity.getAllDishesType();
         mDishesData=dishesEntity.getAllDishesOrderbyType();
         orderEntity=new OrderEntity(merchantRegister,mDishesData.getDishesTypeList(),merchantDesk);
-
         LinearLayoutManager dishesLayoutManager = new LinearLayoutManager(this);
         dishesLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         dishesTypeView.setLayoutManager(dishesLayoutManager);
+
         mDishesTypeAdapter=new DishesTypeAdapter(inflater,mDishesData.getDishesTypeList(),res);
         mDishesTypeAdapter.setmOnItemClickListenerT(dishesTypeOnItemClick);
         dishesTypeView.setAdapter(mDishesTypeAdapter);
         //菜品加载
 //        mDishesAdapter=new DishesAdapter<MerchantDishes>(inflater,res,mActivity);
 //        mDishesAdapter.setOnPropertyItemClickListener(addDishesOnItemClick);
-        mStickyDishesAdapter=new StickyDishesAdapter(inflater,res,mActivity);
+        mStickyDishesAdapter=new StickyDishesAdapter(inflater,res,mActivity,this);
         mStickyDishesAdapter.setOnPropertyItemClickListener(addDishesOnItemClick);
         mStickyDishesAdapter.refreshData(mDishesData.getDishesList());
         dishesGridView.setAdapter(mStickyDishesAdapter);
-        updateNumAndPrice();
     }
 
-    private void initListener(){
+    private void initListener() {
         clear.setOnClickListener(mOnClickListener);
         clear_init.setOnClickListener(mOnClickListener);
         next.setOnClickListener(mOnClickListener);
@@ -164,10 +175,10 @@ public class DishesMenuActivity extends mBaseActivity{
         });
     }
 
-    View.OnClickListener mOnClickListener=new View.OnClickListener() {
+    View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            switch (view.getId()){
+            switch (view.getId()) {
                 case R.id.dishesmenu_bottom_clear:
                     orderEntity.clearOrder();
                     updateNumAndPrice();
@@ -177,7 +188,7 @@ public class DishesMenuActivity extends mBaseActivity{
                     break;
                 case R.id.dishesmenu_next:
                     orderEntity.prepareNewOrderSummaryInfo();
-                    mApp.saveData(mApp.KEY_CURORDER_ENTITY,orderEntity);
+                    mApp.saveData(mApp.KEY_CURORDER_ENTITY, orderEntity);
                     getOperation().forwardForResult(MakeOrderActivity.class, Constants.RequestCode_DishesMenuToMakeorder);
                     break;
                 case R.id.dishesmenu_next_init:
@@ -190,12 +201,12 @@ public class DishesMenuActivity extends mBaseActivity{
         }
     };
 
-    public void clearTOinit(){
+    public void clearTOinit() {
         clear_init.setVisibility(View.VISIBLE);
         next_init.setVisibility(View.VISIBLE);
     }
 
-    public void initTOclear(){
+    public void initTOclear() {
         clear_init.setVisibility(View.GONE);
         next_init.setVisibility(View.GONE);
     }
@@ -203,7 +214,7 @@ public class DishesMenuActivity extends mBaseActivity{
     /**
      * 处理dishesType,点击事件
      */
-    OnItemClickListener<MerchantDishesType> dishesTypeOnItemClick=new OnItemClickListener<MerchantDishesType>() {
+    OnItemClickListener<MerchantDishesType> dishesTypeOnItemClick = new OnItemClickListener<MerchantDishesType>() {
         @Override
         public void onItemClick(View view, int position, MerchantDishesType dishesType) {
             refreshDishesItem(position,dishesType);
@@ -296,30 +307,29 @@ public class DishesMenuActivity extends mBaseActivity{
     /**
      * 处理dishes初始点击事件
      */
-    OnPropertyItemClickListener<MerchantDishes> addDishesOnItemClick=new OnPropertyItemClickListener<MerchantDishes>() {
+    OnPropertyItemClickListener<MerchantDishes> addDishesOnItemClick = new OnPropertyItemClickListener<MerchantDishes>() {
         @Override
-        public void onItemClick(View view, int num, MerchantDishes merchantDishes,List<PropertySelectEntity> selectedPropertyItems) {
-            if(view!=null){
-                orderEntity.updateOrderGoodsListData(merchantDishes,num,selectedPropertyItems);
+        public void onItemClick(View view, int num, MerchantDishes merchantDishes, List<PropertySelectEntity> selectedPropertyItems) {
+            if (view != null) {
+                orderEntity.updateOrderGoodsListData(merchantDishes, num, selectedPropertyItems);
                 updateNumAndPrice();
-            }else{
+            } else {
 //                    if(num==0){
-                    orderEntity.clearPropetyItem(merchantDishes);
-                    updateNumAndPrice();
+                orderEntity.clearPropetyItem(merchantDishes);
+                updateNumAndPrice();
 //                }else
 //                showLongTip("有多条"+merchantDishes.getDishesName()+",存在不同属性,请至订单删除!");
             }
         }
     };
 
-    public void updateNumAndPrice(){
-        int num=orderEntity.getOrderSubmitAllGoodsNum();
-        shoppingNum.setText(num+"");
+    public void updateNumAndPrice() {
+        int num = orderEntity.getOrderSubmitAllGoodsNum();
+        shoppingNum.setText(num + "");
         shoppingPrice.setText(orderEntity.getOrderSubmitOriginalPrice());
-        if(num==0&&clear_init.getVisibility()==View.GONE){
+        if (num == 0 && clear_init.getVisibility() == View.GONE) {
             clearTOinit();
-        }
-        else if(num>0&&clear_init.getVisibility()==View.VISIBLE){
+        } else if (num > 0 && clear_init.getVisibility() == View.VISIBLE) {
             initTOclear();
         }
     }
@@ -331,26 +341,35 @@ public class DishesMenuActivity extends mBaseActivity{
             orderEntity=(OrderEntity)mApp.getData(mApp.KEY_CURORDER_ENTITY);
 //            mDishesAdapter.refreshByOrderList(orderEntity.getOrderList());
             mStickyDishesAdapter.refreshByOrderList(orderEntity.getOrderList());
+
             updateNumAndPrice();
         }
-        if(requestCode==Constants.RequestCode_DishesMenuToMakeorder&&resultCode==Constants.ResultCode_MakeorderToDishesMenu_Clear){
-            orderEntity=(OrderEntity)mApp.getData(mApp.KEY_CURORDER_ENTITY);
+        if (requestCode == Constants.RequestCode_DishesMenuToMakeorder && resultCode == Constants.ResultCode_MakeorderToDishesMenu_Clear) {
+            orderEntity = (OrderEntity) mApp.getData(mApp.KEY_CURORDER_ENTITY);
             orderEntity.clearOrder();
             updateNumAndPrice();
             clearTOinit();
 //            mDishesAdapter.clearNum();
             mStickyDishesAdapter.clearNum();
         }
+        if (requestCode == DishCompsActivity.DISHE_COMPS && resultCode == DishCompsActivity.DISHE_COMPS) {
+            MerchantDishes merchantDishes = (MerchantDishes) data.getSerializableExtra("merchantDishes");
+            List<OrderGoodsItem> list = (List<OrderGoodsItem>) data.getSerializableExtra("OrderGoodsList");
+            DishesCompSelectionEntity dishesCompSelectionEntity = new DishesCompSelectionEntity();
+            dishesCompSelectionEntity.setCompItemDishes(list);
+            orderEntity.addOrderCompGoods(dishesCompSelectionEntity);
+            mStickyDishesAdapter.addNumberTest(viewHolder, merchantDishes, position);
+        }
     }
 
     @Override
     public boolean onEventMainThread(EventMain event) {
-        boolean isRun=super.onEventMainThread(event);
+        boolean isRun = super.onEventMainThread(event);
         if (isRun) {
             switch (event.getType()) {
                 case EventMain.TYPE_FIRST:
                     //点餐完毕后清空
-                    orderEntity=(OrderEntity)mApp.getData(mApp.KEY_CURORDER_ENTITY);
+                    orderEntity = (OrderEntity) mApp.getData(mApp.KEY_CURORDER_ENTITY);
                     orderEntity.clearOrder();
                     updateNumAndPrice();
                     clearTOinit();
@@ -359,23 +378,33 @@ public class DishesMenuActivity extends mBaseActivity{
                     break;
                 default:
                     break;
-            }}
+            }
+        }
         return isRun;
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK){
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             mApp.removeData(mApp.KEY_CURORDER_ENTITY);
             getOperation().finish();
-            return  true;
+            return true;
         }
-        return  super.onKeyDown(keyCode, event);
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);
         super.onDestroy();
+    }
+
+    public void deleteOrderCompGoods() {
+        orderEntity.deleteOrderCompGoods();
+    }
+
+    public void test(ViewHolder viewHolder, int position) {
+        this.viewHolder = viewHolder;
+        this.position = position;
     }
 }

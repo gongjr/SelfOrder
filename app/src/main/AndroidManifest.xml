@@ -54,6 +54,11 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
+            android:name=".ui.DishCompsActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
             android:name=".ui.DishesMenuActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"

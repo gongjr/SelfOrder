@@ -18,6 +18,8 @@ import com.asiainfo.selforder.model.dishes.MerchantDishes;
 import com.asiainfo.selforder.model.order.OrderGoodsItem;
 import com.asiainfo.selforder.model.order.PropertySelectEntity;
 import com.asiainfo.selforder.ui.ChoosePropertyFragment;
+import com.asiainfo.selforder.ui.DishCompsActivity;
+import com.asiainfo.selforder.ui.DishesMenuActivity;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -45,22 +47,25 @@ public class StickyDishesAdapter extends BaseAdapter implements
     private Map<String,Integer> numMap;
     private FragmentActivity mActivity;
     private boolean init;
+    private DishesMenuActivity context;
 
-    public StickyDishesAdapter(LayoutInflater inflater, Resources mRes, FragmentActivity mActivity){
+    public StickyDishesAdapter(LayoutInflater inflater, Resources mRes, FragmentActivity mActivity, DishesMenuActivity context){
         this.mInflater=inflater;
         this.res=mRes;
         this.mActivity=mActivity;
         this.numMap=new HashMap<String,Integer>();
         this.init=true;
+        this.context = context;
     }
 
-    public StickyDishesAdapter(LayoutInflater inflater, List<MerchantDishes> typeList, Resources mRes, FragmentActivity mActivity){
+    public StickyDishesAdapter(LayoutInflater inflater, List<MerchantDishes> typeList, Resources mRes, FragmentActivity mActivity, DishesMenuActivity context){
         this.mInflater=inflater;
         this.itemList=typeList;
         this.res=mRes;
         this.numMap=new HashMap<String,Integer>();
         this.mActivity=mActivity;
         this.init=true;
+        this.context = context;
     }
 
     @Override
@@ -147,7 +152,14 @@ public class StickyDishesAdapter extends BaseAdapter implements
                     if(!viewHolder.isLoad){
                         viewHolder.initViewStud();
                     }
-                    if(propertyList!=null && propertyList.size()>0){
+
+                    if (merchantDishes.getIsComp() != 0) {
+                        view.setVisibility(View.VISIBLE);
+                        viewHolder.dishesSelected.setVisibility(View.INVISIBLE);
+                        context.test(viewHolder, position);
+                        DishCompsActivity.actionStart(mActivity, merchantDishes);
+
+                    } else if(propertyList!=null && propertyList.size()>0){
                         if(ChoosePropertyFragment.getInstance()!=null&&!ChoosePropertyFragment.getInstance().isVisible()){
                         loadViewHolderWithDishes(viewHolder, merchantDishes,position);
                         view.setVisibility(View.VISIBLE);
@@ -183,7 +195,9 @@ public class StickyDishesAdapter extends BaseAdapter implements
                 @Override
                 public void onClick(View view) {
                     List<DishesProperty> propertyList = merchantDishes.getDishesItemTypelist();
-                    if(propertyList!=null && propertyList.size()>0){
+                    if (merchantDishes.getIsComp() != 0) {
+                        DishCompsActivity.actionStart(mActivity, merchantDishes);
+                    } else if(propertyList!=null && propertyList.size()>0){
                         if(ChoosePropertyFragment.getInstance()!=null&&!ChoosePropertyFragment.getInstance().isVisible()){
                         ChoosePropertyFragment mChoosePropertyValueDF = ChoosePropertyFragment.newInstance(merchantDishes);
                         mChoosePropertyValueDF.setOnCheckedPropertyItemsListener(mOnChangeWithPropertyListener,viewHolder);
@@ -200,13 +214,23 @@ public class StickyDishesAdapter extends BaseAdapter implements
                 @Override
                 public void onClick(View view) {
                     List<DishesProperty> propertyList = merchantDishes.getDishesItemTypelist();
+                    if (merchantDishes.getIsComp() != 0) {
+                        if (getNum(merchantDishes) == 1) {
+                            int num = minusNum(merchantDishes);
+                            viewHolder.dishesInit.setVisibility(View.VISIBLE);
+                            viewHolder.dishesSelected.setVisibility(View.INVISIBLE);
+                            context.deleteOrderCompGoods();
+                        } else {
+                            int num = minusNum(merchantDishes);
+                            viewHolder.dishesSelectedNum.setText(num + "");
+                            context.deleteOrderCompGoods();
+                        }
 
-                    if(propertyList!=null && propertyList.size()>0){
+                    } else if(propertyList!=null && propertyList.size()>0){
                         if(getNum(merchantDishes)==1){
                             int num=minusNum(merchantDishes);
                             viewHolder.dishesInit.setVisibility(View.VISIBLE);
                             viewHolder.dishesSelected.setVisibility(View.INVISIBLE);
-                            //notifyItemChanged(position);//由于视图复用,恢复显示的时候要单独刷新对应item
                             numChangeOnItemClick.onItemClick(null, num, merchantDishes, null);
                         }else{
                             int num=minusNum(merchantDishes);
@@ -218,7 +242,6 @@ public class StickyDishesAdapter extends BaseAdapter implements
                     if(num==0){
                         viewHolder.dishesInit.setVisibility(View.VISIBLE);
                         viewHolder.dishesSelected.setVisibility(View.INVISIBLE);
-                        //notifyItemChanged(position);//由于视图复用,恢复显示的时候要单独刷新对应item
                     }else{
                         viewHolder.dishesSelectedNum.setText(num+"");
                     }
@@ -227,6 +250,15 @@ public class StickyDishesAdapter extends BaseAdapter implements
                 }
             });
         }
+    }
+    //套餐菜数量增加后回调更新视图
+    public void addNumberTest(ViewHolder viewHolder, MerchantDishes merchantDishes, int position) {
+        if(getNum(merchantDishes)==0&&viewHolder.isLoad){
+            viewHolder.dishesInit.setVisibility(View.INVISIBLE);
+            viewHolder.dishesSelected.setVisibility(View.VISIBLE);
+        }
+        int num = addNum(merchantDishes);
+        loadViewHolderWithDishes(viewHolder, merchantDishes, position);
     }
 
     private int addNum(MerchantDishes merchantDishes){
