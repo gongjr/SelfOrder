@@ -89,7 +89,7 @@ public class StickyDishesAdapter extends BaseAdapter implements
         HeaderViewHolder mHeaderHolder;
         if (convertView == null) {
             mHeaderHolder = new HeaderViewHolder();
-            convertView = mInflater.inflate(R.layout.header1, parent, false);
+            convertView = mInflater.inflate(R.layout.dishes_header, parent, false);
             mHeaderHolder.mTextView = (TextView) convertView
                     .findViewById(R.id.header);
             convertView.setTag(mHeaderHolder);
