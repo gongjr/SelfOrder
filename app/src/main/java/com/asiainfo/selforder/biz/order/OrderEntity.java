@@ -407,13 +407,42 @@ public class OrderEntity {
             goodsItem.setIsZdzk(orderCompGoods.getmCompMainDishes().getIsZdzk());
             goodsItem.setMemberPrice(orderCompGoods.getmCompMainDishes().getMemberPrice());
             List<String> remarkCommit = new ArrayList<String>();
-            String remark = getCompRemark(orderCompGoods.getCompItemDishes());
-            remarkCommit.add(remark);
+//            String remark = getCompRemark(orderCompGoods.getCompItemDishes());
+//            remarkCommit.add(remark);
             if (orderCompGoods.getmCompMainDishes().isTakeaway()) {
                 remarkCommit.add("外卖");
             }
             goodsItem.setRemark(remarkCommit);
             mCommitList.add(goodsItem);
+
+            for (OrderGoodsItem mOrderGoodsItem:orderCompGoods.getCompItemDishes()){
+                OrderGoodsItem goodsCompItem = new OrderGoodsItem();
+                goodsCompItem.setCompId(mOrderGoodsItem.getCompId());  //非套餐
+                goodsCompItem.setTradeStaffId(mOrderGoodsItem.getTradeStaffId());
+                goodsCompItem.setDeskId(mOrderGoodsItem.getDeskId());
+                goodsCompItem.setDishesPrice(mOrderGoodsItem.getDishesPrice());
+                goodsCompItem.setDishesTypeCode(mOrderGoodsItem.getDishesTypeCode());
+                goodsCompItem.setExportId(mOrderGoodsItem.getExportId());
+                goodsCompItem.setInstanceId(mOrderGoodsItem.getInstanceId());
+                goodsCompItem.setInterferePrice(mOrderGoodsItem.getInterferePrice());
+                goodsCompItem.setOrderId(mOrderGoodsItem.getOrderId());
+                goodsCompItem.setSalesId(mOrderGoodsItem.getSalesId());
+                goodsCompItem.setSalesName(mOrderGoodsItem.getSalesName());
+                goodsCompItem.setSalesNum(mOrderGoodsItem.getSalesNum());
+                goodsCompItem.setSalesPrice(mOrderGoodsItem.getSalesPrice());
+                goodsCompItem.setSalesState(mOrderGoodsItem.getSalesState());
+                goodsCompItem.setIsCompDish(mOrderGoodsItem.getIsCompDish());
+                goodsCompItem.setAction(mOrderGoodsItem.getAction());
+                goodsCompItem.setIsZdzk(mOrderGoodsItem.getIsZdzk());
+                goodsCompItem.setMemberPrice(mOrderGoodsItem.getMemberPrice());
+                goodsCompItem.setRemark(mOrderGoodsItem.getRemark());
+                if (orderCompGoods.getmCompMainDishes().isTakeaway()) {
+                    List<String> remarkitem=goodsCompItem.getRemark();
+                    remarkitem.add("外卖");
+                    goodsCompItem.setRemark(remarkitem);
+                }
+                mCommitList.add(goodsCompItem);
+            }
         }
 
         Submit.setOrderGoods(mCommitList);
