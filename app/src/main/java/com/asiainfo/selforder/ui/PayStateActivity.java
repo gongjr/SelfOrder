@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -13,10 +14,12 @@ import com.android.volley.VolleyError;
 import com.asiainfo.selforder.R;
 import com.asiainfo.selforder.biz.order.OrderEntity;
 import com.asiainfo.selforder.http.HttpHelper;
+import com.asiainfo.selforder.model.Listener.OnTimeOutListener;
 import com.asiainfo.selforder.model.MerchantRegister;
 import com.asiainfo.selforder.model.net.ResultMap;
 import com.asiainfo.selforder.model.net.UpdateOrderInfoResultData;
 import com.asiainfo.selforder.ui.base.mBaseActivity;
+import com.asiainfo.selforder.widget.TimeTextView;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
@@ -36,6 +39,10 @@ import roboguice.inject.InjectView;
 public class PayStateActivity extends mBaseActivity {
     @InjectView(R.id.back_to_dishes)
     private Button back_to_dishes;
+    @InjectView(R.id.TimeOut_num)
+    private TimeTextView mTimeTextView;
+    @InjectView(R.id.paystate_timeout)
+    private LinearLayout TimeOutGroup;
     private OrderEntity orderEntity;
     private MerchantRegister merchantRegister;
     private MakeOrderDF mMakeOrderDF;
@@ -225,6 +232,7 @@ public class PayStateActivity extends mBaseActivity {
                             ResultMap<UpdateOrderInfoResultData> response) {
                         if(response.getMsg().equals("ok")) {
                             dismissMakeOrderDF();
+                            startTimeOutText();
                         }
                         else  {
                             dismissMakeOrderDF();
@@ -262,6 +270,30 @@ public class PayStateActivity extends mBaseActivity {
             }
         };
         executeRequest(ResultMapRequest);
+    }
+
+    /**
+     * 启动倒计时控件
+     */
+    public void startTimeOutText(){
+        int[] time = { 0, 0, 0, 9};
+        TimeOutGroup.setVisibility(View.VISIBLE);
+        mTimeTextView.setTimes(time);
+        mTimeTextView.setOnTimeOutListener(new OnTimeOutListener() {
+            @Override
+            public void onTimeOut() {
+                EventMain eventOrder =new EventMain();
+                eventOrder.setType(EventMain.TYPE_FIRST);
+                eventOrder.setDescribe("返回清空");
+                eventOrder.setName(DishesMenuActivity.class.getName());
+                EventBus.getDefault().post(eventOrder);
+                getOperation().forward(DishesMenuActivity.class);
+                getOperation().finish();
+            }
+        });
+        if (!mTimeTextView.isRun()) {
+            mTimeTextView.run();
+        }
     }
 
 }
