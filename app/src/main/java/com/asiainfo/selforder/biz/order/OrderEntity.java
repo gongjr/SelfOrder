@@ -537,7 +537,11 @@ public class OrderEntity {
             if (remarkList != null && remarkList.size() != 0) {
                 String tasteString = "";
                 for (String remark : remarkList) {
-                    tasteString += remark;
+                    if (tasteString.equals("")) {
+                        tasteString += remark;
+                    } else {
+                        tasteString += ", " + remark;
+                    }
                 }
                 mRemark += "(" + tasteString + ")";
             }
