@@ -198,8 +198,8 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
                 OrderGoodsItem orderGoodsItem = new OrderGoodsItem();
                 if (dishesCompItem.isChecked()) {
                     List<DishesProperty> dishesPropertyList = dishesCompItem.getDishesItemTypelist();
+                    List<String> remark = new ArrayList<String>();
                     if (dishesPropertyList.size() != 0) {
-                        List<String> remark = new ArrayList<String>();
                         for (DishesProperty dishesProperty : dishesPropertyList) {
                             List<DishesPropertyItem> dishesPropertyItemList = dishesProperty.getItemlist();
                             for (DishesPropertyItem dishesPropertyItem : dishesPropertyItemList) {
@@ -207,9 +207,10 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
                                     remark.add(dishesPropertyItem.getItemName());
                                 }
                             }
-                            orderGoodsItem.setRemark(remark);
+
                         }
                     }
+                    orderGoodsItem.setRemark(remark);
                     orderGoodsItem.setCompId(dishId);
                     orderGoodsItem.setTradeStaffId(mRegister.getStaffId());
                     orderGoodsItem.setDeskId(mDesk.getDeskId());
@@ -223,7 +224,7 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
                     orderGoodsItem.setSalesName(dishesCompItem.getDishesName());
                     orderGoodsItem.setSalesNum(1);
                     orderGoodsItem.setSalesPrice("0");
-                    orderGoodsItem.setSalesState("1");  //0稍后下单  1立即下单
+                    orderGoodsItem.setSalesState("0");  //0稍后下单  1立即下单
                     orderGoodsItem.setIsCompDish("" + true); //套餐菜固定为true
                     orderGoodsItem.setAction("1");
                     orderGoodsItem.setIsZdzk(dishesCompItem.getIsZdzk()); //整单折扣
@@ -247,7 +248,7 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
         orderGoodsItem.setSalesName(mMerchantDishes.getDishesName());
         orderGoodsItem.setSalesNum(1);
         orderGoodsItem.setSalesPrice(mMerchantDishes.getDishesPrice());
-        orderGoodsItem.setSalesState("1");  //0稍后下单  1立即下单
+        orderGoodsItem.setSalesState("0");  //0稍后下单  1立即下单
         orderGoodsItem.setIsCompDish("" + false); //套餐菜固定为true
         orderGoodsItem.setAction("1");
         orderGoodsItem.setIsZdzk(mMerchantDishes.getIsZdzk()); //整单折扣
