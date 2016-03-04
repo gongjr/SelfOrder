@@ -22,6 +22,8 @@ import com.asiainfo.selforder.config.Constants;
 import com.asiainfo.selforder.http.HttpHelper;
 import com.asiainfo.selforder.model.MerchantDesk;
 import com.asiainfo.selforder.model.MerchantRegister;
+import com.asiainfo.selforder.model.dishComps.DishesComp;
+import com.asiainfo.selforder.model.dishComps.DishesCompItem;
 import com.asiainfo.selforder.model.dishes.DishesProperty;
 import com.asiainfo.selforder.model.dishes.DishesPropertyItem;
 import com.asiainfo.selforder.model.dishes.MerchantDishes;
@@ -133,6 +135,8 @@ public class LoginActivity extends mBaseActivity {
                         }
                     }
                     //更新时将套餐数据清空，后续缓存更新
+                    DataSupport.deleteAll(DishesComp.class);
+                    DataSupport.deleteAll(DishesCompItem.class);
                     Log.i("onEventBackgroundThread", "LoginActivity中数据库更新成功");
 
                     EventMain eventMain = new EventMain();

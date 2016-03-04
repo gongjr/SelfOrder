@@ -2,9 +2,11 @@
 <litepal>  
     <dbname value="selforderdb" ></dbname>
   
-    <version value="6" ></version>
+    <version value="8" ></version>
   
     <list>
+        <mapping class="com.asiainfo.selforder.model.dishComps.DishesComp"></mapping>
+        <mapping class="com.asiainfo.selforder.model.dishComps.DishesCompItem"></mapping>
         <mapping class="com.asiainfo.selforder.model.dishes.DishesProperty"></mapping>
         <mapping class="com.asiainfo.selforder.model.dishes.DishesPropertyItem"></mapping>
         <mapping class="com.asiainfo.selforder.model.dishes.MerchantDishes"></mapping>

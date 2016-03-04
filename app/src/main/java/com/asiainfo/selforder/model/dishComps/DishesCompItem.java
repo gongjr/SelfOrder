@@ -40,7 +40,15 @@ public class DishesCompItem extends DataSupport implements Serializable{
 	/**是否选择**/
 	private boolean isChecked;
 
-	public String getIsZdzk() {
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean isChecked) {
+        this.isChecked = isChecked;
+    }
+
+    public String getIsZdzk() {
 		return isZdzk;
 	}
 
@@ -132,11 +140,4 @@ public class DishesCompItem extends DataSupport implements Serializable{
         return  getBaseObjId();
     }
 
-	public boolean isChecked() {
-		return isChecked;
-	}
-
-	public void setIsChecked(boolean isChecked) {
-		this.isChecked = isChecked;
-	}
 }
