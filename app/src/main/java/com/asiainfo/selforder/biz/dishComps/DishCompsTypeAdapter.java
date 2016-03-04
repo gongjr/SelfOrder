@@ -38,7 +38,7 @@ public class DishCompsTypeAdapter extends BaseAdapter {
     }
 
     private class DishCompsTypeViewHolder {
-        TextView titleNameText;
+        TextView titleNameText,titleRuleText;
         GridView typeGridView;
         ListView tasteListView;
     }
@@ -65,6 +65,7 @@ public class DishCompsTypeAdapter extends BaseAdapter {
             holder = new DishCompsTypeViewHolder();
             view = LayoutInflater.from(context).inflate(R.layout.dish_comps_listview, null);
             holder.titleNameText = (TextView) view.findViewById(R.id.dish_comp_type_name);
+            holder.titleRuleText = (TextView) view.findViewById(R.id.dish_comp_type_rule);
             holder.typeGridView = (GridView) view.findViewById(R.id.dish_comp_type_gridview);
             holder.tasteListView = (ListView) view.findViewById(R.id.dish_comp_taste_listview);
             view.setTag(holder);
@@ -77,6 +78,8 @@ public class DishCompsTypeAdapter extends BaseAdapter {
         final List<DishesCompItem> dishesCompItemList = dishesComp.getDishesInfoList();//每个类型包含的菜品
         dishesCompItemList.get(0).setChecked(true); //默认第一项为选中
         holder.titleNameText.setText(disheTypeName); //设置每一项的名称
+        String ruleComp="("+dishesComp.getDishesCount()+"选"+dishesComp.getMaxSelect()+")";
+        holder.titleRuleText.setText(ruleComp); //设置每一项的名称
         //设置每类菜品的具体菜式
         final DishCompsAdapter adapter = new DishCompsAdapter(context, dishesCompItemList);
         holder.typeGridView.setAdapter(adapter);

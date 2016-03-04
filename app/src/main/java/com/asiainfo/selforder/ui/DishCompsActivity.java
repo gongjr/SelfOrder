@@ -61,6 +61,7 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
     private static MerchantDishes mMerchantDishes;
     private DishesEntity dishesEntity;
 
+
     @InjectView(R.id.dish_comp_name)
     private TextView dishCompNameText;
     @InjectView(R.id.dish_comp_close_btn)
@@ -100,8 +101,9 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
         if(mDishCompsPartionDataList.size()>0){
             setLayout(mDishCompsPartionDataList);
         }else{
-//            showCommonDialog("正在加载套餐详情···");
-            httpGetDishesData(dishId, childMerchantId);        }
+            showCommonDialog("正在加载套餐详情···");
+            httpGetDishesData(dishId, childMerchantId);
+        }
     }
 
     /*
@@ -133,6 +135,7 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
                                     Type type = new TypeToken<ArrayList<DishesComp>>() {
                                     }.getType();
                                     mDishesCompList = gson.fromJson(dataStr, type);
+                                    dismissCommonDialog();
                                     mDishCompsPartionDataList=mDishesCompList;
                                     setLayout(mDishCompsPartionDataList);
                                     if(mDishesCompList!=null){
@@ -174,17 +177,20 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
                                     }
 
                                 } else {
+                                    dismissCommonDialog();
                                     Log.d(TAG, "套餐数据有误,请后台确认!");
                                     showShortTip("套餐数据有误,请后台确认!");
                                 }
                             } else {
+                                dismissCommonDialog();
                                 Log.d(TAG, "套餐数据有误,请后台确认!");
                                 showShortTip("套餐数据有误,请后台确认!");
                             }
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            dismissCommonDialog();
                             Log.d(TAG, "套餐数据有误,请后台确认!");
                             showShortTip("套餐数据有误,请后台确认!");
+                            e.printStackTrace();
                         }
 
                     }
@@ -192,6 +198,7 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        dismissCommonDialog();
                         Log.e("VolleyLogTag", "VolleyError:" + error.getMessage(), error);
                         showShortTip(VolleyErrorHelper.getMessage(error, mActivity));
                     }
