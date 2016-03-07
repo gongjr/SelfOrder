@@ -279,7 +279,7 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
                     orderGoodsItem.setOrderId("");
                     orderGoodsItem.setSalesId(dishesCompItem.getDishesId());
                     orderGoodsItem.setSalesName(dishesCompItem.getDishesName());
-                    orderGoodsItem.setSalesNum(1);
+                    orderGoodsItem.setSalesNum(Integer.valueOf(dishesCompItem.getDishesNum()));
                     orderGoodsItem.setSalesPrice("0");
                     orderGoodsItem.setSalesState("0");  //0稍后下单  1立即下单
                     orderGoodsItem.setIsCompDish("" + true); //套餐菜固定为true
