@@ -249,6 +249,7 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
     * */
     private void getSelectedData() {
         List<OrderGoodsItem> orderGoodsItemList = new ArrayList<OrderGoodsItem>();
+        long instanceId =System.currentTimeMillis();
         for (DishesComp dishesComp : mDishCompsPartionDataList) {
             List<DishesCompItem> dishesCompItemList = dishesComp.getDishesInfoList();
             for (DishesCompItem dishesCompItem : dishesCompItemList) {
@@ -274,7 +275,7 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
                     orderGoodsItem.setDishesPrice(dishesCompItem.getDishesPrice());
                     orderGoodsItem.setDishesTypeCode(dishesCompItem.getDishesTypeCode());
                     orderGoodsItem.setExportId(dishesCompItem.getExportId());
-                    orderGoodsItem.setInstanceId("" + System.currentTimeMillis());
+                    orderGoodsItem.setInstanceId("" +instanceId );
                     orderGoodsItem.setInterferePrice("0");
                     orderGoodsItem.setOrderId("");
                     orderGoodsItem.setSalesId(dishesCompItem.getDishesId());
@@ -298,7 +299,7 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
         orderGoodsItem.setDishesPrice(mMerchantDishes.getDishesPrice());
         orderGoodsItem.setDishesTypeCode(mMerchantDishes.getDishesTypeCode());
         orderGoodsItem.setExportId(mMerchantDishes.getExportId());
-        orderGoodsItem.setInstanceId("" + System.currentTimeMillis());
+        orderGoodsItem.setInstanceId("" + instanceId);
         orderGoodsItem.setInterferePrice("0");
         orderGoodsItem.setOrderId("");
         orderGoodsItem.setSalesId(mMerchantDishes.getDishesId());
