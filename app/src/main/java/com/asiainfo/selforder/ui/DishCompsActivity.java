@@ -15,6 +15,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.asiainfo.selforder.R;
+import com.asiainfo.selforder.biz.db.DishesEntity;
 import com.asiainfo.selforder.biz.dishComps.DishCompsTypeAdapter;
 import com.asiainfo.selforder.http.HttpHelper;
 import com.asiainfo.selforder.model.MerchantDesk;
@@ -31,12 +32,14 @@ import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.litepal.crud.DataSupport;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import kxlive.gjrlibrary.http.VolleyErrorHelper;
 import roboguice.inject.InjectView;
 
 
@@ -50,12 +53,14 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
 
     private static String TAG = null;
     public static final Integer DISHE_COMPS = 10001;
-    private List<DishesComp> dishesCompList;
+    private List<DishesComp> mDishCompsPartionDataList;
     private String dishId = "100014732";
     private String childMerchantId;
     private MerchantRegister mRegister;
     private MerchantDesk mDesk;
     private static MerchantDishes mMerchantDishes;
+    private DishesEntity dishesEntity;
+
 
     @InjectView(R.id.dish_comp_name)
     private TextView dishCompNameText;
@@ -79,7 +84,6 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
         mDesk = (MerchantDesk) mApp.getData(mApp.KEY_GLOABLE_MERCHANTDESk);
         initData();
         initListner();
-        httpGetDishesData("100014732", "20000080");
     }
 
     /*
@@ -87,11 +91,19 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
     * */
     private void initData() {
         dishId = getIntent().getStringExtra("dishesId");
-        childMerchantId = getIntent().getStringExtra("childMerchantId");
         dishCompNameText.setText(getIntent().getStringExtra("dishesName"));
         priceText.setText(getIntent().getStringExtra("dishesPrice"));
         memberPriceText.setText(getIntent().getStringExtra("dishesMemberPrice"));
+        childMerchantId = mRegister.getChildMerchantId();
         textSetFlag(priceText);
+        dishesEntity = new DishesEntity();
+        mDishCompsPartionDataList=dishesEntity.sqliteGetDishesCompDataByDishesId2(dishId);
+        if(mDishCompsPartionDataList.size()>0){
+            setLayout(mDishCompsPartionDataList);
+        }else{
+            showCommonDialog("正在加载套餐详情···");
+            httpGetDishesData(dishId, childMerchantId);
+        }
     }
 
     /*
@@ -106,7 +118,7 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
     *
     * 根据dishesId和childMerchantId获取套餐内容
     * */
-    private void httpGetDishesData(String dishesId, String childMerchantID) {
+    private void httpGetDishesData(final String dishesId, String childMerchantID) {
         String url = "/appController/queryComboInfoForApp.do?dishesId=" + dishesId + "&childMerchantId=" + childMerchantID;
         Log.d(TAG, HttpHelper.HOST + url);
         JsonObjectRequest httpGetDishesData = new JsonObjectRequest(HttpHelper.HOST + url, null,
@@ -118,24 +130,67 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
                             if (data.length() != 0) {
                                 String dataStr = data.getString("compDishesTypeList");
                                 if (dataStr.length() != 0) {
-                                    dishesCompList = new ArrayList<DishesComp>();
+                                    List<DishesComp> mDishesCompList= new ArrayList<DishesComp>();
                                     Gson gson = new Gson();
                                     Type type = new TypeToken<ArrayList<DishesComp>>() {
                                     }.getType();
-                                    dishesCompList = gson.fromJson(dataStr, type);
-                                    setLayout(dishesCompList);
+                                    mDishesCompList = gson.fromJson(dataStr, type);
+                                    dismissCommonDialog();
+                                    mDishCompsPartionDataList=mDishesCompList;
+                                    setLayout(mDishCompsPartionDataList);
+                                    if(mDishesCompList!=null){
+                                        for(int i=0; i<mDishesCompList.size(); i++){
+                                            DishesComp dishesComp = mDishesCompList.get(i);
+                                            dishesComp.setDishesId(dishesId);
+                                            mDishesCompList.set(i, dishesComp);
+                                        }
+
+                                        DataSupport.saveAll(mDishesCompList);
+                                        for(int i=0; i<mDishesCompList.size(); i++){
+                                            DishesComp  dishesComp = mDishesCompList.get(i);
+                                            List<DishesCompItem> mCompItemsList = dishesComp.getDishesInfoList();
+                                            DataSupport.saveAll(mCompItemsList);
+                                            for(DishesCompItem dishesCompItem:mCompItemsList){
+                                                List<DishesProperty> dpList = dishesCompItem.getDishesItemTypelist();
+                                                if (dpList != null && dpList.size() > 0) {
+
+                                                    for (int j = 0; j < dpList.size(); j++) {
+                                                        DishesProperty dpItem = dpList.get(j);
+                                                        dpItem.setIsCompProperty("1");
+                                                        dpItem.setDishesId(dishesCompItem.getDishesId());
+                                                        dpList.set(j,dpItem);
+                                                        DataSupport.saveAll(dpList); //缓存菜品属性类型数据
+                                                        List<DishesPropertyItem> dpiList = dpItem.getItemlist();
+                                                        for (int m = 0; m < dpiList.size(); m++){
+                                                            DishesPropertyItem item=dpiList.get(m);
+                                                            item.setIsCompProperty("1");
+                                                            item.setDishesId(dishesCompItem.getDishesId());
+                                                            item.setItemType(dpItem.getItemType());
+                                                            dpiList.set(m,item);
+                                                        }
+                                                        DataSupport.saveAll(dpiList); //缓存菜品属性值数据
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        Log.d(TAG, "DishesId = " + dishesId + " 同步套餐数据完成!");
+                                    }
+
                                 } else {
+                                    dismissCommonDialog();
                                     Log.d(TAG, "套餐数据有误,请后台确认!");
                                     showShortTip("套餐数据有误,请后台确认!");
                                 }
                             } else {
+                                dismissCommonDialog();
                                 Log.d(TAG, "套餐数据有误,请后台确认!");
                                 showShortTip("套餐数据有误,请后台确认!");
                             }
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            dismissCommonDialog();
                             Log.d(TAG, "套餐数据有误,请后台确认!");
                             showShortTip("套餐数据有误,请后台确认!");
+                            e.printStackTrace();
                         }
 
                     }
@@ -143,7 +198,9 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        dismissCommonDialog();
+                        Log.e("VolleyLogTag", "VolleyError:" + error.getMessage(), error);
+                        showShortTip(VolleyErrorHelper.getMessage(error, mActivity));
                     }
                 }
         );
@@ -192,7 +249,8 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
     * */
     private void getSelectedData() {
         List<OrderGoodsItem> orderGoodsItemList = new ArrayList<OrderGoodsItem>();
-        for (DishesComp dishesComp : dishesCompList) {
+        long instanceId =System.currentTimeMillis();
+        for (DishesComp dishesComp : mDishCompsPartionDataList) {
             List<DishesCompItem> dishesCompItemList = dishesComp.getDishesInfoList();
             for (DishesCompItem dishesCompItem : dishesCompItemList) {
                 OrderGoodsItem orderGoodsItem = new OrderGoodsItem();
@@ -217,12 +275,12 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
                     orderGoodsItem.setDishesPrice(dishesCompItem.getDishesPrice());
                     orderGoodsItem.setDishesTypeCode(dishesCompItem.getDishesTypeCode());
                     orderGoodsItem.setExportId(dishesCompItem.getExportId());
-                    orderGoodsItem.setInstanceId("" + System.currentTimeMillis());
+                    orderGoodsItem.setInstanceId("" +instanceId );
                     orderGoodsItem.setInterferePrice("0");
                     orderGoodsItem.setOrderId("");
                     orderGoodsItem.setSalesId(dishesCompItem.getDishesId());
                     orderGoodsItem.setSalesName(dishesCompItem.getDishesName());
-                    orderGoodsItem.setSalesNum(1);
+                    orderGoodsItem.setSalesNum(Integer.valueOf(dishesCompItem.getDishesNum()));
                     orderGoodsItem.setSalesPrice("0");
                     orderGoodsItem.setSalesState("0");  //0稍后下单  1立即下单
                     orderGoodsItem.setIsCompDish("" + true); //套餐菜固定为true
@@ -241,7 +299,7 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
         orderGoodsItem.setDishesPrice(mMerchantDishes.getDishesPrice());
         orderGoodsItem.setDishesTypeCode(mMerchantDishes.getDishesTypeCode());
         orderGoodsItem.setExportId(mMerchantDishes.getExportId());
-        orderGoodsItem.setInstanceId("" + System.currentTimeMillis());
+        orderGoodsItem.setInstanceId("" + instanceId);
         orderGoodsItem.setInterferePrice("0");
         orderGoodsItem.setOrderId("");
         orderGoodsItem.setSalesId(mMerchantDishes.getDishesId());

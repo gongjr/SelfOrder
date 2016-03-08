@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.asiainfo.selforder.AppApplication;
 import com.asiainfo.selforder.R;
 import com.asiainfo.selforder.config.Constants;
+import com.asiainfo.selforder.widget.HttpDialogCommon;
 import com.google.gson.Gson;
 
 import kxlive.gjrlibrary.base.BaseActivity;
@@ -29,6 +30,7 @@ public class mBaseActivity  extends BaseActivity{
     public Toast mToast;
     public LeafLoadingDialog leafDialog;
     private DialogDelayListener leafdelay,delay;
+    protected HttpDialogCommon mHttpDialogCommon;
 
     @Override
     protected void onCreate(Bundle arg0) {
@@ -137,5 +139,47 @@ public class mBaseActivity  extends BaseActivity{
 
         ;
     };
+
+
+    protected void showCommonDialog(){
+        try {
+            if(mHttpDialogCommon==null)
+                mHttpDialogCommon = new HttpDialogCommon();
+            if(mHttpDialogCommon!=null&&!mHttpDialogCommon.isAdded()) {
+                mHttpDialogCommon.show(getSupportFragmentManager(), "dialog_fragment_http_common");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }}
+
+    protected void showCommonDialog(String txt){
+        try {
+            if(mHttpDialogCommon==null)
+                mHttpDialogCommon = new HttpDialogCommon();
+            mHttpDialogCommon.setNoticeText(txt);
+            if(mHttpDialogCommon!=null&&!mHttpDialogCommon.isAdded()) {
+                mHttpDialogCommon.show(getSupportFragmentManager(), "dialog_fragment_http_common");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    protected void dismissCommonDialog(){
+        try {
+            if(mHttpDialogCommon!=null&&mHttpDialogCommon.isAdded()){
+                mHttpDialogCommon.dismiss();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    protected Boolean isComoDialogShowing(){
+        if(mHttpDialogCommon!=null && mHttpDialogCommon.isVisible()){
+            return true;
+        }
+        return false;
+    }
 
 }

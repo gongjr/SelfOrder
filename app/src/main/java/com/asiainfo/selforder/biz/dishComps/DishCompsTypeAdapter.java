@@ -38,7 +38,7 @@ public class DishCompsTypeAdapter extends BaseAdapter {
     }
 
     private class DishCompsTypeViewHolder {
-        TextView titleNameText;
+        TextView titleNameText,titleRuleText;
         GridView typeGridView;
         ListView tasteListView;
     }
@@ -65,18 +65,21 @@ public class DishCompsTypeAdapter extends BaseAdapter {
             holder = new DishCompsTypeViewHolder();
             view = LayoutInflater.from(context).inflate(R.layout.dish_comps_listview, null);
             holder.titleNameText = (TextView) view.findViewById(R.id.dish_comp_type_name);
+            holder.titleRuleText = (TextView) view.findViewById(R.id.dish_comp_type_rule);
             holder.typeGridView = (GridView) view.findViewById(R.id.dish_comp_type_gridview);
             holder.tasteListView = (ListView) view.findViewById(R.id.dish_comp_taste_listview);
             view.setTag(holder);
         } else {
             holder = (DishCompsTypeViewHolder) view.getTag();
         }
-        DishesComp dishesComp = dishesCompList.get(i);
+        final DishesComp dishesComp = dishesCompList.get(i);
         String disheTypeName = dishesComp.getDishesTypeName(); //菜单类型名称
         final String maxSize = dishesComp.getMaxSelect();
         final List<DishesCompItem> dishesCompItemList = dishesComp.getDishesInfoList();//每个类型包含的菜品
-        dishesCompItemList.get(0).setIsChecked(true); //默认第一项为选中
+        dishesCompItemList.get(0).setChecked(true); //默认第一项为选中
         holder.titleNameText.setText(disheTypeName); //设置每一项的名称
+        String ruleComp="("+dishesComp.getDishesCount()+"选"+dishesComp.getMaxSelect()+")";
+        holder.titleRuleText.setText(ruleComp); //设置每一项的名称
         //设置每类菜品的具体菜式
         final DishCompsAdapter adapter = new DishCompsAdapter(context, dishesCompItemList);
         holder.typeGridView.setAdapter(adapter);
@@ -91,9 +94,9 @@ public class DishCompsTypeAdapter extends BaseAdapter {
                 int selectedItem = 0;
                 if (Integer.valueOf(maxSize) == 1) {
                     for (DishesCompItem dishesCompItem : dishesCompItemList) {
-                        dishesCompItem.setIsChecked(false);
+                        dishesCompItem.setChecked(false);
                     }
-                    dishesCompItemList.get(i).setIsChecked(true);
+                    dishesCompItemList.get(i).setChecked(true);
                     isListViewVisible(finalHolder.tasteListView, dishesCompItemList.get(i).getDishesItemTypelist());
                     adapter.notifyDataSetChanged();
                 } else {
@@ -104,15 +107,15 @@ public class DishCompsTypeAdapter extends BaseAdapter {
                     }
                     if (dishesCompItemList.get(i).isChecked()) {
                         selectedItem--;
-                        dishesCompItemList.get(i).setIsChecked(false);
+                        dishesCompItemList.get(i).setChecked(false);
                         isListViewVisible(finalHolder.tasteListView, dishesCompItemList.get(i).getDishesItemTypelist());
                         adapter.notifyDataSetChanged();
 
                     } else {
                         if (selectedItem >= Integer.valueOf(maxSize)) {
-                            Toast.makeText(context, "数量不能大于" + maxSize, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, dishesComp.getDishesTypeName()+":可选数量不能大于" + maxSize, Toast.LENGTH_SHORT).show();
                         } else {
-                            dishesCompItemList.get(i).setIsChecked(true);
+                            dishesCompItemList.get(i).setChecked(true);
                             isListViewVisible(finalHolder.tasteListView, dishesCompItemList.get(i).getDishesItemTypelist());
                             adapter.notifyDataSetChanged();
                         }

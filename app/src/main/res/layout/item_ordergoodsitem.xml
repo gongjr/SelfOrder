@@ -58,7 +58,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/distance_10"
-            android:singleLine="true"
             android:text="口味:微辣"
             android:textColor="@color/makeorder_item_remark_text"
             android:textSize="@dimen/textsize_middle"

@@ -2,6 +2,8 @@ package com.asiainfo.selforder.biz.db;
 
 import android.util.Log;
 
+import com.asiainfo.selforder.model.dishComps.DishesComp;
+import com.asiainfo.selforder.model.dishComps.DishesCompItem;
 import com.asiainfo.selforder.model.dishes.DishesData;
 import com.asiainfo.selforder.model.dishes.DishesProperty;
 import com.asiainfo.selforder.model.dishes.DishesPropertyItem;
@@ -240,6 +242,30 @@ public class DishesEntity {
             }
         }
         return dishes;
+    }
+
+    /**
+     * 根据dishesId获取套餐数据
+     * @param dishesId
+     * 由于Litepal查询后对象内容序列化，与Gson反序列化冲突，无法直接搜索
+     * 冲突的原因是:Litepal中的关联表，对象应用有误，导致json解析死循环，内存溢出
+     * @return List<DishesComp>
+     */
+    public List<DishesComp> sqliteGetDishesCompDataByDishesId2(String dishesId){
+        List<DishesComp> mCompList = DataBinder.binder.findWithWhere(DishesComp.class,"dishesid = ?",dishesId);
+        for (DishesComp mDishesComp :mCompList){
+            List<DishesCompItem> mCompLists= DataBinder.binder.findWithWhere(DishesCompItem.class,"dishescomp_id = ?",mDishesComp.getId()+"");
+            for (DishesCompItem mDishesCompItem:mCompLists){
+                List<DishesProperty> dishesItemTypelist= DataBinder.binder.findWithWhere(DishesProperty.class,"dishescompitem_id = ?",mDishesCompItem.getId()+"");
+                for (DishesProperty mDishesProperty: dishesItemTypelist){
+                    List<DishesPropertyItem> itemlist=DataBinder.binder.findWithWhere(DishesPropertyItem.class,"dishesproperty_id = ?",mDishesProperty.getId()+"");
+                    mDishesProperty.setItemlist(itemlist);
+                }
+                mDishesCompItem.setDishesItemTypelist(dishesItemTypelist);
+            }
+            mDishesComp.setDishesInfoList(mCompLists);
+        }
+        return mCompList;
     }
 
 }
