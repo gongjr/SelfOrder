@@ -1,4 +1,4 @@
-package com.asiainfo.selforder.model.dishes;
+package com.tonicartos.widget.stickygridheaders;
 
 /**
  * Created by gjr on 2016/3/2.

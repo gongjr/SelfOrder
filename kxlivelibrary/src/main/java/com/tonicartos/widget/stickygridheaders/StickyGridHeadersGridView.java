@@ -142,8 +142,6 @@ public class StickyGridHeadersGridView extends GridView implements OnScrollListe
 
     private int mNumMeasuredColumns = 1;
 
-    private OnStickyHeaderChangeListener mOnStickyHeaderChangeListener;
-
     private OnHeaderClickListener mOnHeaderClickListener;
 
     private OnHeaderLongClickListener mOnHeaderLongClickListener;
@@ -177,6 +175,12 @@ public class StickyGridHeadersGridView extends GridView implements OnScrollListe
     protected int mTouchMode;
 
     boolean mHeaderChildBeingPressed = false;
+
+    private ArrayList<TypeSection> sectionList;
+
+    private int curFirstVisibleItemPosition=0;
+
+    private OnStickyHeaderChangeListener mOnStickyHeaderChangeListener;
 
     public StickyGridHeadersGridView(Context context) {
         this(context, null);
@@ -283,6 +287,22 @@ public class StickyGridHeadersGridView extends GridView implements OnScrollListe
             int totalItemCount) {
         if (mScrollListener != null) {
             mScrollListener.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
+        }
+
+        //滑动时,curFirstVisibleItemPosition每次有变化时才进行头部变化判断
+        if (curFirstVisibleItemPosition != firstVisibleItem) {
+            curFirstVisibleItemPosition = firstVisibleItem;
+            if(sectionList!=null){
+            for (TypeSection mTypeSection : sectionList) {
+                //判断curFirstVisibleItemPosition在某个类型的头尾Index之间,返回对应的TypeIndex
+                if (curFirstVisibleItemPosition < mTypeSection.getEndIndex() && curFirstVisibleItemPosition >= mTypeSection.getStartIndex()){
+                    if(mOnStickyHeaderChangeListener!=null){
+                    mOnStickyHeaderChangeListener.onItemClick(mTypeSection.getTypeIndex(),curFirstVisibleItemPosition,visibleItemCount);
+                    }
+                    break;
+                }
+            }
+            }
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
@@ -553,8 +573,15 @@ public class StickyGridHeadersGridView extends GridView implements OnScrollListe
         mOnHeaderClickListener = listener;
     }
 
-    public void setOnStickyHeaderChangeListener(OnStickyHeaderChangeListener listener) {
+    /**
+     * 头部事件与TypeSectionList的相关数据
+     * @param listener
+     * @param mSectionList
+     */
+    public void setOnStickyHeaderChangeListener(OnStickyHeaderChangeListener listener,ArrayList<TypeSection> mSectionList) {
         mOnStickyHeaderChangeListener = listener;
+        sectionList=mSectionList;
+
     }
 
     public void setOnHeaderLongClickListener(OnHeaderLongClickListener listener) {
@@ -978,7 +1005,6 @@ public class StickyGridHeadersGridView extends GridView implements OnScrollListe
         }
 
         mStickiedHeader.draw(canvas);
-//        mOnStickyHeaderChangeListener.onItemClick(getFirstVisiblePosition());
         if (mHeaderBottomPosition != headerHeight) {
             canvas.restore();
         }

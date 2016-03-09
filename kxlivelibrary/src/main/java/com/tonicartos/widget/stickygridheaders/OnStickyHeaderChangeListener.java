@@ -5,5 +5,5 @@ package com.tonicartos.widget.stickygridheaders;
  * @author gjr
  */
 public interface OnStickyHeaderChangeListener {
-    public void onItemClick(int position);
+    public void onItemClick(int typeIndex,int FirstVisibleItemPosition,int visibleItemCount);
 }

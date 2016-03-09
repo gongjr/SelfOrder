@@ -9,7 +9,7 @@ import com.asiainfo.selforder.model.dishes.DishesProperty;
 import com.asiainfo.selforder.model.dishes.DishesPropertyItem;
 import com.asiainfo.selforder.model.dishes.MerchantDishes;
 import com.asiainfo.selforder.model.dishes.MerchantDishesType;
-import com.asiainfo.selforder.model.dishes.TypeSection;
+import com.tonicartos.widget.stickygridheaders.TypeSection;
 
 import org.litepal.crud.DataSupport;
 

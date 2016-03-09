@@ -5,11 +5,9 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -28,11 +26,11 @@ import com.asiainfo.selforder.model.dishComps.DishesCompSelectionEntity;
 import com.asiainfo.selforder.model.dishes.DishesData;
 import com.asiainfo.selforder.model.dishes.MerchantDishes;
 import com.asiainfo.selforder.model.dishes.MerchantDishesType;
-import com.asiainfo.selforder.model.dishes.TypeSection;
 import com.asiainfo.selforder.model.order.OrderGoodsItem;
 import com.asiainfo.selforder.model.order.PropertySelectEntity;
 import com.asiainfo.selforder.ui.base.mBaseActivity;
 import com.google.inject.Inject;
+import com.tonicartos.widget.stickygridheaders.OnStickyHeaderChangeListener;
 import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
 
 import java.util.ArrayList;
@@ -128,48 +126,36 @@ public class DishesMenuActivity extends mBaseActivity {
         clear_init.setOnClickListener(mOnClickListener);
         next.setOnClickListener(mOnClickListener);
         next_init.setOnClickListener(mOnClickListener);
-        dishesGridView.setOnScrollListener(new AbsListView.OnScrollListener() {
+        dishesGridView.setOnStickyHeaderChangeListener(new OnStickyHeaderChangeListener() {
             @Override
-            public void onScrollStateChanged(AbsListView absListView, int i) {
-
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
-                                 int totalItemCount) {
-                if (curFirstVisibleItemPosition != firstVisibleItem) {
-                    curFirstVisibleItemPosition = firstVisibleItem;
-                    curVisibleItemCount=visibleItemCount;
-                    Log.i("onScroll", "curFirstVisibleItemPosition:" + curFirstVisibleItemPosition);
-                    for (TypeSection mTypeSection : mDishesData.getSectionList()) {
-                        if (curFirstVisibleItemPosition < mTypeSection.getEndIndex() && curFirstVisibleItemPosition >= mTypeSection.getStartIndex()&&!isAutoScroll) {
-                            if (mDishesTypeAdapter.getSelectedPos() != mTypeSection.getTypeIndex()) {
-                                mDishesTypeAdapter.setSelectedPos(mTypeSection.getTypeIndex());
-                                final int position = mTypeSection.getTypeIndex();
-                                //定位头部类型位置
-                                if (position == 0 && dishesGridView.getChildAt(0).getVisibility() == View.VISIBLE) {
-                                    dishesTypeView.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                        }
-                                    }, 300);
-                                } else if (position > 0) {
-                                    dishesTypeView.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            //dishesTypeView.getLayoutManager().scrollToPosition(position-1);
-                                            //scrollToPosition(position),移动靠左或靠右,或者完全显示的时候不移动,不计算偏移量
-                                            ((LinearLayoutManager) dishesTypeView.getLayoutManager()).scrollToPositionWithOffset(position - 1, 0);
-                                        }
-                                    }, 300);
-                                }
+            public void onItemClick(final int typeIndex,int FirstVisibleItemPosition,int visibleItemCount) {
+                curFirstVisibleItemPosition = FirstVisibleItemPosition;
+                curVisibleItemCount=visibleItemCount;
+                if(!isAutoScroll){
+                        if (mDishesTypeAdapter.getSelectedPos() != typeIndex) {
+                            mDishesTypeAdapter.setSelectedPos(typeIndex);
+                            //定位头部类型位置
+                            if (typeIndex == 0 && dishesGridView.getChildAt(0).getVisibility() == View.VISIBLE) {
+                                dishesTypeView.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ((LinearLayoutManager) dishesTypeView.getLayoutManager()).scrollToPositionWithOffset(0, 0);
+                                    }
+                                }, 300);
+                            } else if (typeIndex > 0) {
+                                dishesTypeView.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        //dishesTypeView.getLayoutManager().scrollToPosition(typeIndex-1);
+                                        //scrollToPosition(typeIndex),移动靠左或靠右,或者完全显示的时候不移动,不计算偏移量
+                                        ((LinearLayoutManager) dishesTypeView.getLayoutManager()).scrollToPositionWithOffset(typeIndex - 1, 0);
+                                    }
+                                }, 300);
                             }
-                            break;
                         }
                     }
-                }
             }
-        });
+        },mDishesData.getSectionList());
     }
 
     View.OnClickListener mOnClickListener = new View.OnClickListener() {

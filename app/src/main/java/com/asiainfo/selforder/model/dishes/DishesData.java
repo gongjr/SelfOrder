@@ -1,5 +1,7 @@
 package com.asiainfo.selforder.model.dishes;
 
+import com.tonicartos.widget.stickygridheaders.TypeSection;
+
 import java.util.ArrayList;
 
 /**
