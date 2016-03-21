@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="10dp"
+    android:paddingTop="20dp">
+
+    <TextView
+        android:id="@+id/dish_comp_type_name"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="70dp"
+        android:text="主食"
+        android:textColor="@color/item_dishes_type_name_text_s"
+        android:textSize="@dimen/textsize_middle"
+        android:layout_marginTop="@dimen/distance_10"/>
+
+    <TextView
+        android:id="@+id/dish_comp_type_rule"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="70dp"
+        android:text="(1选1)"
+        android:textColor="@color/item_dishes_type_name_text_s"
+        android:textSize="@dimen/textsize_small"
+        android:layout_below="@+id/dish_comp_type_name"
+        android:layout_marginTop="@dimen/distance_10"
+        android:layout_marginStart="@dimen/distance_10"/>
+
+    <com.asiainfo.selforder.biz.dishComps.MyGridview
+        android:id="@+id/dish_comp_type_gridview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="70dp"
+        android:layout_toRightOf="@+id/dish_comp_type_name"
+        android:horizontalSpacing="10dp"
+        android:numColumns="3"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="20dp"></com.asiainfo.selforder.biz.dishComps.MyGridview>
+
+    <com.asiainfo.selforder.biz.dishComps.MyListView
+        android:id="@+id/dish_comp_taste_listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dish_comp_type_gridview"
+        android:layout_marginTop="20dp"
+        android:background="@android:color/white"
+        android:divider="@null"
+        android:focusable="false"
+        android:visibility="gone"
+        android:paddingBottom="10dip"
+        android:paddingTop="10dip">
+
+    </com.asiainfo.selforder.biz.dishComps.MyListView>
+
+</RelativeLayout>

@@ -1,6 +1,7 @@
 package com.asiainfo.selforder.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,11 +22,14 @@ import com.asiainfo.selforder.config.Constants;
 import com.asiainfo.selforder.http.HttpHelper;
 import com.asiainfo.selforder.model.MerchantDesk;
 import com.asiainfo.selforder.model.MerchantRegister;
+import com.asiainfo.selforder.model.dishComps.DishesComp;
+import com.asiainfo.selforder.model.dishComps.DishesCompItem;
 import com.asiainfo.selforder.model.dishes.DishesProperty;
 import com.asiainfo.selforder.model.dishes.DishesPropertyItem;
 import com.asiainfo.selforder.model.dishes.MerchantDishes;
 import com.asiainfo.selforder.model.dishes.MerchantDishesType;
 import com.asiainfo.selforder.model.eventbus.post.DishesListEntity;
+import com.asiainfo.selforder.service.ScreenService;
 import com.asiainfo.selforder.ui.base.mBaseActivity;
 import com.asiainfo.selforder.widget.HttpDialogLogin;
 import com.google.gson.Gson;
@@ -131,6 +135,8 @@ public class LoginActivity extends mBaseActivity {
                         }
                     }
                     //更新时将套餐数据清空，后续缓存更新
+                    DataSupport.deleteAll(DishesComp.class);
+                    DataSupport.deleteAll(DishesCompItem.class);
                     Log.i("onEventBackgroundThread", "LoginActivity中数据库更新成功");
 
                     EventMain eventMain = new EventMain();
@@ -165,6 +171,13 @@ public class LoginActivity extends mBaseActivity {
         login=mActivity.getSharedPreferences(Constants.Preferences_Login, mActivity.MODE_PRIVATE);
         mJPushUtils = new JPushUtils(getApplicationContext());
         mJPushUtils.initJPush();
+        startScreenService();
+    }
+
+    public void startScreenService(){
+        Intent mService = new Intent(LoginActivity.this, ScreenService.class);
+        mService.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startService(mService);
     }
 
     public void initListener() {

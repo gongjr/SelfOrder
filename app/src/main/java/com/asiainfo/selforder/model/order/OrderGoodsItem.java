@@ -33,6 +33,7 @@ public class OrderGoodsItem  implements Serializable{
     private String memberPrice; //会员价
 	private String isZdzk; //整单折扣
     private boolean isTakeaway;//是否外卖
+	private boolean isComp;
 
     public boolean isTakeaway() {
         return isTakeaway;
@@ -192,5 +193,13 @@ public class OrderGoodsItem  implements Serializable{
 
 	public void setRemark(List<String> remark) {
 		this.remark = remark;
+	}
+
+	public boolean isComp() {
+		return isComp;
+	}
+
+	public void setComp(boolean comp) {
+		isComp = comp;
 	}
 }

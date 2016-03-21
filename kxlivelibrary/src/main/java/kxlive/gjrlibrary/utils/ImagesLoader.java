@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.util.LruCache;
 import android.util.Log;
+import android.widget.ImageView;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -255,6 +256,125 @@ public class ImagesLoader {
             }
         }
         return bitmap;
+    }
+
+    /**
+     * 根据限定大小获取图片对应缩放过图片,截取自volley的图片压缩算法
+     * @param bytes
+     * @param maxWidth
+     * @param maxHeight
+     * @return
+     */
+    public  Bitmap create(byte[] bytes, int maxWidth, int maxHeight) {
+        //上面的省略了
+        Bitmap bitmap = null;
+        BitmapFactory.Options option = new BitmapFactory.Options();
+        option.inJustDecodeBounds = true;
+        BitmapFactory.decodeByteArray(bytes, 0, bytes.length, option);
+        //设置inJustDecodeBounds = true 时候,BitmapFactory.decodeByteArray(bytes, 0, bytes.length, option);是不占内存的，因为返回的是null
+        //decodeByteArray两次不会更占内存,所以压缩处理不会占用更多内存
+        int actualWidth = option.outWidth;
+        int actualHeight = option.outHeight;
+
+        // 计算出图片应该显示的宽高
+
+        int desiredWidth = getResizedDimension(maxWidth, maxHeight, actualWidth, actualHeight,null);
+        int desiredHeight = getResizedDimension(maxHeight, maxWidth, actualHeight, actualWidth,null);
+
+        option.inJustDecodeBounds = false;
+        option.inSampleSize = findBestSampleSize(actualWidth, actualHeight,
+                desiredWidth, desiredHeight);
+        Bitmap tempBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, option);
+
+        // 做缩放
+        if (tempBitmap != null
+                && (tempBitmap.getWidth() > desiredWidth || tempBitmap
+                .getHeight() > desiredHeight)) {
+            bitmap = Bitmap.createScaledBitmap(tempBitmap, desiredWidth,
+                    desiredHeight, true);
+            tempBitmap.recycle();
+        } else {
+            bitmap = tempBitmap;
+        }
+
+        return bitmap;
+    }
+
+    /**
+     * 计算缩放目标值大小
+     * @param maxPrimary
+     * @param maxSecondary
+     * @param actualPrimary
+     * @param actualSecondary
+     * @param scaleType
+     * @return
+     */
+    private  int getResizedDimension(int maxPrimary, int maxSecondary, int actualPrimary,
+                                           int actualSecondary, ImageView.ScaleType scaleType) {
+
+        // If no dominant value at all, just return the actual.如果没有指定大小,则直接返回主要的目标大小
+        if ((maxPrimary == 0) && (maxSecondary == 0)) {
+            return actualPrimary;
+        }
+
+        // If ScaleType.FIT_XY fill the whole rectangle, ignore ratio.无视比率,按指定大小显示
+        if (scaleType!=null&&scaleType == ImageView.ScaleType.FIT_XY) {
+            if (maxPrimary == 0) {
+                return actualPrimary;
+            }
+            return maxPrimary;
+        }
+
+        // If primary is unspecified, scale primary to match secondary's scaling ratio.
+        if (maxPrimary == 0) {
+            double ratio = (double) maxSecondary / (double) actualSecondary;
+            return (int) (actualPrimary * ratio);
+        }
+
+        if (maxSecondary == 0) {
+            return maxPrimary;
+        }
+
+        double ratio = (double) actualSecondary / (double) actualPrimary;
+        int resized = maxPrimary;
+
+        // If ScaleType.CENTER_CROP fill the whole rectangle, preserve aspect ratio.
+        //ImageView.ScaleType.CENTER_CROP按比例扩大图片的size使居中显示，使得图片长 (宽)等于或大于View的长(宽)
+        if (scaleType!=null&&scaleType == ImageView.ScaleType.CENTER_CROP) {
+            if ((resized * ratio) < maxSecondary) {
+                resized = (int) (maxSecondary / ratio);
+            }
+            return resized;
+        }
+
+        //一般情况下,按比例缩小图片的size，使得图片长 (宽)等于或小于View的长(宽)
+        if ((resized * ratio) > maxSecondary) {
+            resized = (int) (maxSecondary / ratio);
+        }
+        return resized;
+    }
+
+    /**
+     * Returns the largest power-of-two divisor for use in downscaling a bitmap
+     * that will not result in the scaling past the desired dimensions.
+     *
+     * @param actualWidth Actual width of the bitmap
+     * @param actualHeight Actual height of the bitmap
+     * @param desiredWidth Desired width of the bitmap
+     * @param desiredHeight Desired height of the bitmap
+     */
+    // Visible for testing.
+    static int findBestSampleSize(
+            int actualWidth, int actualHeight, int desiredWidth, int desiredHeight) {
+        double wr = (double) actualWidth / desiredWidth;
+        double hr = (double) actualHeight / desiredHeight;
+        double ratio = Math.min(wr, hr);
+        float n = 1.0f;
+        while ((n * 2) <= ratio) {
+            n *= 2;
+        }
+
+        return (int) n;
     }
 
     /**

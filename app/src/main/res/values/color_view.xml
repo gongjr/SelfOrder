@@ -45,4 +45,9 @@
     <color name="settle_top_type_name">#5a5859</color>
     <color name="settle_bg">#f6f6f6</color>
     <color name="settle_print_btn_bg">#ca3939</color>
+
+
+    <color name="sticky_header_bg">#ccc1c1c1</color>
+
+
 </resources>

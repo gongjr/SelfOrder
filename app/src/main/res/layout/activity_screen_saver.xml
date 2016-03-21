@@ -1,0 +1,49 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:id="@+id/Idle_time_LL"
+        android:layout_width="fill_parent" 
+        android:layout_height="fill_parent"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        >
+        <RelativeLayout
+			android:id="@+id/main_ad_relative_layout"
+			android:layout_width="fill_parent" 
+			android:layout_height="fill_parent">
+        <ImageView
+            android:id="@+id/main_ad_background"
+            android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:keepScreenOn="true" 
+			android:layout_centerInParent="true"
+			android:scaleType="center"
+            />
+        <TextView
+            android:id="@+id/main_ad_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="没有可显示的广告"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" 
+            android:visibility="gone"
+            />
+         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="触碰屏幕退出屏保"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            android:layout_alignParentBottom="true"
+             android:layout_marginBottom="5dip"
+             android:visibility="gone"
+            />
+        </RelativeLayout>
+    </LinearLayout> 
+
+</RelativeLayout>

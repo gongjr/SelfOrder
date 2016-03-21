@@ -24,4 +24,8 @@
     <style name="AppTheme.NODimEnabled" parent="@style/AppTheme">
         <item name="android:backgroundDimEnabled">false</item>
     </style>
+
+    <declare-styleable name="TimeTextView">
+
+    </declare-styleable>
 </resources>

@@ -8,8 +8,8 @@ android {
         applicationId "com.asiainfo.selforder"
         minSdkVersion 16
         targetSdkVersion 19
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "2.0"
     }
 
     sourceSets {
@@ -85,7 +85,7 @@ android {
         release {
             keyAlias 'kxlive'
             keyPassword 'kxlive'
-            storeFile file('F:/adt_64/studiokey_kxlive.jks')
+            storeFile file('/studiokey_kxlive.jks')
             storePassword 'kxlive'
         }
     }

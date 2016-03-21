@@ -116,6 +116,7 @@ public class MakeOrderActivity extends mBaseActivity{
             initLvAdapter();
         }
         mAdapter.setData(shopping.getOrderGoods());
+//        mAdapter.setOrderCompsData(shopping.getOrderComps());
         mSimpleSectionedListAdapter
                 .setSections(sections.toArray(new Section[0]));
         dishesList.setAdapter(mSimpleSectionedListAdapter);
@@ -126,6 +127,7 @@ public class MakeOrderActivity extends mBaseActivity{
      */
     void initLvAdapter() {
         mAdapter = new OrderListAdapter(inflater);
+        mAdapter.setContext(this);
         mAdapter.setOnItemClickListener(mOnItemClickListener);
         mSimpleSectionedListAdapter = new SimpleSectionedListAdapter(
                 this, mAdapter, R.layout.dish_selected_lv_item_header,
@@ -160,7 +162,7 @@ public class MakeOrderActivity extends mBaseActivity{
                 getOperation().finishByResultCode(Constants.ResultCode_MakeorderToDishesMenu_Back);
                 break;
             case R.id.makeorder_settle:
-                if(orderEntity.getOrderList().size()>0){
+                if(orderEntity.getOrderList().size()>0 || orderEntity.getOrderCompGoodsList().size() > 0){
                     showMakeOrderDF();
                     lockMakeOrderBtn();
                     showDelay(new DialogDelayListener() {
@@ -322,5 +324,12 @@ public class MakeOrderActivity extends mBaseActivity{
             e.printStackTrace();
         }
 
+    }
+
+    public void delete(int position) {
+        orderEntity.deleteOrderCompGoods(position);
+        ShoppingOrder shopping=orderEntity.getShoppingOrderByList();
+        refreshOrderList(shopping);
+        updateNumAndPrice();
     }
 }

@@ -12,14 +12,26 @@
             android:background="@color/item_dishes_type_name_bg"
             />
 
-        <android.support.v7.widget.RecyclerView
+        <!--<android.support.v7.widget.RecyclerView
             android:id="@+id/dishes_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/dishes_type_group"
             android:layout_above="@+id/dishes_bottom"
             android:layout_margin="@dimen/distance_5"
-            />
+            />-->
+
+    <com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView
+        android:id="@+id/sticky_dishes_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:numColumns="3"
+        android:horizontalSpacing="3dip"
+        android:verticalSpacing="3dip"
+        android:layout_below="@+id/dishes_type_group"
+        android:layout_above="@+id/dishes_bottom"
+        android:layout_margin="@dimen/distance_5"/>
     <RelativeLayout
         android:id="@+id/dishes_bottom"
         android:layout_width="match_parent"
@@ -44,7 +56,7 @@
                 android:id="@+id/dishes_menu_selected_num"
                 android:layout_width="@dimen/distance_160"
                 android:layout_height="@dimen/distance_40"
-                android:text="1"
+                android:text="0"
                 android:gravity="center"
                 android:textSize="@dimen/textsize_xlarge"
                 android:textColor="@color/dishes_menu_selected_num_text"/>

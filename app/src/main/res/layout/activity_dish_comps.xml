@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f5f6f7">
+
+    <RelativeLayout
+        android:id="@+id/dish_comp_title_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="60dp"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:id="@+id/dish_comp_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="麻辣牛肉炒饭套餐"
+            android:textColor="@color/item_dishes_type_name_text_s"
+            android:textSize="@dimen/textsize_large" />
+
+        <ImageButton
+            android:id="@+id/dish_comp_close_btn"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/choose_property_close_n" />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/dish_comp_line"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@+id/dish_comp_title_layout"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="10dp"
+        android:background="#BEC0C0" />
+
+    <ListView
+        android:id="@+id/dish_comp_listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/dish_comp_footer_layout"
+        android:layout_below="@+id/dish_comp_line"
+        android:divider="@null"></ListView>
+
+    <RelativeLayout
+        android:id="@+id/dish_comp_footer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginRight="10dp">
+
+        <TextView
+            android:id="@+id/dish_comp_price_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="套餐价格"
+            android:textSize="@dimen/textsize_large" />
+
+        <TextView
+            android:id="@+id/dish_comp_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/dish_comp_price_tag"
+            android:text="¥23"
+            android:textColor="#626464"
+            android:textSize="@dimen/textsize_large" />
+
+        <TextView
+            android:id="@+id/dish_comp_member_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/dish_comp_price"
+            android:text="¥23"
+            android:textColor="#BC4142"
+            android:textSize="@dimen/textsize_big" />
+
+        <Button
+            android:id="@+id/dish_comp_pay_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/save" />
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

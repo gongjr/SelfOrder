@@ -25,8 +25,17 @@ public class MerchantDishesType extends DataSupport implements Serializable{
 	private String merchantId;
 	private String dishesNum;
     private List<MerchantDishes> dishesInfoList=new ArrayList<MerchantDishes>();
-	
-	public String getDishesTypeName() {
+    private int sectionPosition;
+
+    public int getSectionPosition() {
+        return sectionPosition;
+    }
+
+    public void setSectionPosition(int sectionPosition) {
+        this.sectionPosition = sectionPosition;
+    }
+
+    public String getDishesTypeName() {
 		return dishesTypeName;
 	}
 

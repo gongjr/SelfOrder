@@ -17,10 +17,10 @@ public class HttpHelper {
 	public static final String Address_release = "http://115.29.35.199:27890/tacos";
 	
 	/**
-	 * 测试环境
-	 */
-    public static final String Address_tst = "http://115.29.35.199:18888/tacos";
-    
+     * 测试环境
+     */
+//    public static final String Address_tst = "http://115.29.35.199:18888/tacos";
+    public static final String Address_tst = "http://139.129.35.66:30080/tacos";
     /**
      * 使用地址
      */

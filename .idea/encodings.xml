@@ -8,6 +8,7 @@
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/http/HttpHelper.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/model/Listener/OnChangeWithPropertyListener.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/model/Listener/OnCheckedPropertyListener.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/model/Listener/OnStickyHeaderChangeListener.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/model/MerchantRegister.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/model/dishes/DishesProperty.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/asiainfo/selforder/model/dishes/DishesPropertyItem.java" charset="UTF-8" />
@@ -38,6 +39,10 @@
     <file url="file://$PROJECT_DIR$/app/src/main/res/anim/push_up_in.xml" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/anim/push_up_out.xml" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/anim/scale_rotate_in.xml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/click.png" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/icon.png" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/key.png" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/lock.png" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/login_bg.jpg" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/login_password_icon.png" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/login_pwd_shadow.png" charset="UTF-8" />
@@ -113,6 +118,7 @@
     <file url="file://$PROJECT_DIR$/kxlivelibrary/src/main/java/com/android/volley/toolbox/StringRequest.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/kxlivelibrary/src/main/java/com/android/volley/toolbox/Volley.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/kxlivelibrary/src/main/java/com/handmark" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/kxlivelibrary/src/main/java/com/tonicartos" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/kxlivelibrary/src/main/java/kxlive/gjrlibrary/base/BaseActivity.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/kxlivelibrary/src/main/java/kxlive/gjrlibrary/base/DialogFragmentBase.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/kxlivelibrary/src/main/java/kxlive/gjrlibrary/base/IBaseActivity.java" charset="UTF-8" />

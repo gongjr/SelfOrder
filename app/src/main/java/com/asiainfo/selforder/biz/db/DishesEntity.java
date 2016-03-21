@@ -1,9 +1,15 @@
 package com.asiainfo.selforder.biz.db;
 
+import android.util.Log;
+
+import com.asiainfo.selforder.model.dishComps.DishesComp;
+import com.asiainfo.selforder.model.dishComps.DishesCompItem;
+import com.asiainfo.selforder.model.dishes.DishesData;
 import com.asiainfo.selforder.model.dishes.DishesProperty;
 import com.asiainfo.selforder.model.dishes.DishesPropertyItem;
 import com.asiainfo.selforder.model.dishes.MerchantDishes;
 import com.asiainfo.selforder.model.dishes.MerchantDishesType;
+import com.tonicartos.widget.stickygridheaders.TypeSection;
 
 import org.litepal.crud.DataSupport;
 
@@ -11,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kxlive.gjrlibrary.db.DataBinder;
+import kxlive.gjrlibrary.utils.ArithUtils;
 
 /**
  * 将数据库操作和视图activity分离 在此实体类中统一处理菜品相关的业务逻辑 通过DataBinder来绑定表对象，进行数据库操作
@@ -100,6 +107,50 @@ public class DishesEntity {
     }
 
     /**
+     * 获取所有的菜品按类型排序
+     */
+    public DishesData getAllDishesOrderbyType() {
+        ArrayList<TypeSection> sectionList = new ArrayList<TypeSection>();
+        DishesData mDishesData=new DishesData();
+        ArrayList<MerchantDishes> dishes=new ArrayList<MerchantDishes>();
+        ArrayList<MerchantDishesType> dishesTypeList = (ArrayList<MerchantDishesType>) dataSetDishesType.findAll(MerchantDishesType.class);
+        mDishesData.setDishesTypeList(dishesTypeList);
+        int SectionSetTO=0;
+        int Section=1;
+        int typeIndex=0;
+        for (MerchantDishesType mMerchantDishesType:dishesTypeList){
+            TypeSection typeSection=new TypeSection();
+            typeSection.setStartIndex(SectionSetTO);
+            mMerchantDishesType.setSectionPosition(SectionSetTO);
+            List<MerchantDishes> dishesList=sqliteMerchantDishesByTypeWithSection(mMerchantDishesType.getDishesTypeCode(),Section,typeIndex);
+
+            dishes.addAll(dishesList);
+            if(dishesList!=null) Section+=dishesList.size();
+            if (dishesList!=null&&dishesList.size()!=0){
+            Double offsetNum=dishesList.size()/3.0;
+            Double offset1= ArithUtils.round(offsetNum, 2);
+            int offset=offset1.intValue() ;
+            if(offset1-offset>0){
+                offset+=1;
+            }
+            Log.i("refreshDishesItem", "offset:" + offset);
+            SectionSetTO=SectionSetTO+offset*3+3;
+                //由于加入了header类型头部,其实际position每次都被占了1行,需要加3偏移
+                typeSection.setEndIndex(SectionSetTO);
+                typeSection.setSize(typeSection.getEndIndex()-typeSection.getStartIndex());
+                typeSection.setDishesName(mMerchantDishesType.getDishesTypeName());
+                typeSection.setDishesTypeCode(mMerchantDishesType.getDishesTypeCode());
+                typeSection.setTypeIndex(typeIndex);
+                sectionList.add(typeSection);
+            }
+            typeIndex++;
+        }
+        mDishesData.setSectionList(sectionList);
+        mDishesData.setDishesList(dishes);
+        return mDishesData;
+    }
+
+    /**
      * 填充某类型菜品列表
      *
      * @param dishesType
@@ -171,6 +222,50 @@ public class DishesEntity {
             }
         }
         return dishes;
+    }
+
+    /**
+     * 根据菜品类型编码，获取对应的菜品,加入动态section
+     * @param dishesTypeCode
+     * @return
+     */
+    public List<MerchantDishes> sqliteMerchantDishesByTypeWithSection(String dishesTypeCode,int section,int typeIndex){
+        List<MerchantDishes> dishes=dataSetDishes.findWithWhere(MerchantDishes.class,"dishestypecode=?",
+                dishesTypeCode);
+        for (MerchantDishes dishesInfo : dishes) {
+            dishesInfo.setSection(section);
+            dishesInfo.setTypeIndex(typeIndex);
+            dishesInfo.getItemlistDb();
+            for (DishesProperty dishesItemType : dishesInfo
+                    .getDishesItemTypelist()) {
+                dishesItemType.getItemlistDb();
+            }
+        }
+        return dishes;
+    }
+
+    /**
+     * 根据dishesId获取套餐数据
+     * @param dishesId
+     * 由于Litepal查询后对象内容序列化，与Gson反序列化冲突，无法直接搜索
+     * 冲突的原因是:Litepal中的关联表，对象应用有误，导致json解析死循环，内存溢出
+     * @return List<DishesComp>
+     */
+    public List<DishesComp> sqliteGetDishesCompDataByDishesId2(String dishesId){
+        List<DishesComp> mCompList = DataBinder.binder.findWithWhere(DishesComp.class,"dishesid = ?",dishesId);
+        for (DishesComp mDishesComp :mCompList){
+            List<DishesCompItem> mCompLists= DataBinder.binder.findWithWhere(DishesCompItem.class,"dishescomp_id = ?",mDishesComp.getId()+"");
+            for (DishesCompItem mDishesCompItem:mCompLists){
+                List<DishesProperty> dishesItemTypelist= DataBinder.binder.findWithWhere(DishesProperty.class,"dishescompitem_id = ?",mDishesCompItem.getId()+"");
+                for (DishesProperty mDishesProperty: dishesItemTypelist){
+                    List<DishesPropertyItem> itemlist=DataBinder.binder.findWithWhere(DishesPropertyItem.class,"dishesproperty_id = ?",mDishesProperty.getId()+"");
+                    mDishesProperty.setItemlist(itemlist);
+                }
+                mDishesCompItem.setDishesItemTypelist(dishesItemTypelist);
+            }
+            mDishesComp.setDishesInfoList(mCompLists);
+        }
+        return mCompList;
     }
 
 }

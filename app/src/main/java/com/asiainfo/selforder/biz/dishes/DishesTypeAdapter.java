@@ -91,4 +91,9 @@ public class DishesTypeAdapter extends Adapter<DishesTypeAdapter.ViewHolder>{
         this.selectedPos=pos;
         notifyDataSetChanged();
     }
+
+    public int getSelectedPos(){
+        return this.selectedPos;
+    }
+
 }
