@@ -2,6 +2,7 @@ package kxlive.gjrlibrary.http;
 
 import android.util.Log;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Request;
@@ -15,6 +16,7 @@ import org.apache.http.protocol.HTTP;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
+import java.util.Map;
 
 /**
  * @author gjr
@@ -29,12 +31,23 @@ public class ResultMapRequest<T> extends Request<T> {
 
     private Type modelClass;
 
+    private Map<String, String> params;
+
     public ResultMapRequest(int method, String url, Type model, Listener<T> listener,
                             ErrorListener errorListener) {
         super(method, url, errorListener);
         mGson = new Gson();
         modelClass = model;
         mListener = listener;
+    }
+
+    public ResultMapRequest(int method, String url,Map<String, String> param , Type model,Listener<T> listener,
+                            ErrorListener errorListener) {
+        super(method, url, errorListener);
+        mGson = new Gson();
+        modelClass = model;
+        mListener = listener;
+        this.params=param;
     }
 
     public ResultMapRequest(String url, Type model, Listener<T> listener,
@@ -71,5 +84,10 @@ public class ResultMapRequest<T> extends Request<T> {
         mListener.onResponse(response);
     }
 
+    @Override
+    protected Map<String, String> getParams() throws AuthFailureError{
+        Log.i("VolleyLogTag", "params:" + params.toString());
+        return params;
+    }
 
 }
