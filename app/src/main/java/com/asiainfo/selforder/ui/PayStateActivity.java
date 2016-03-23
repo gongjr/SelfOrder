@@ -251,10 +251,10 @@ public class PayStateActivity extends mBaseActivity {
                 Map<String, String> paramList = new HashMap<String, String>();
                 paramList.put("orderId", orderId);
                 paramList.put("payType", payType);//付费类型 orderPay里面的payType,如果是现金结账传0，微信支付传4，支付宝支付传5
-                int payPrice=Integer.valueOf(orderEntity.getOrderSubmitOriginalPrice())*100;
-                paramList.put("payPrice", payPrice+"");//支付金额
-                paramList.put("state", "1");//状态 0未支付 1已支付
-                paramList.put("tradeStaffId", merchantRegister.getStaffId());//操作员工
+//                int payPrice=Integer.valueOf(orderEntity.getOrderSubmitOriginalPrice())*100;
+//                paramList.put("payPrice", payPrice+"");//支付金额
+//                paramList.put("state", "1");//状态 0未支付 1已支付
+//                paramList.put("tradeStaffId", merchantRegister.getStaffId());//操作员工
                 paramList.put("merchantId", merchantRegister.getMerchantId());//商户ID
                 paramList.put("childMerchantId", merchantRegister.getChildMerchantId());//子商户ID
                 Log.i("VolleyLogTag", "paramList:" + paramList.toString());

@@ -19,12 +19,15 @@ public class HttpHelper {
 	/**
      * 测试环境
      */
-//    public static final String Address_tst = "http://115.29.35.199:18888/tacos";
     public static final String Address_tst = "http://139.129.35.66:30080/tacos";
+    /**
+     * 本地局域网内测试,对应IP
+     */
+    public static final String local_test="http://192.168.1.109:8080/tacos";
     /**
      * 使用地址
      */
-    public static final String HOST = Address_release;
+    public static final String HOST = Address_tst;
 
 
     /**
