@@ -3,6 +3,8 @@ package com.asiainfo.selforder.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -40,12 +42,17 @@ import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.greenrobot.event.EventBus;
 import kxlive.gjrlibrary.entity.AppUpdate;
 import kxlive.gjrlibrary.entity.eventbus.EventBackground;
 import kxlive.gjrlibrary.entity.eventbus.EventMain;
+import kxlive.gjrlibrary.http.ImageInfo;
+import kxlive.gjrlibrary.http.PostSingleUploadRequest;
+import kxlive.gjrlibrary.http.ResponseListener;
 import kxlive.gjrlibrary.http.VolleyErrorHelper;
 import kxlive.gjrlibrary.utils.JPushUtils;
 import kxlive.gjrlibrary.utils.KLog;
@@ -83,6 +90,7 @@ public class LoginActivity extends mBaseActivity {
         EventBus.getDefault().register(this);
         initData();
         initListener();
+//        upLoadImageTest();
     }
 
     @Override
@@ -408,4 +416,32 @@ public class LoginActivity extends mBaseActivity {
                 });
         executeRequest(httpGetMerchantDishes);
     }
+
+    public void upLoadImageTest(){
+        ImageInfo imageInfo=new ImageInfo();
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_logo) ;
+        imageInfo.setmBitmap(bitmap);
+        imageInfo.setmName("mainFile");
+        imageInfo.setFileName("ic_logo.png");
+        imageInfo.setMime("image/png");
+        String url="http://www.kxlive.com/tacos/uploadMainFile.do";
+        Map<String, String> params=new HashMap<String, String>();
+        params.put("postUploadRequest","图片上传");
+        params.put("postUploadRequest-1","图片上传1");
+        Log.i("s","url:"+url);
+        PostSingleUploadRequest postUploadRequest=new PostSingleUploadRequest(url,imageInfo,params,null,new ResponseListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+
+            @Override
+            public void onResponse(Object response) {
+
+            }
+        });
+        executeRequest(postUploadRequest);
+    }
+
+
 }

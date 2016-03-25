@@ -222,7 +222,7 @@ public class PayStateActivity extends mBaseActivity {
      */
     public void VolleyPayOrder() {
         String param = "/appController/payOrder.do?";
-        System.out.println("payOrder:" + HttpHelper.HOST + param);
+        Log.i("TAG","payOrder:" + HttpHelper.HOST + param);
         Type type= new TypeToken<ResultMap<UpdateOrderInfoResultData>>(){}.getType();
         ResultMapRequest<ResultMap<UpdateOrderInfoResultData>> ResultMapRequest = new ResultMapRequest<ResultMap<UpdateOrderInfoResultData>>(
                 Request.Method.POST, HttpHelper.HOST + param, type,
@@ -230,12 +230,17 @@ public class PayStateActivity extends mBaseActivity {
                     @Override
                     public void onResponse(
                             ResultMap<UpdateOrderInfoResultData> response) {
-                        if(response.getMsg().equals("ok")) {
+                        if(response.getErrcode().equals(response.errcode_ok)) {
                             dismissMakeOrderDF();
                             startTimeOutText();
                         }
-                        else  {
-                            dismissMakeOrderDF();
+                        else if(response.getErrcode().equals(response.errcode_param_missing)){
+                            onMakeOrderFailed("打印订单失败,请联系收银员确认!",null);
+                            showShortTip("打印订单失败,请联系收银员确认!");
+                        } else if(response.getErrcode().equals(response.errcode_update_failed_all)){
+                            onMakeOrderFailed("更新数据失败"+"->请点击确定重新打印!",payOrder);
+                        }else{
+                            onMakeOrderFailed("打印订单失败,请联系收银员确认!",null);
                             showShortTip("打印订单失败,请联系收银员确认!");
                         }
                     }

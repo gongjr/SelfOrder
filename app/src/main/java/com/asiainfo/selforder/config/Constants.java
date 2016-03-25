@@ -16,4 +16,11 @@ public class Constants {
 
     public static final int Handler_Dialog_Delay = 1;
     public static final int Handler_elay = 2;
+
+
+
+    //订单支付类型类型:如果是现金结账传0，微信支付传4，支付宝支付传5
+    public static final int Order_PayType_weixin = 4;
+    public static final int Order_PayType_zhifubao = 5;
+    public static final int Order_PayType_xianjin = 0;
 }

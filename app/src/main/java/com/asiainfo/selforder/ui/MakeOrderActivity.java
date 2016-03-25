@@ -11,7 +11,6 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -205,8 +204,10 @@ public class MakeOrderActivity extends mBaseActivity{
     public void VolleysubmitOrderInfo(final String order) {
         String param = "/appController/submitOrderInfo.do?";
         Log.i(TAG, "submitOrderInfo_url:" + HttpHelper.HOST + param);
+        Map<String, String> paramList = new HashMap<String, String>();
+        paramList.put("orderSubmitData", order);
         ResultMapRequest<SubmitOrderId> ResultMapRequest = new ResultMapRequest<SubmitOrderId>(
-                Request.Method.POST, HttpHelper.HOST + param, SubmitOrderId.class,
+                Request.Method.POST, HttpHelper.HOST + param,paramList, SubmitOrderId.class,
                 new Response.Listener<SubmitOrderId>() {
                     @Override
                     public void onResponse(
@@ -250,14 +251,6 @@ public class MakeOrderActivity extends mBaseActivity{
                 }
             }
         }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> paramList = new HashMap<String, String>();
-                paramList.put("orderSubmitData", order);
-                Log.i("VolleyLogTag", "paramList:" + paramList.toString());
-                return paramList;
-            }
-
             @Override
             public Map<String, String> getHeaders() {
                 HashMap<String, String> headers = new HashMap<String, String>();

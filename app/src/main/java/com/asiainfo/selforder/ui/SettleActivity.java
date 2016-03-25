@@ -20,12 +20,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.asiainfo.selforder.R;
 import com.asiainfo.selforder.biz.order.OrderEntity;
+import com.asiainfo.selforder.config.Constants;
 import com.asiainfo.selforder.http.HttpHelper;
 import com.asiainfo.selforder.model.MerchantRegister;
 import com.asiainfo.selforder.model.net.PayBodyInfo;
 import com.asiainfo.selforder.model.net.PayInfoNativeResult;
+import com.asiainfo.selforder.model.net.PayOrderResultData;
 import com.asiainfo.selforder.model.net.ResultBody;
-import com.asiainfo.selforder.model.net.UpdateOrderInfoResultData;
+import com.asiainfo.selforder.ui.base.EnsureDialogFragmentBase;
 import com.asiainfo.selforder.ui.base.mBaseActivity;
 import com.google.gson.reflect.TypeToken;
 import com.google.inject.Inject;
@@ -116,7 +118,7 @@ public class SettleActivity extends mBaseActivity {
         printOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                isPayReponse = false;
+             isPayReponse = false;
              getOperation().addParameter("orderId",orderId);
              getOperation().forward(PayXianjinActivity.class);
             }
@@ -133,54 +135,41 @@ public class SettleActivity extends mBaseActivity {
                         weixinAndZhifubaoGroup.setVisibility(View.VISIBLE);
                         xianjinGroup.setVisibility(View.GONE);
                         needPayTitle.setText(res.getString(R.string.need_pay_weixin_title));
+                        payCode.setImageBitmap(null);
 
-                        if(curWeiXINBody==null){
-                            payCode.setImageBitmap(null);
-                            showLoadingDialog(new DialogDelayListener() {
-                                @Override
-                                public void onexecute() {
-                                    volleyGetv3PayInfoNative("1");                                }
-                            }, 50);
-                        }
-                        else{
-                            try {
-                                Bitmap bitmap=ToolPicture.makeQRImage(curWeiXINBody.getCode_url(), 500, 500);
-                                payCode.setImageBitmap(bitmap);
-                            }catch (Exception e){
-                                showShortTip("二维码生成有误!");
-                                e.printStackTrace();
-                            }
-                        }
+                        showLoadingDialog(new DialogDelayListener() {
+                            @Override
+                            public void onexecute() {
+                                VolleyPreOrder(Constants.Order_PayType_weixin,0);                                }
+                        }, 50);
                         break;
                     case R.id.type_zhifubao:
                         CurrentShow=R.id.type_zhifubao;
                         weixinAndZhifubaoGroup.setVisibility(View.VISIBLE);
                         xianjinGroup.setVisibility(View.GONE);
                         needPayTitle.setText(res.getString(R.string.need_pay_zhifubao_title));
-                        if(curZhiFuBaoBody==null){
-                            payCode.setImageBitmap(null);
-                            showLoadingDialog(new DialogDelayListener() {
-                                @Override
-                                public void onexecute() {
-                                    volleyGetv3PayInfoNative("2");                                }
-                            }, 50);
-                        }
-                        else{
-                            try {
-                                Bitmap bitmap=ToolPicture.makeQRImage(curZhiFuBaoBody.getQrCode(), 500, 500);
-                                payCode.setImageBitmap(bitmap);
-                            }catch (Exception e){
-                                showShortTip("二维码生成有误!");
-                                e.printStackTrace();
-                            }
-                        }
+                        payCode.setImageBitmap(null);
+
+                        showLoadingDialog(new DialogDelayListener() {
+                            @Override
+                            public void onexecute() {
+                                VolleyPreOrder(Constants.Order_PayType_zhifubao,0);                                }
+                        }, 50);
                         break;
                     case R.id.type_xianjin:
                         CurrentShow=R.id.type_xianjin;
                         xianjinGroup.setVisibility(View.VISIBLE);
-                        xianjinTips.setText(Html.fromHtml(String.format(res.getString(R.string.pay_xianjin_title),"收银台")));
+                        xianjinTips.setText(Html.fromHtml(String.format(res.getString(R.string.pay_xianjin_title), "收银台")));
                         weixinAndZhifubaoGroup.setVisibility(View.GONE);
                         payCode.setImageBitmap(null);
+                        printOrder.setVisibility(View.INVISIBLE);
+                        showLoadingDialog(new DialogDelayListener() {
+                            @Override
+                            public void onexecute() {
+                                VolleyPreOrder(Constants.Order_PayType_xianjin, 0);
+                            }
+                        }, 50);
+
                         break;
                 }
             }
@@ -240,24 +229,44 @@ public class SettleActivity extends mBaseActivity {
                             if (response.getState().equals("1")){
                                 try {
                                 if(CurrentShow==R.id.type_weixin){
-                                        curWeiXINBody=response.getBody();
+                                    curWeiXINBody=response.getBody();
                                     Bitmap bitmap=ToolPicture.makeQRImage(curWeiXINBody.getCode_url(), 500, 500);
                                     payCode.setImageBitmap(bitmap);
-                                        volleyQueryPayOrder();
+                                    if(curWeiXINBody!=null&&curZhiFuBaoBody==null)volleyQueryPayOrder();
                                 }else
                                 if(CurrentShow==R.id.type_zhifubao){
                                     curZhiFuBaoBody=response.getBody();
                                     Bitmap bitmap=ToolPicture.makeQRImage(curZhiFuBaoBody.getQrCode(), 500, 500);
                                     payCode.setImageBitmap(bitmap);
+                                    if(curZhiFuBaoBody!=null&&curWeiXINBody==null)volleyQueryPayOrder();
                                     }else{
-                                    KLog.i("当前显示不匹配,只保存body,不更新二维码");
+                                    KLog.i("当前显示不匹配");
                                 }
                                 }catch (Exception e){
                                     showShortTip("二维码生成有误!");
                                      e.printStackTrace();
                                 }
                             }else{
-                                  showShortTip(response.getMsg());
+                                showShortTip(response.getMsg());
+                                //                窗口强制提示
+                                setmEnsureDialogListener(new EnsureDialogFragmentBase.CallBackListener() {
+                                    @Override
+                                    public void onLeftBtnFinish() {
+                                        dismissEnsureDialog();
+                                        showLoadingDialog(new DialogDelayListener() {
+                                            @Override
+                                            public void onexecute() {
+                                                volleyGetv3PayInfoNative(payType);                             }
+                                        }, 50);
+                                    }
+
+                                    @Override
+                                    public void onRightBtnFinish() {
+                                        dismissEnsureDialog();
+                                    }
+                                },"生成支付码时:请求错误?","必须重新生成,才能继续支付!","确定","取消");
+                                //窗口强制提示,确定,取消都舍弃本单,返回重新生成订单提交
+                                showEnsureDialog("getv3PayInfoNative_error_0");
                             }
                     }
                 }, new Response.ErrorListener() {
@@ -267,6 +276,25 @@ public class SettleActivity extends mBaseActivity {
                 Log.e("TAG",
                         "VolleyError:" + error.getMessage(), error);
                 showShortTip(VolleyErrorHelper.getMessage(error, mActivity));
+                //                窗口强制提示
+                setmEnsureDialogListener(new EnsureDialogFragmentBase.CallBackListener() {
+                    @Override
+                    public void onLeftBtnFinish() {
+                        dismissEnsureDialog();
+                        showLoadingDialog(new DialogDelayListener() {
+                            @Override
+                            public void onexecute() {
+                                volleyGetv3PayInfoNative(payType);                             }
+                        }, 50);
+                    }
+
+                    @Override
+                    public void onRightBtnFinish() {
+                        dismissEnsureDialog();
+                    }
+                },"提交请求时:网络异常?","必须重新提交,才能继续支付!","确定","取消");
+                //窗口强制提示,确定,取消都舍弃本单,返回重新生成订单提交
+                showEnsureDialog("getv3PayInfoNative_error_Net-Exception");
 
             }
         })
@@ -321,12 +349,12 @@ public class SettleActivity extends mBaseActivity {
                                 PayBodyInfo payBodyInfo=response.getBody();
                             if(payBodyInfo.getTrade_state()!=null&&payBodyInfo.getTrade_state().equals("SUCCESS")){
                                     isPayReponse = false;
-                                    getOperation().addParameter("payType","4");
+                                    getOperation().addParameter("payType",Constants.Order_PayType_weixin+"");
                                 getOperation().addParameter("orderId",orderId);
                                     getOperation().forward(PayStateActivity.class);
                             }else if(payBodyInfo.getTradeStatus()!=null&&payBodyInfo.getTradeStatus().equals("TRADE_SUCCESS")){
                                 isPayReponse = false;
-                                getOperation().addParameter("payType","5");
+                                getOperation().addParameter("payType",Constants.Order_PayType_zhifubao+"");
                                 getOperation().addParameter("orderId",orderId);
                                 getOperation().forward(PayStateActivity.class);
                             }
@@ -391,41 +419,163 @@ public class SettleActivity extends mBaseActivity {
     }
 
     /**
-     * 打印客单
+     * 在选择支付类型的时候,实时更新服务器预付单信息
+     * 调用次数,当发生异常服务器需要默认新提交,最大次数3
      */
-    public void VolleyPrintOrderInfo() {
-        String param = "/appController/appPrintDeskOrderInfo.do?childMerchantId="+merchantRegister.getChildMerchantId()+"&orderId="+orderEntity.getOrderId();
-        System.out.println("VolleyPrintOrderInfo:" + HttpHelper.HOST + param);
-        ResultMapRequest<UpdateOrderInfoResultData> ResultMapRequest = new ResultMapRequest<UpdateOrderInfoResultData>(
-                Request.Method.GET, HttpHelper.HOST + param, UpdateOrderInfoResultData.class,
-                new Response.Listener<UpdateOrderInfoResultData>() {
-                    @Override
-                    public void onResponse(
-                            UpdateOrderInfoResultData response) {
-                        dismissLoadingDialog();
-                        if(response.getState()==1) {
-
-                        }
-                        else if(response.getState()==0) {
-                            showShortTip("由于设备原因,打印客单失败,请联系收银员!");
-                        }
+    public void VolleyPreOrder(final int payType,final int time){
+        String param = "/appController/preOrder.do";
+        Map<String, String> paramList = new HashMap<String, String>();
+        paramList.put("orderId", orderId);
+        int payPrice=Integer.valueOf(orderEntity.getOrderSubmitOriginalPrice())*100;
+        paramList.put("payPrice", payPrice+"");//支付金额
+        paramList.put("payType", payType+"");//支付类型
+        paramList.put("tradeStaffId", merchantRegister.getStaffId());//操作员工
+        paramList.put("merchantId", merchantRegister.getMerchantId());//商户ID
+        paramList.put("childMerchantId", merchantRegister.getChildMerchantId());//子商户ID
+        Log.i("tag","url:"+HttpHelper.HOST + param);
+        ResultMapRequest<PayOrderResultData> resultMapRequest =new ResultMapRequest<PayOrderResultData>(
+                Request.Method.POST, HttpHelper.HOST + param,paramList,
+                PayOrderResultData.class,new Response.Listener<PayOrderResultData>() {
+            @Override
+            public void onResponse(PayOrderResultData response) {
+                if (response.getErrcode().equals(response.errcode_ok)){
+                    switch (payType){
+                        case Constants.Order_PayType_weixin:
+                            if(curWeiXINBody==null){
+                                volleyGetv3PayInfoNative("1");
+                            }
+                            else{
+                                try {
+                                    dismissLoadingDialog();
+                                    Bitmap bitmap=ToolPicture.makeQRImage(curWeiXINBody.getCode_url(), 500, 500);
+                                    payCode.setImageBitmap(bitmap);
+                                }catch (Exception e){
+                                    showShortTip("二维码生成有误,请退出重新提交!");
+                                    e.printStackTrace();
+                                }
+                            }
+                            break;
+                        case Constants.Order_PayType_zhifubao:
+                            if(curZhiFuBaoBody==null){
+                                volleyGetv3PayInfoNative("2");
+                            }
+                            else{
+                                try {
+                                    dismissLoadingDialog();
+                                    Bitmap bitmap=ToolPicture.makeQRImage(curZhiFuBaoBody.getQrCode(), 500, 500);
+                                    payCode.setImageBitmap(bitmap);
+                                }catch (Exception e){
+                                    showShortTip("二维码生成有误,请退出重新提交!");
+                                    e.printStackTrace();
+                                }
+                            }
+                            break;
+                        case Constants.Order_PayType_xianjin:
+                            dismissLoadingDialog();
+                            printOrder.setVisibility(View.VISIBLE);
+                            break;
                     }
-                }, new Response.ErrorListener() {
+                }else if (response.getErrcode().equals(response.errcode_update_failed_all)){
+                    //接口错误,数据更新失败,需要默认重新提交,最打尝试次数3
+                    if(time<3){
+                        VolleyPreOrder(payType,time+1);
+                    }else{
+                        dismissLoadingDialog();
+                        showShortTip("预付单信息生成失败,请重新下单支付!");
+                        setmEnsureDialogListener(new EnsureDialogFragmentBase.CallBackListener() {
+                            @Override
+                            public void onLeftBtnFinish() {
+                                dismissEnsureDialog();
+                                showLoadingDialog(new DialogDelayListener() {
+                                    @Override
+                                    public void onexecute() {
+                                        VolleyPreOrder(payType,0);                                }
+                                }, 50);
+                            }
+
+                            @Override
+                            public void onRightBtnFinish() {
+                                dismissEnsureDialog();
+                                isPayReponse=false;
+                                cancelAllRequest();
+                                getOperation().finish();
+                            }
+                        },"生成预付单时:更新信息失败?","必须重新生成,才能继续支付!","重新尝试","取消");
+                        showEnsureDialog("preOrder_errcode_update_failed_all");
+                    }
+                }else if(response.getErrcode().equals(response.errcode_param_missing)){
+                    dismissLoadingDialog();
+                    showShortTip("参数值错误,请重新下单支付!");
+                    setmEnsureDialogListener(new EnsureDialogFragmentBase.CallBackListener() {
+                        @Override
+                        public void onLeftBtnFinish() {
+                            dismissEnsureDialog();
+                            isPayReponse=false;
+                            cancelAllRequest();
+                            getOperation().finish();
+                        }
+
+                        @Override
+                        public void onRightBtnFinish() {
+                            dismissEnsureDialog();
+                            isPayReponse=false;
+                            cancelAllRequest();
+                            getOperation().finish();
+                        }
+                    },"生成预付单时:参数值错误?","必须重新生成,才能继续支付!","确定","取消");
+                    showEnsureDialog("preOrder_errcode_param_missing");
+                }else{
+                    dismissLoadingDialog();
+                    showShortTip("订单未知异常,请重新下单支付!");
+                    setmEnsureDialogListener(new EnsureDialogFragmentBase.CallBackListener() {
+                        @Override
+                        public void onLeftBtnFinish() {
+                            dismissEnsureDialog();
+                            isPayReponse=false;
+                            cancelAllRequest();
+                            getOperation().finish();
+                        }
+
+                        @Override
+                        public void onRightBtnFinish() {
+                            dismissEnsureDialog();
+                            isPayReponse=false;
+                            cancelAllRequest();
+                            getOperation().finish();
+                        }
+                    },"订单未知异常?","必须重新生成,才能继续支付!","确定","取消");
+                    showEnsureDialog("preOrder_errcode_unknow");
+                }
+
+            }
+        },new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(TAG,"VolleyError:" + error.getMessage(), error);
+                dismissLoadingDialog();
                 showShortTip(VolleyErrorHelper.getMessage(error, mActivity));
+                setmEnsureDialogListener(new EnsureDialogFragmentBase.CallBackListener() {
+                    @Override
+                    public void onLeftBtnFinish() {
+                        dismissEnsureDialog();
+                        showLoadingDialog(new DialogDelayListener() {
+                            @Override
+                            public void onexecute() {
+                                VolleyPreOrder(payType,0);                                }
+                        }, 50);
+                    }
+
+                    @Override
+                    public void onRightBtnFinish() {
+                        dismissEnsureDialog();
+                        isPayReponse=false;
+                        cancelAllRequest();
+                        getOperation().finish();
+                    }
+                },"提交预付单时:网络异常?","必须重新提交,才能继续支付!","确定","取消");
+                showEnsureDialog("preOrder_onErrorResponse");
             }
-        })
-        {
-            @Override
-            public Map<String, String> getHeaders() {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-Type",
-                        "application/x-www-form-urlencoded; charset=utf-8");
-                return headers;
-            }
-        };
-        executeRequest(ResultMapRequest);
+        });
+        executeRequest(resultMapRequest);
     }
+
 }

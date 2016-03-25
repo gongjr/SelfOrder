@@ -31,6 +31,7 @@ public class mBaseActivity  extends BaseActivity{
     public LeafLoadingDialog leafDialog;
     private DialogDelayListener leafdelay,delay;
     protected HttpDialogCommon mHttpDialogCommon;
+    private EnsureDialogFragmentBase mEnsureDialogFragmentBase;
 
     @Override
     protected void onCreate(Bundle arg0) {
@@ -180,6 +181,50 @@ public class mBaseActivity  extends BaseActivity{
             return true;
         }
         return false;
+    }
+
+    /**
+     * 确认取消提示弹窗
+     * @param mCallBackListener
+     * @param topTitle
+     * @param context
+     */
+    protected void setmEnsureDialogListener(EnsureDialogFragmentBase.CallBackListener mCallBackListener,String topTitle,String context){
+        if(mEnsureDialogFragmentBase==null){
+            mEnsureDialogFragmentBase= EnsureDialogFragmentBase.newInstance(topTitle,context,"取消","确定");
+        }
+        mEnsureDialogFragmentBase.setOnCallBackListener(mCallBackListener);
+    }
+
+    /**
+     * 确认取消提示弹窗
+     * @param mCallBackListener
+     * @param topTitle
+     * @param context
+     */
+    protected void setmEnsureDialogListener(EnsureDialogFragmentBase.CallBackListener mCallBackListener,String topTitle,String context,String left_name,String right_name){
+        mEnsureDialogFragmentBase= EnsureDialogFragmentBase.newInstance(topTitle,context,left_name,right_name);
+        mEnsureDialogFragmentBase.setOnCallBackListener(mCallBackListener);
+    }
+
+    public void showEnsureDialog(String name){
+        try {
+            if(mEnsureDialogFragmentBase!=null&&!mEnsureDialogFragmentBase.isAdded()&&!mEnsureDialogFragmentBase.isVisible()){
+                mEnsureDialogFragmentBase.show(mActivity.getFragmentManager(),name);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void dismissEnsureDialog(){
+        try {
+            if(mEnsureDialogFragmentBase!=null&&mEnsureDialogFragmentBase.isAdded()&&mEnsureDialogFragmentBase.isVisible())
+                mEnsureDialogFragmentBase.dismiss();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
     }
 
 }
