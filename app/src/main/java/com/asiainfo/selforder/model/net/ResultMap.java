@@ -9,6 +9,9 @@ package com.asiainfo.selforder.model.net;
  * @param <T> 不同响应返回不同内容
  */
 public class ResultMap<T> {
+    public final String errcode_ok="0";
+    public final String errcode_param_missing="31";
+    public final String errcode_update_failed_all="6";
 
     private String errcode;
     private String msg;

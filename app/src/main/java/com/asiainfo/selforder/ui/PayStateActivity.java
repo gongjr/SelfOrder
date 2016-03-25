@@ -222,7 +222,7 @@ public class PayStateActivity extends mBaseActivity {
      */
     public void VolleyPayOrder() {
         String param = "/appController/payOrder.do?";
-        System.out.println("payOrder:" + HttpHelper.HOST + param);
+        Log.i("TAG","payOrder:" + HttpHelper.HOST + param);
         Type type= new TypeToken<ResultMap<UpdateOrderInfoResultData>>(){}.getType();
         ResultMapRequest<ResultMap<UpdateOrderInfoResultData>> ResultMapRequest = new ResultMapRequest<ResultMap<UpdateOrderInfoResultData>>(
                 Request.Method.POST, HttpHelper.HOST + param, type,
@@ -230,12 +230,17 @@ public class PayStateActivity extends mBaseActivity {
                     @Override
                     public void onResponse(
                             ResultMap<UpdateOrderInfoResultData> response) {
-                        if(response.getMsg().equals("ok")) {
+                        if(response.getErrcode().equals(response.errcode_ok)) {
                             dismissMakeOrderDF();
                             startTimeOutText();
                         }
-                        else  {
-                            dismissMakeOrderDF();
+                        else if(response.getErrcode().equals(response.errcode_param_missing)){
+                            onMakeOrderFailed("打印订单失败,请联系收银员确认!",null);
+                            showShortTip("打印订单失败,请联系收银员确认!");
+                        } else if(response.getErrcode().equals(response.errcode_update_failed_all)){
+                            onMakeOrderFailed("更新数据失败"+"->请点击确定重新打印!",payOrder);
+                        }else{
+                            onMakeOrderFailed("打印订单失败,请联系收银员确认!",null);
                             showShortTip("打印订单失败,请联系收银员确认!");
                         }
                     }
@@ -251,10 +256,10 @@ public class PayStateActivity extends mBaseActivity {
                 Map<String, String> paramList = new HashMap<String, String>();
                 paramList.put("orderId", orderId);
                 paramList.put("payType", payType);//付费类型 orderPay里面的payType,如果是现金结账传0，微信支付传4，支付宝支付传5
-//                int payPrice=Integer.valueOf(orderEntity.getOrderSubmitOriginalPrice())*100;
-//                paramList.put("payPrice", payPrice+"");//支付金额
-//                paramList.put("state", "1");//状态 0未支付 1已支付
-//                paramList.put("tradeStaffId", merchantRegister.getStaffId());//操作员工
+                int payPrice=Integer.valueOf(orderEntity.getOrderSubmitOriginalPrice())*100;
+                paramList.put("payPrice", payPrice+"");//支付金额
+                paramList.put("state", "1");//状态 0未支付 1已支付
+                paramList.put("tradeStaffId", merchantRegister.getStaffId());//操作员工
                 paramList.put("merchantId", merchantRegister.getMerchantId());//商户ID
                 paramList.put("childMerchantId", merchantRegister.getChildMerchantId());//子商户ID
                 Log.i("VolleyLogTag", "paramList:" + paramList.toString());

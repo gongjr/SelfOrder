@@ -112,7 +112,7 @@ public class MakeOrderDF extends DialogFragment {
         btn_navToDesk.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onexecute();
+                if(mListener!=null)mListener.onexecute();
                 dismiss();
             }
         });

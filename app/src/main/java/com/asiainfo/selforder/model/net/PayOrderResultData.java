@@ -5,7 +5,7 @@ package com.asiainfo.selforder.model.net;
  */
 public class PayOrderResultData {
     public final String errcode_ok="0";
-    public final String errcode_param_missing="33";
+    public final String errcode_param_missing="31";
     public final String errcode_update_failed_all="6";
     private String errcode;
     private String msg;
