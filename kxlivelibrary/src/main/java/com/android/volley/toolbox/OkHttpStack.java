@@ -46,6 +46,8 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import kxlive.gjrlibrary.utils.KLog;
+
 
 /**
  * OkHttp backed {@link HttpStack HttpStack} that does not
@@ -58,6 +60,14 @@ import java.util.concurrent.TimeUnit;
 public class OkHttpStack implements HttpStack {
 
     private final OkHttpClient mClient;
+
+
+    /**
+     * Create a OkHttpStack with default OkHttpClient.
+     */
+    public OkHttpStack() {
+        this.mClient=new OkHttpClient();
+    }
 
     public OkHttpStack(OkHttpClient client) {
         this.mClient = client;
@@ -77,6 +87,7 @@ public class OkHttpStack implements HttpStack {
         //全部对应操作都在Builder中,所有操作完成后返回当前最新的builder
         com.squareup.okhttp.Request.Builder okHttpRequestBuilder = new com.squareup.okhttp.Request.Builder();
         okHttpRequestBuilder.url(request.getUrl());//设置url
+        KLog.i(request.getUrl().toString());
         Map<String, String> headers = request.getHeaders();//添加request的header
         for (final String name : headers.keySet()) {
             okHttpRequestBuilder.addHeader(name, headers.get(name));
@@ -126,6 +137,7 @@ public class OkHttpStack implements HttpStack {
                 response.addHeader(new BasicHeader(name, value));
             }
         }
+        KLog.i(response.getStatusLine());
         return response;
     }
 

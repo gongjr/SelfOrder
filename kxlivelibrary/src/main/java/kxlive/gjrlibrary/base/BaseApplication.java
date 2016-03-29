@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
+import com.android.volley.toolbox.OkHttpStack;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.LargestLimitedMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -44,7 +45,7 @@ public class BaseApplication extends LitePalApplication {
     public void onCreate() {
         super.onCreate();
         instance = this;
-        RequestManager.init(this);
+        RequestManager.init(this,new OkHttpStack());
         initImageLoader(getApplicationContext());
     }
 

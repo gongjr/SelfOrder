@@ -8,6 +8,7 @@ import android.content.Context;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.OkHttpStack;
 import com.android.volley.toolbox.Volley;
 
 public class RequestManager {
@@ -16,9 +17,22 @@ public class RequestManager {
 	private RequestManager() {
 	}
 
+    /**
+     * 默认初始化,volley默认实现
+     * @param context
+     */
 	public static void init(Context context) {
 		mRequestQueue = Volley.newRequestQueue(context);
 	}
+
+    /**
+     * api>9,2.3以下是httpClient,以后用okhttp实现传输层
+     * @param context
+     * @param okHttpStack
+     */
+    public static void init(Context context,OkHttpStack okHttpStack) {
+        mRequestQueue = Volley.newRequestQueue(context,okHttpStack);
+    }
 
 	public static RequestQueue getRequestQueue() {
 		if (mRequestQueue != null) {

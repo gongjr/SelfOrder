@@ -136,12 +136,23 @@ public class SettleActivity extends mBaseActivity {
                         xianjinGroup.setVisibility(View.GONE);
                         needPayTitle.setText(res.getString(R.string.need_pay_weixin_title));
                         payCode.setImageBitmap(null);
-
-                        showLoadingDialog(new DialogDelayListener() {
-                            @Override
-                            public void onexecute() {
-                                VolleyPreOrder(Constants.Order_PayType_weixin,0);                                }
-                        }, 50);
+                        if(curWeiXINBody==null){
+                            showLoadingDialog(new DialogDelayListener() {
+                                @Override
+                                public void onexecute() {
+                                    volleyGetv3PayInfoNative("1");                                }
+                            }, 50);
+                        }
+                        else{
+                            try {
+                                dismissLoadingDialog();
+                                Bitmap bitmap=ToolPicture.makeQRImage(curWeiXINBody.getCode_url(), 500, 500);
+                                payCode.setImageBitmap(bitmap);
+                            }catch (Exception e){
+                                showShortTip("二维码生成有误,请退出重新提交!");
+                                e.printStackTrace();
+                            }
+                        }
                         break;
                     case R.id.type_zhifubao:
                         CurrentShow=R.id.type_zhifubao;
@@ -150,26 +161,30 @@ public class SettleActivity extends mBaseActivity {
                         needPayTitle.setText(res.getString(R.string.need_pay_zhifubao_title));
                         payCode.setImageBitmap(null);
 
-                        showLoadingDialog(new DialogDelayListener() {
-                            @Override
-                            public void onexecute() {
-                                VolleyPreOrder(Constants.Order_PayType_zhifubao,0);                                }
-                        }, 50);
+                        if(curZhiFuBaoBody==null){
+                            showLoadingDialog(new DialogDelayListener() {
+                                @Override
+                                public void onexecute() {
+                                    volleyGetv3PayInfoNative("2");                                }
+                            }, 50);
+                        }
+                        else{
+                            try {
+                                dismissLoadingDialog();
+                                Bitmap bitmap=ToolPicture.makeQRImage(curZhiFuBaoBody.getQrCode(), 500, 500);
+                                payCode.setImageBitmap(bitmap);
+                            }catch (Exception e){
+                                showShortTip("二维码生成有误,请退出重新提交!");
+                                e.printStackTrace();
+                            }
+                        }
                         break;
                     case R.id.type_xianjin:
                         CurrentShow=R.id.type_xianjin;
                         xianjinGroup.setVisibility(View.VISIBLE);
                         xianjinTips.setText(Html.fromHtml(String.format(res.getString(R.string.pay_xianjin_title), "收银台")));
-                        weixinAndZhifubaoGroup.setVisibility(View.GONE);
                         payCode.setImageBitmap(null);
-                        printOrder.setVisibility(View.INVISIBLE);
-                        showLoadingDialog(new DialogDelayListener() {
-                            @Override
-                            public void onexecute() {
-                                VolleyPreOrder(Constants.Order_PayType_xianjin, 0);
-                            }
-                        }, 50);
-
+                        weixinAndZhifubaoGroup.setVisibility(View.GONE);
                         break;
                 }
             }
