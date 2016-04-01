@@ -238,7 +238,7 @@ public class MakeOrderActivity extends mBaseActivity{
                 VolleyErrors errors= VolleyErrorHelper.getVolleyErrors(error,
                         mActivity);
                 switch (errors.getErrorType()){
-                    case 1:
+                    case VolleyErrorHelper.ErrorType_Connect_Timeout:
                         Log.e(TAG,
                                 "VolleyError:" + errors.getErrorMsg(), error);
                         onMakeOrderFailed(errors.getErrorMsg());

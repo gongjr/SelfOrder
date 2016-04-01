@@ -21,6 +21,7 @@ import android.os.SystemClock;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Cache;
 import com.android.volley.Cache.Entry;
+import com.android.volley.ConnectTimeoutError;
 import com.android.volley.Network;
 import com.android.volley.NetworkError;
 import com.android.volley.NetworkResponse;
@@ -29,7 +30,7 @@ import com.android.volley.RedirectError;
 import com.android.volley.Request;
 import com.android.volley.RetryPolicy;
 import com.android.volley.ServerError;
-import com.android.volley.TimeoutError;
+import com.android.volley.SocketTimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 
@@ -52,6 +53,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
+ * 网络线程（NetworkDispatcher)调用Network对象去实现跟网络进行沟通的，而在Volley中，默认的Network实现类，则是BasicNetwork类
  * A network performing Volley requests over an {@link com.android.volley.toolbox.HttpStack}.
  */
 public class BasicNetwork implements Network {
@@ -89,17 +91,21 @@ public class BasicNetwork implements Network {
         while (true) {
             HttpResponse httpResponse = null;
             byte[] responseContents = null;
+            //零长度数据或集合是不可变的,不可变的对象是可以被自由共享的,EffectiveJava(43,15)
             Map<String, String> responseHeaders = Collections.emptyMap();
             try {
-                // Gather headers.
+                // Gather headers.添加头部信息
                 Map<String, String> headers = new HashMap<String, String>();
                 addCacheHeaders(headers, request.getCacheEntry());
+                //调用不同传输协议实现了HttpStack接口的类对象去网络中获取数据
                 httpResponse = mHttpStack.performRequest(request, headers);
                 StatusLine statusLine = httpResponse.getStatusLine();
                 int statusCode = statusLine.getStatusCode();
 
                 responseHeaders = convertHeaders(httpResponse.getAllHeaders());
                 // Handle cache validation.
+                // 从响应的状态行获取状态编码，如果是304（未修改），
+                // 说明之前已经取过数据了，那么就直接利用缓存中的数据，构造一个NetworkResonse对象
                 if (statusCode == HttpStatus.SC_NOT_MODIFIED) {
 
                     Entry entry = request.getCacheEntry();
@@ -120,6 +126,7 @@ public class BasicNetwork implements Network {
                 }
                 
                 // Handle moved resources
+                // 检查是否重定向,301页面已经永久移动到另外一个新地址,302页面暂时移动到新地址
                 if (statusCode == HttpStatus.SC_MOVED_PERMANENTLY || statusCode == HttpStatus.SC_MOVED_TEMPORARILY) {
                 	String newUrl = responseHeaders.get("Location");
                 	request.setRedirectUrl(newUrl);
@@ -144,9 +151,9 @@ public class BasicNetwork implements Network {
                 return new NetworkResponse(statusCode, responseContents, responseHeaders, false,
                         SystemClock.elapsedRealtime() - requestStart);
             } catch (SocketTimeoutException e) {
-                attemptRetryOnException("socket", request, new TimeoutError());
+                attemptRetryOnException("socket", request, new SocketTimeoutError());
             } catch (ConnectTimeoutException e) {
-                attemptRetryOnException("connection", request, new TimeoutError());
+                attemptRetryOnException("connection", request, new ConnectTimeoutError());
             } catch (MalformedURLException e) {
                 throw new RuntimeException("Bad URL " + request.getUrl(), e);
             } catch (IOException e) {
@@ -168,6 +175,7 @@ public class BasicNetwork implements Network {
                             responseHeaders, false, SystemClock.elapsedRealtime() - requestStart);
                     if (statusCode == HttpStatus.SC_UNAUTHORIZED ||
                             statusCode == HttpStatus.SC_FORBIDDEN) {
+                        //这里会根据Volley的Retyr机制进行重新获取
                         attemptRetryOnException("auth",
                                 request, new AuthFailureError(networkResponse));
                     } else if (statusCode == HttpStatus.SC_MOVED_PERMANENTLY || 
@@ -199,6 +207,7 @@ public class BasicNetwork implements Network {
     }
 
     /**
+     * 判断重试机制,是否可以重试,不可以就抛出异常,可以重试就忽略此异常,继续运行循环
      * Attempts to prepare the request for a retry. If there are no more attempts remaining in the
      * request's retry policy, a timeout exception is thrown.
      * @param request The request to use.

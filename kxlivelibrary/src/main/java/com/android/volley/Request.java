@@ -16,7 +16,6 @@
 
 package com.android.volley;
 
-import android.net.TrafficStats;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
@@ -601,6 +600,10 @@ public abstract class Request<T> implements Comparable<Request<T>> {
     }
 
     /**
+     * Comparable接口比较规则是：当前和其他对象比较，如果compare方法返回负数，那么在队列里面的优先级就比较高
+     * other.ordinal()-this.ordinal()<0,则Priority等级高,则优先级高
+     * 如果Priority等级相同,则根据他们在进入的序列来排序,
+     * this.mSequence - other.mSequence<0,序列号小的,优先级高,所以排在列表的前面,保持先进先出
      * Our comparator sorts from high to low priority, and secondarily by
      * sequence number to provide FIFO ordering.
      */
