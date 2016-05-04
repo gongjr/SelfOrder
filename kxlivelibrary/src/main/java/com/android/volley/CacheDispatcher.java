@@ -16,7 +16,6 @@
 
 package com.android.volley;
 
-import android.os.*;
 import android.os.Process;
 
 import java.util.concurrent.BlockingQueue;
@@ -46,17 +45,20 @@ public class CacheDispatcher extends Thread {
     /** For posting responses. */
     private final ResponseDelivery mDelivery;
 
-    /** Used for telling us to die. */
+    /** Used for telling us to die.
+     * 是否退出循环,关闭线程事物
+     * */
     private volatile boolean mQuit = false;
 
     /**
      * Creates a new cache triage dispatcher thread.  You must call {@link #start()}
      * in order to begin processing.
      *
-     * @param cacheQueue Queue of incoming requests for triage
-     * @param networkQueue Queue to post requests that require network to
-     * @param cache Cache interface to use for resolution
-     * @param delivery Delivery interface to use for posting responses
+     * @param cacheQueue Queue of incoming requests for triage CacheDispatcher持有缓存队列cacheQueue，目的当然是为了从队列中获取东西
+     * @param networkQueue Queue to post requests that require network to 而同时持有网络队列networkQueue，目的是为了在缓存请求失败后，将request放入网络队列中
+     * @param cache Cache interface to use for resolution 至于响应分发器delivery是成功请求缓存以后，将响应分发给对应请求的，分发器存在的目的就是为了灵活性和在主线程更新UI
+     * @param delivery Delivery interface to use for posting responses 缓存类cache，这个cache接口可以看成是缓存的代表实体
+     *
      */
     public CacheDispatcher(
             BlockingQueue<Request<?>> cacheQueue, BlockingQueue<Request<?>> networkQueue,
@@ -79,6 +81,7 @@ public class CacheDispatcher extends Thread {
     @Override
     public void run() {
         if (DEBUG) VolleyLog.v("start new dispatcher");
+        //设置线程优先级为标准后台程序
         Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
 
         // Make a blocking call to initialize the cache.
@@ -117,6 +120,7 @@ public class CacheDispatcher extends Thread {
                 }
 
                 // If it is completely expired, just send it to the network.
+                //如果缓存超时,放入网络线程队列,重新请求
                 if (entry.isExpired()) {
                     request.addMarker("cache-hit-expired");
                     request.setCacheEntry(entry);
@@ -129,14 +133,14 @@ public class CacheDispatcher extends Thread {
                 Response<?> response = request.parseNetworkResponse(
                         new NetworkResponse(entry.data, entry.responseHeaders));
                 request.addMarker("cache-hit-parsed");
-
+                //检查是否希望更新缓存，否，组装成response交给分发器mDelivery
                 if (!entry.refreshNeeded()) {
                     // Completely unexpired cache hit. Just deliver the response.
                     mDelivery.postResponse(request, response);
                 } else {
                     // Soft-expired cache hit. We can deliver the cached response,
                     // but we need to also send the request to the network for
-                    // refreshing.
+                    // refreshing.组装成response交给分发器mDelivery，并且将request再加入mNetworkQueue，去网络请求更新缓存
                     request.addMarker("cache-hit-refresh-needed");
                     request.setCacheEntry(entry);
 

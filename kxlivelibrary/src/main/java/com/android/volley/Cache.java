@@ -63,6 +63,7 @@ public interface Cache {
 
     /**
      * Data and metadata for an entry returned by the cache.
+     * 一条缓存记录
      */
     public static class Entry {
         /** The data returned from cache. */
@@ -71,13 +72,13 @@ public interface Cache {
         /** ETag for cache coherency. */
         public String etag;
 
-        /** Date of this response as reported by the server. */
+        /** Date of this response as reported by the server.响应日期 */
         public long serverDate;
 
-        /** The last modified date for the requested object. */
+        /** The last modified date for the requested object.最后修改日期 */
         public long lastModified;
 
-        /** TTL for this record. */
+        /** TTL for this record. 生存时间*/
         public long ttl;
 
         /** Soft TTL for this record. */
@@ -86,12 +87,12 @@ public interface Cache {
         /** Immutable response headers as received from server; must be non-null. */
         public Map<String, String> responseHeaders = Collections.emptyMap();
 
-        /** True if the entry is expired. */
+        /** True if the entry is expired.是否超时  */
         public boolean isExpired() {
             return this.ttl < System.currentTimeMillis();
         }
 
-        /** True if a refresh is needed from the original data source. */
+        /** True if a refresh is needed from the original data source.缓存是否需要更新 */
         public boolean refreshNeeded() {
             return this.softTtl < System.currentTimeMillis();
         }
