@@ -78,7 +78,7 @@ public class SettleActivity extends mBaseActivity {
     private RelativeLayout xianjinGroup;
     @Inject
     private Resources res;
-    private String merchantId,money,orderId,toId,attch;
+    private String merchantId,childMerchantId,money,orderId,toId,attch;
     private MerchantRegister merchantRegister;
     private ResultBody curWeiXINBody,curZhiFuBaoBody;
     private int CurrentShow;
@@ -96,6 +96,7 @@ public class SettleActivity extends mBaseActivity {
         money=bundle.getString("money");
         merchantRegister=(MerchantRegister)mApp.getData(mApp.KEY_GLOABLE_LOGININFO);
         merchantId=merchantRegister.getMerchantId();
+        childMerchantId=merchantRegister.getChildMerchantId();
         toId=merchantRegister.getToId();
         if(toId==null)toId="0";
         orderEntity=(OrderEntity)mApp.getData(mApp.KEY_CURORDER_ENTITY);
@@ -318,7 +319,7 @@ public class SettleActivity extends mBaseActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> paramList = new HashMap<String, String>();
                 paramList.put("attch", attch);
-                paramList.put("merchantId", merchantId);
+                paramList.put("merchantId", childMerchantId);
                 int s=Integer.valueOf(money)*100;
                 paramList.put("money", s+"");
                 paramList.put("orderId", orderId);

@@ -41,6 +41,6 @@ public class HttpHelper {
     /**
      * 微信相关使用地址
      */
-    public static final String HOST_WBusiunion = Busiunion_tst;
+    public static final String HOST_WBusiunion = Busiunion;
     
 }
