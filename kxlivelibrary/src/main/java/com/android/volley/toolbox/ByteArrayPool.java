@@ -50,6 +50,14 @@ import java.util.List;
  * This class ensures that the total size of the buffers in its recycling pool never exceeds a
  * certain byte limit. When a buffer is returned that would cause the pool to exceed the limit,
  * least-recently-used buffers are disposed.
+ * 设计思路:
+ * 在对响应的实体进行操作的时候，使用到了byte[]，由于volley是轻量级频次高的网络请求框架，
+ * 因此会大量使用到byte[] ，这样的话会频繁创建和销毁byte[]。
+ * 为了提高性能，volley定义了一个byte[]缓冲池，即ByteArrayPool 。
+ * 在ByteArrayPool 内，定义了两个集合，分别是存储按大小顺序排列byte[]的mBuffersBySize  和 按使用先后顺序排列byte[]的mBuffersByLastUse。
+ * 在volley中所需要使用到的byte[]从该缓冲池中来取getBuf(size)，
+ * 当byte[]使用完毕后再归还到该缓冲池returnBuf(byte[] buf)，从而避免频繁的创建和销毁byte[]
+ *
  */
 public class ByteArrayPool {
     /** The buffer pool, arranged both by last use and by buffer size */
@@ -112,6 +120,9 @@ public class ByteArrayPool {
             return;
         }
         mBuffersByLastUse.add(buf);
+        //二分搜索法搜索指定列表,在进行此调用之前，必须根据指定的比较器对列表进行升序排序,如果没有对列表进行排序，则结果是不确定的。
+        //但是此处从初始0开始塞入缓存byte[],如果搜索键包含在列表中，则返回搜索键的索引；否则返回 (-(插入点) - 1)。
+        //插入点 被定义为将键插入列表的那一点：即第一个大于此键的元素索引,list.size==0,是,为-1,其他情况下返回的值将 >= 0
         int pos = Collections.binarySearch(mBuffersBySize, buf, BUF_COMPARATOR);
         if (pos < 0) {
             pos = -pos - 1;
@@ -122,7 +133,9 @@ public class ByteArrayPool {
     }
 
     /**
+     * mSizeLimit判断缓冲池允许大小,进行响应释放处理
      * Removes buffers from the pool until it is under its size limit.
+     * 将最近最后使用的byte[]释放,mBuffersByLastUse.remove(0)
      */
     private synchronized void trim() {
         while (mCurrentSize > mSizeLimit) {
