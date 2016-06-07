@@ -34,6 +34,7 @@ public class ScreenSaverActivity extends Activity {
     private LayoutParams mWindowManagerParams;
     private View mEmptyView;
     private String ImageUrl="http://115.29.35.199:27890/material_img/images/upload/20000531/screensaver.png";
+    private String ImageUrl2="http://115.29.35.199:27890/material_img/images/upload/20000531/330001393_screensaver.jpg";
     /**
      * 菜单显示图片的加载参数
      * 默认是ARGB_8888， 使用RGB_565会比使用ARGB_8888少消耗2倍的内存，但是这样会没有透明度
@@ -57,7 +58,7 @@ public class ScreenSaverActivity extends Activity {
 	  			PowerManager.ON_AFTER_RELEASE, "SimpleTimer");
 //        forbiddenHomeKey();
         screenSaverImage=(ImageView)findViewById(R.id.main_ad_background);
-        ImageLoader.getInstance().displayImage(ImageUrl, screenSaverImage,
+        ImageLoader.getInstance().displayImage(ImageUrl2, screenSaverImage,
                     options, mImageLoadingListener);
 	}
 	
