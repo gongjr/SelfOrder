@@ -33,11 +33,11 @@ public class HttpHelper {
     /**
      * 微信相关测试环境
      */
-    public static final String Busiunion_tst = "http://www.kxlive.com/busiunion_tst";
+    public static final String Busiunion_tst = "http://115.29.35.199:27890/busiunion_tst";
     /**
      * 微信相关生产环境
      */
-    public static final String Busiunion = "http://www.kxlive.com/busiunion";
+    public static final String Busiunion = "http://115.29.35.199:27890/busiunion";
     /**
      * 微信相关使用地址
      */

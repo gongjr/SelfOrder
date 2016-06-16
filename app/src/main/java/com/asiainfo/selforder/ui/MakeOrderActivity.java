@@ -1,5 +1,6 @@
 package com.asiainfo.selforder.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -34,7 +35,6 @@ import java.util.Map;
 import kxlive.gjrlibrary.http.ResultMapRequest;
 import kxlive.gjrlibrary.http.VolleyErrorHelper;
 import kxlive.gjrlibrary.http.VolleyErrors;
-import kxlive.gjrlibrary.widget.LeafDialog.DialogDelayListener;
 import kxlive.gjrlibrary.widget.sectionedlist.SimpleSectionedListAdapter;
 import kxlive.gjrlibrary.widget.sectionedlist.SimpleSectionedListAdapter.Section;
 import roboguice.inject.InjectView;
@@ -161,17 +161,19 @@ public class MakeOrderActivity extends mBaseActivity{
                 getOperation().finishByResultCode(Constants.ResultCode_MakeorderToDishesMenu_Back);
                 break;
             case R.id.makeorder_settle:
-                if(orderEntity.getOrderList().size()>0 || orderEntity.getOrderCompGoodsList().size() > 0){
-                    showMakeOrderDF();
-                    lockMakeOrderBtn();
-                    showDelay(new DialogDelayListener() {
-                        @Override
-                        public void onexecute() {
-                            VolleysubmitOrderInfo(orderEntity.prepareOrderSummaryInfo());
-                        }
-                    },100);
-                }
-                else showShortTip("您尚未点菜哦~~");
+//                if(orderEntity.getOrderList().size()>0 || orderEntity.getOrderCompGoodsList().size() > 0){
+//                    showMakeOrderDF();
+//                    lockMakeOrderBtn();
+//                    showDelay(new DialogDelayListener() {
+//                        @Override
+//                        public void onexecute() {
+//                            VolleysubmitOrderInfo(orderEntity.prepareOrderSummaryInfo());
+//                        }
+//                    },100);
+//                }
+//                else showShortTip("您尚未点菜哦~~");
+                Intent intent = new Intent(MakeOrderActivity.this, TestActivity.class);
+                startActivity(intent);
                 break;
 //            case R.id.makeorder_clear:
 //                mApp.saveData(mApp.KEY_CURORDER_ENTITY,orderEntity);
