@@ -50,8 +50,8 @@ public class MakeOrderActivity extends mBaseActivity{
     private Button toDishesmenu;
     @InjectView(R.id.makeorder_settle)
     private Button settle;
-    @InjectView(R.id.makeorder_clear)
-    private Button clear;
+//    @InjectView(R.id.makeorder_clear)
+//    private Button clear;
     @InjectView(R.id.makeorder_num)
     private TextView orderNum;
     @InjectView(R.id.makeorder_price)
@@ -88,7 +88,7 @@ public class MakeOrderActivity extends mBaseActivity{
     public void initListener(){
         toDishesmenu.setOnClickListener(mOnClickListener);
         settle.setOnClickListener(mOnClickListener);
-        clear.setOnClickListener(mOnClickListener);
+//        clear.setOnClickListener(mOnClickListener);
         takeawayAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -173,10 +173,10 @@ public class MakeOrderActivity extends mBaseActivity{
                 }
                 else showShortTip("您尚未点菜哦~~");
                 break;
-            case R.id.makeorder_clear:
-                mApp.saveData(mApp.KEY_CURORDER_ENTITY,orderEntity);
-                getOperation().finishByResultCode(Constants.ResultCode_MakeorderToDishesMenu_Clear);
-                break;
+//            case R.id.makeorder_clear:
+//                mApp.saveData(mApp.KEY_CURORDER_ENTITY,orderEntity);
+//                getOperation().finishByResultCode(Constants.ResultCode_MakeorderToDishesMenu_Clear);
+//                break;
         }
         }
     };
