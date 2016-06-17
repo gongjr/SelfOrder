@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.asiainfo.selforder.R;
 import com.asiainfo.selforder.model.Listener.OnDialogBackListener;
@@ -81,6 +82,10 @@ public class MealNumberDF extends DialogFragment implements View.OnClickListener
                 dismiss();
                 break;
             case R.id.meal_sure_btn:
+                if (editText.getText().toString().equals("")) {
+                    Toast.makeText(getActivity(), "请先输入餐牌号~.~", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 onDialogBackListener.onDialogBack(editText.getText().toString());
                 break;
         }
