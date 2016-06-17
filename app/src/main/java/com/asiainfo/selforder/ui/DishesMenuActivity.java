@@ -186,13 +186,13 @@ public class DishesMenuActivity extends mBaseActivity {
     };
 
     public void clearTOinit() {
-        clear_init.setVisibility(View.VISIBLE);
-        next_init.setVisibility(View.VISIBLE);
+        clear.setVisibility(View.GONE);
+        next.setVisibility(View.GONE);
     }
 
     public void initTOclear() {
-        clear_init.setVisibility(View.GONE);
-        next_init.setVisibility(View.GONE);
+        clear.setVisibility(View.VISIBLE);
+        next.setVisibility(View.VISIBLE);
     }
 
     /**

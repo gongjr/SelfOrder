@@ -15,7 +15,7 @@ public class HttpHelper {
 	 * 生产环境
 	 */
 	public static final String Address_release = "http://115.29.35.199:27890/tacos";
-	
+
 	/**
      * 测试环境
      */
@@ -27,7 +27,7 @@ public class HttpHelper {
     /**
      * 使用地址
      */
-    public static final String HOST = Address_release;
+    public static final String HOST = Address_tst;
 
 
     /**

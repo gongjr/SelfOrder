@@ -18,6 +18,7 @@
             />
 
         <ImageButton
+            android:id="@+id/meal_closebtn"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_alignParentRight="true"
@@ -30,8 +31,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:drawable/editbox_background_normal"
-        android:padding="10dp"
-        android:layout_marginTop="20dp"/>
+        android:padding="15dp"
+        android:layout_marginTop="20dp"
+        android:textSize="20sp"/>
 
     <android.inputmethodservice.KeyboardView
         android:id="@+id/keyboard_view"

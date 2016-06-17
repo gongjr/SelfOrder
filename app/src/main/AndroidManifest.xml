@@ -71,12 +71,6 @@
             android:theme="@style/AppTheme.NODimEnabled">
         </activity>
         <activity
-            android:name=".ui.TestActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NODimEnabled">
-        </activity>
-        <activity
             android:name=".ui.SettleActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"

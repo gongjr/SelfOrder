@@ -1,10 +1,10 @@
 package com.asiainfo.selforder.widget;
 
-import android.app.Activity;
 import android.content.Context;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.text.Editable;
+import android.view.View;
 import android.widget.EditText;
 
 import com.asiainfo.selforder.R;
@@ -15,14 +15,14 @@ import com.asiainfo.selforder.R;
  */
 public class NumberKeyBoard implements KeyboardView.OnKeyboardActionListener {
 
-    private Activity act;
+    private View act;
     private Context ctx;
     private EditText editText;
     private Keyboard keyboard;
     private KeyboardView keyboardView;
 
 
-    public NumberKeyBoard(Activity act, Context ctx, EditText editText) {
+    public NumberKeyBoard(View act, Context ctx, EditText editText) {
         this.act = act;
         this.ctx = ctx;
         this.editText = editText;
