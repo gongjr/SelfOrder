@@ -163,7 +163,14 @@ public class MakeOrderActivity extends mBaseActivity {
                     getOperation().finishByResultCode(Constants.ResultCode_MakeorderToDishesMenu_Back);
                     break;
                 case R.id.makeorder_settle:
-                    showMealNumber();
+                    /*
+                    * 判断是否需要输入餐牌号
+                    * */
+                    if (mApp.IS_NEED_MEAL_NUMBER) {
+                        showMealNumber();
+                    } else {
+                        settleOrder("");
+                    }
                     break;
 //            case R.id.makeorder_clear:
 //                mApp.saveData(mApp.KEY_CURORDER_ENTITY,orderEntity);
@@ -346,20 +353,29 @@ public class MakeOrderActivity extends mBaseActivity {
     * */
     private OnDialogBackListener<String> onDialogBackListener = new OnDialogBackListener<String>() {
         @Override
-        public void onDialogBack(final String msg) {
+        public void onDialogBack(String msg) {
             dismissMealNumber();
-            if (orderEntity.getOrderList().size() > 0 || orderEntity.getOrderCompGoodsList().size() > 0) {
-                showMakeOrderDF();
-                lockMakeOrderBtn();
-                showDelay(new DialogDelayListener() {
-                    @Override
-                    public void onexecute() {
-                        orderEntity.prepareOrderSummaryInfo(msg);
-                        VolleysubmitOrderInfo(orderEntity.prepareOrderSummaryInfo(msg));
-                    }
-                }, 100);
-
-            } else showShortTip("您尚未点菜哦~~");
+            settleOrder(msg);
         }
     };
+
+    /*
+    * 结算方法
+    * */
+    private void settleOrder(final String msg) {
+        if (orderEntity.getOrderList().size() > 0 || orderEntity.getOrderCompGoodsList().size() > 0) {
+            showMakeOrderDF();
+            lockMakeOrderBtn();
+            showDelay(new DialogDelayListener() {
+                @Override
+                public void onexecute() {
+                    orderEntity.prepareOrderSummaryInfo(msg);
+                    VolleysubmitOrderInfo(orderEntity.prepareOrderSummaryInfo(msg));
+                }
+            }, 100);
+
+        } else {
+            showShortTip("您尚未点菜哦~~");
+        }
+    }
 }

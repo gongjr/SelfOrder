@@ -446,7 +446,9 @@ public class OrderEntity {
         }
 
         Submit.setOrderGoods(mCommitList);
-        Submit.setMealNumber(mealNumber);
+        if (!mealNumber.equals("")) {
+            Submit.setMealNumber(mealNumber);
+        }
         String orderData = gson.toJson(Submit);
         return orderData;
     }
