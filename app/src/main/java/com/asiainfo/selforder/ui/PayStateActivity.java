@@ -30,6 +30,7 @@ import de.greenrobot.event.EventBus;
 import kxlive.gjrlibrary.entity.eventbus.EventMain;
 import kxlive.gjrlibrary.http.ResultMapRequest;
 import kxlive.gjrlibrary.http.VolleyErrorHelper;
+import kxlive.gjrlibrary.utils.ArithUtils;
 import kxlive.gjrlibrary.widget.LeafDialog.DialogDelayListener;
 import roboguice.inject.InjectView;
 
@@ -256,8 +257,8 @@ public class PayStateActivity extends mBaseActivity {
                 Map<String, String> paramList = new HashMap<String, String>();
                 paramList.put("orderId", orderId);
                 paramList.put("payType", payType);//付费类型 orderPay里面的payType,如果是现金结账传0，微信支付传4，支付宝支付传5
-                int payPrice=Integer.valueOf(orderEntity.getOrderSubmitOriginalPrice())*100;
-                paramList.put("payPrice", payPrice+"");//支付金额
+                Double payPrice=Double.valueOf(orderEntity.getOrderSubmitOriginalPrice())*100;
+                paramList.put("payPrice", ArithUtils.d2str(payPrice));//支付金额
                 paramList.put("state", "1");//状态 0未支付 1已支付
                 paramList.put("tradeStaffId", merchantRegister.getStaffId());//操作员工
                 paramList.put("merchantId", merchantRegister.getMerchantId());//商户ID

@@ -31,6 +31,7 @@ import com.asiainfo.selforder.model.dishes.DishesPropertyItem;
 import com.asiainfo.selforder.model.dishes.MerchantDishes;
 import com.asiainfo.selforder.model.dishes.MerchantDishesType;
 import com.asiainfo.selforder.model.eventbus.post.DishesListEntity;
+import com.asiainfo.selforder.model.net.HttpMerchantDishes;
 import com.asiainfo.selforder.service.ScreenService;
 import com.asiainfo.selforder.ui.base.mBaseActivity;
 import com.asiainfo.selforder.widget.HttpDialogLogin;
@@ -79,7 +80,7 @@ public class LoginActivity extends mBaseActivity {
     private HttpDialogLogin mHttpDialogLogin;
     private JPushUtils mJPushUtils;
     private List<MerchantDishesType> mDishTypeDataList;
-    private List<MerchantDishes> mAllDishesDataList;
+    private List<MerchantDishes> mAllDishesDataList=new ArrayList<MerchantDishes>();
     private String userName;
     private String passwd;
 
@@ -372,8 +373,11 @@ public class LoginActivity extends mBaseActivity {
                                 mDishTypeDataList = gson.fromJson(datainfo.getString("types"), new TypeToken<List<MerchantDishesType>>() {
                                 }.getType());
                                 Log.d(TAG, "Dishes Type Count: " + mDishTypeDataList.size());
-                                mAllDishesDataList = gson.fromJson(datainfo.getString("dishes"), new TypeToken<List<MerchantDishes>>() {
+                                List<HttpMerchantDishes> lHttpMerchantDisheses = gson.fromJson(datainfo.getString("dishes"), new TypeToken<List<HttpMerchantDishes>>() {
                                 }.getType());
+                                for (HttpMerchantDishes lHttpMerchantDishes:lHttpMerchantDisheses){
+                                    mAllDishesDataList.add(lHttpMerchantDishes.HttpMerchantDishesToMerchantDishes());
+                                }
                                 Log.d(TAG, "All Dishes Count: " + mAllDishesDataList.size());
                                 if(datainfo.has("desks")){
                                     String desks=datainfo.getString("desks");

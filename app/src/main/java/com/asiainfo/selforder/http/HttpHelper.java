@@ -27,7 +27,7 @@ public class HttpHelper {
     /**
      * 使用地址
      */
-    public static final String HOST = Address_release;
+    public static final String HOST = Address_tst;
 
 
     /**

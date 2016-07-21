@@ -40,6 +40,7 @@ import de.greenrobot.event.EventBus;
 import kxlive.gjrlibrary.entity.eventbus.EventMain;
 import kxlive.gjrlibrary.http.ResultMapRequest;
 import kxlive.gjrlibrary.http.VolleyErrorHelper;
+import kxlive.gjrlibrary.utils.ArithUtils;
 import kxlive.gjrlibrary.utils.KLog;
 import kxlive.gjrlibrary.utils.ToolPicture;
 import kxlive.gjrlibrary.widget.LeafDialog.DialogDelayListener;
@@ -320,12 +321,12 @@ public class SettleActivity extends mBaseActivity {
                 Map<String, String> paramList = new HashMap<String, String>();
                 paramList.put("attch", attch);
                 paramList.put("merchantId", childMerchantId);
-                int s=Integer.valueOf(money)*100;
-                paramList.put("money", s+"");
+                Double moneys=Double.valueOf(money)*100;
+                paramList.put("money", ArithUtils.d2str(moneys));
                 paramList.put("orderId", orderId);
                 paramList.put("payType", payType);
                 paramList.put("discountableAmount", "0");
-                paramList.put("undiscountableAmount", s+"");
+                paramList.put("undiscountableAmount", ArithUtils.d2str(moneys));
                 Log.i("VolleyLogTag", "paramList:" + paramList.toString());
                 return paramList;
             }
