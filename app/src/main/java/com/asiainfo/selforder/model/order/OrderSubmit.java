@@ -41,6 +41,7 @@ public class OrderSubmit implements Serializable{
 	private List<String> remark;
 	private String tradeStsffId;
 	private int personNum;
+	private String mealNumber;
 	
 	private List<OrderGoodsItem>  OrderGoods;
 
@@ -253,4 +254,11 @@ public class OrderSubmit implements Serializable{
 		this.remark = remark;
 	}
 
+	public String getMealNumber() {
+		return mealNumber;
+	}
+
+	public void setMealNumber(String mealNumber) {
+		this.mealNumber = mealNumber;
+	}
 }

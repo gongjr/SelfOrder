@@ -15,7 +15,7 @@ public class HttpHelper {
 	 * 生产环境
 	 */
 	public static final String Address_release = "http://115.29.35.199:27890/tacos";
-	
+
 	/**
      * 测试环境
      */
@@ -29,13 +29,12 @@ public class HttpHelper {
      */
     public static final String HOST = Address_tst;
 
-
     /**
      * 微信相关测试环境
      */
     public static final String Busiunion_tst = "http://www.kxlive.com/busiunion_tst";
     /**
-     * 微信相关生产环境
+     * 微信相关生产环境(微信项目部署不支持,地址+端口直接访问)
      */
     public static final String Busiunion = "http://www.kxlive.com/busiunion";
     /**

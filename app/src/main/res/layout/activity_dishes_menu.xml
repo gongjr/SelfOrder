@@ -87,26 +87,6 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/dishesmenu_next"
-            android:layout_width="@dimen/distance_190"
-            android:layout_height="@dimen/distance_80"
-            android:background="@anim/selector_btn_dishesmenu_next_click"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/dishesmenu_bottom_clear"
-            android:layout_marginRight="@dimen/distance_15"/>
-
-
-        
-        <Button
-            android:id="@+id/dishesmenu_bottom_clear"
-            android:layout_width="@dimen/distance_110"
-            android:layout_height="@dimen/distance_80"
-            android:background="@anim/selector_btn_dishesmenu_clear"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/distance_20"/>
-
-        <Button
             android:id="@+id/dishesmenu_next_init"
             android:layout_width="@dimen/distance_190"
             android:layout_height="@dimen/distance_80"
@@ -114,12 +94,34 @@
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/dishesmenu_bottom_clear_init"
             android:layout_marginRight="@dimen/distance_15"
-            android:visibility="gone"/>
+            />
         <Button
             android:id="@+id/dishesmenu_bottom_clear_init"
             android:layout_width="@dimen/distance_110"
             android:layout_height="@dimen/distance_80"
             android:background="@drawable/dishesmenu_clear_init"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/distance_20"
+            />
+
+        <Button
+            android:id="@+id/dishesmenu_next"
+            android:layout_width="@dimen/distance_190"
+            android:layout_height="@dimen/distance_80"
+            android:background="@anim/selector_btn_dishesmenu_next_click"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/dishesmenu_bottom_clear"
+            android:layout_marginRight="@dimen/distance_15"
+            android:visibility="gone"/>
+
+
+
+        <Button
+            android:id="@+id/dishesmenu_bottom_clear"
+            android:layout_width="@dimen/distance_110"
+            android:layout_height="@dimen/distance_80"
+            android:background="@anim/selector_btn_dishesmenu_clear"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/distance_20"

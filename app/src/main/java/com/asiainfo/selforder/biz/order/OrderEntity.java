@@ -355,7 +355,7 @@ public class OrderEntity {
     /**
      * 准备订单数据信息, 返回提交数据
      */
-    public String prepareOrderSummaryInfo() {
+    public String prepareOrderSummaryInfo(String mealNumber) {
         prepareNewOrderSummaryInfo();
         OrderSubmit Submit = mOrderSubmit;
         List<OrderGoodsItem> mCommitList = new ArrayList<OrderGoodsItem>();
@@ -446,6 +446,9 @@ public class OrderEntity {
         }
 
         Submit.setOrderGoods(mCommitList);
+        if (!mealNumber.equals("")) {
+            Submit.setMealNumber(mealNumber);
+        }
         String orderData = gson.toJson(Submit);
         return orderData;
     }

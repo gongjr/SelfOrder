@@ -29,6 +29,11 @@ public class AppApplication extends BaseApplication {
      */
     public static final String KEY_CURORDER_ENTITY="CurOrderEntity";
 
+    /*
+    * 判断是否显示餐牌号
+    * */
+    public static boolean IS_NEED_MEAL_NUMBER = false;
+
 	public void onCreate() {
 		super.onCreate();
         /**捕获系统崩溃信息*/

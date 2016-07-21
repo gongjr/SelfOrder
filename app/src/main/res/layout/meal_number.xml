@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp">
+
+    <RelativeLayout
+        android:id="@+id/meal_title_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/meal_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="请输入餐牌号(请在机器领取)"
+            android:layout_centerVertical="true"
+            />
+
+        <ImageButton
+            android:id="@+id/meal_closebtn"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/close_btn_bg"/>
+    </RelativeLayout>
+
+    <EditText
+        android:layout_below="@+id/meal_title_layout"
+        android:id="@+id/meal_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/editbox_background_normal"
+        android:padding="15dp"
+        android:layout_marginTop="20dp"
+        android:textSize="20sp"/>
+
+    <android.inputmethodservice.KeyboardView
+        android:id="@+id/keyboard_view"
+        android:layout_below="@+id/meal_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F5F5F5"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:keyBackground="@drawable/number_bg"
+        android:keyTextColor="@android:color/black"
+        android:layout_marginTop="20dp"/>
+
+    <Button
+        android:id="@+id/meal_sure_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/keyboard_view"
+        android:background="@drawable/choose_end_btn_bg"
+        android:text="确定"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="20dp"
+        android:textSize="20sp"
+        />
+
+
+</RelativeLayout>

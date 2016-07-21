@@ -269,7 +269,9 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
                     orderGoodsItem.setRemark(remark);
                     orderGoodsItem.setCompId(dishId);
                     orderGoodsItem.setTradeStaffId(mRegister.getStaffId());
-                    orderGoodsItem.setDeskId(mDesk.getDeskId());
+                    if (mDesk != null) {
+                        orderGoodsItem.setDeskId(mDesk.getDeskId());
+                    }
                     orderGoodsItem.setDishesPrice(dishesCompItem.getDishesPrice());
                     orderGoodsItem.setDishesTypeCode(dishesCompItem.getDishesTypeCode());
                     orderGoodsItem.setExportId(dishesCompItem.getExportId());
@@ -293,7 +295,9 @@ public class DishCompsActivity extends mBaseActivity implements View.OnClickList
         OrderGoodsItem orderGoodsItem = new OrderGoodsItem();
         orderGoodsItem.setCompId("0");
         orderGoodsItem.setTradeStaffId(mRegister.getStaffId());
-        orderGoodsItem.setDeskId(mDesk.getDeskId());
+        if (mDesk != null) {
+            orderGoodsItem.setDeskId(mDesk.getDeskId());
+        }
         orderGoodsItem.setDishesPrice(mMerchantDishes.getDishesPrice());
         orderGoodsItem.setDishesTypeCode(mMerchantDishes.getDishesTypeCode());
         orderGoodsItem.setExportId(mMerchantDishes.getExportId());

@@ -196,22 +196,23 @@
         >
 
         <Button
-            android:layout_width="@dimen/distance_230"
-            android:layout_height="@dimen/distance_80"
+            android:layout_width="72dip"
+            android:layout_height="72dip"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:id="@+id/makeorder_to_dishesmenu"
-            android:background="@anim/selector_btn_makeorder_to_dishesmenu"
+            android:background="@anim/selector_btn_settle_back"
+            android:layout_marginLeft="20dp"
             />
 
-        <Button
-            android:id="@+id/makeorder_clear"
-            android:layout_width="@dimen/distance_110"
-            android:layout_height="@dimen/distance_80"
-            android:background="@anim/selector_btn_dishesmenu_clear"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/makeorder_settle"
-            android:layout_marginRight="@dimen/distance_20"/>
+        <!--<Button-->
+            <!--android:id="@+id/makeorder_clear"-->
+            <!--android:layout_width="@dimen/distance_110"-->
+            <!--android:layout_height="@dimen/distance_80"-->
+            <!--android:background="@anim/selector_btn_dishesmenu_clear"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_toLeftOf="@+id/makeorder_settle"-->
+            <!--android:layout_marginRight="@dimen/distance_20"/>-->
 
         <Button
             android:layout_width="@dimen/distance_190"
