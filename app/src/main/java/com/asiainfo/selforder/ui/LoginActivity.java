@@ -48,6 +48,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.greenrobot.event.EventBus;
+import kxlive.gjrlibrary.config.SysEnv;
 import kxlive.gjrlibrary.entity.AppUpdate;
 import kxlive.gjrlibrary.entity.eventbus.EventBackground;
 import kxlive.gjrlibrary.entity.eventbus.EventMain;
@@ -201,13 +202,21 @@ public class LoginActivity extends mBaseActivity {
                 }
             }
         });
+        btn_login.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                showCheckUserPwdDF();
+                return false;
+            }
+        });
+
         remember_password.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-               SharedPreferences.Editor edit=login.edit();
-               edit.putBoolean(Constants.Preferences_Login_IsCheck,b);
-               if(!b) edit.clear();
-               edit.apply();
+                SharedPreferences.Editor edit = login.edit();
+                edit.putBoolean(Constants.Preferences_Login_IsCheck, b);
+                if (!b) edit.clear();
+                edit.apply();
             }
         });
     }
@@ -432,7 +441,7 @@ public class LoginActivity extends mBaseActivity {
         Map<String, String> params=new HashMap<String, String>();
         params.put("postUploadRequest","图片上传");
         params.put("postUploadRequest-1","图片上传1");
-        Log.i("s","url:"+url);
+        Log.i("s", "url:" + url);
         PostSingleUploadRequest postUploadRequest=new PostSingleUploadRequest(url,imageInfo,params,null,new ResponseListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
@@ -447,5 +456,24 @@ public class LoginActivity extends mBaseActivity {
         executeRequest(postUploadRequest);
     }
 
+    /*
+    * 显示验证密码弹窗
+    * */
+    private void showCheckUserPwdDF() {
+        CheckUserPwdDF lCheckUserPwdDF = CheckUserPwdDF.newInstance();
+        lCheckUserPwdDF.setOnCheckUserPwdListener(mOnCheckUserPwdListener);
+        lCheckUserPwdDF.show(getFragmentManager(), "CheckSysPwdDF");
+    }
 
+    CheckUserPwdDF.OnCheckUserPwdListener mOnCheckUserPwdListener=new CheckUserPwdDF.OnCheckUserPwdListener() {
+        @Override
+        public void onSelectBack(String pwd) {
+            if (pwd.equals(SysEnv.SystemActivityPwd)){
+                showShortTip("系统密码正确!");
+                getOperation().forward(SystemActivity.class);
+            }else{
+                showShortTip("系统管理员密码不正确!");
+            }
+        }
+    };
 }

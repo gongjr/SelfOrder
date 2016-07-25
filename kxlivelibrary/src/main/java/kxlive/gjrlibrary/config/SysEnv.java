@@ -28,6 +28,15 @@ import kxlive.gjrlibrary.base.BaseApplication;
  */
 public final class SysEnv {
 
+	/**
+	 * 进入系统信息界面的密码
+	 * **/
+	public static final String SystemActivityPwd = "66123";
+	/**
+	 * 更改环境密码
+	 * **/
+	public static final String ChangeServerAddressPwd = "9876543210";
+
 	/***Log输出标识**/
 	private static final String TAG = SysEnv.class.getSimpleName();
 	
