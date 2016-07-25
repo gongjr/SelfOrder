@@ -49,12 +49,12 @@ public class ChooseServerAddressDF extends DialogFragment implements View.OnClic
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setStyle(android.support.v4.app.DialogFragment.STYLE_NO_TITLE, 0);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        setStyle(android.support.v4.app.DialogFragment.STYLE_NO_TITLE, 0);
         view = inflater.inflate(R.layout.df_choose_desk_order, null);
         return view;
     }
