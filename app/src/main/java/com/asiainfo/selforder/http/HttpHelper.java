@@ -14,7 +14,7 @@ public class HttpHelper {
     /**
      * 默认服务器配置,程序初始化确认的地址,恢复的初始状态
      */
-    public static final AddressState init=AddressState.tst;
+    public static final AddressState init=AddressState.debug;
     /**
      * 当前服务器环境值,如果配置,保有最新选择
      */
@@ -28,7 +28,7 @@ public class HttpHelper {
     /**
      * 微信相关默认服务器配置,程序初始化确认的地址,恢复的初始状态
      */
-    public static AddressState wxInit=AddressState.wxTst;
+    public static AddressState wxInit=AddressState.wxRelease;
     /**
      * 微信相关使用地址
      */
