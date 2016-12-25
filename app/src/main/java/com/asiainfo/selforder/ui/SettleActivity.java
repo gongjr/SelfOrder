@@ -351,7 +351,8 @@ public class SettleActivity extends mBaseActivity {
         }else if(CurrentShow==R.id.type_zhifubao){
             PayType="2";
         }
-        String param="/queryWAPayOrder?merchantId="+merchantId+"&orderId="+orderId+"&toId="+toId+"&payType="+PayType;
+//        String param="/queryWAPayOrder?merchantId="+merchantId+"&orderId="+orderId+"&toId="+toId+"&payType="+PayType;
+        String param="/queryWeChatPayInfo?merchantId="+merchantId+"&childMerchantId="+childMerchantId+"&orderId="+orderId+"&payType="+PayType;
         KLog.i("url:"+HttpHelper.HOST_WBusiunion+param);
         Type type=new TypeToken<PayInfoNativeResult<PayBodyInfo>>() {}.getType();
         ResultMapRequest<PayInfoNativeResult<PayBodyInfo>> resultMapRequest = new ResultMapRequest<PayInfoNativeResult<PayBodyInfo>>(
